@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+
+work/
+tmp/
+temp/
+.cache/
+__pycache__/
+*.pyc
+*.tmp
+~$*
