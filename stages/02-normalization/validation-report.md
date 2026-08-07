@@ -27,10 +27,10 @@ PASS — пилотная нормализация проекта P-2024-08-01 �
 
 ## Созданные наборы
 
-- `data/stage-2-normalization/projects.csv`
-- `data/stage-2-normalization/components.csv`
-- `data/stage-2-normalization/normalized-items.csv`
-- `data/stage-2-normalization/exceptions.csv`
+- `stages/02-normalization/projects.csv`
+- `stages/02-normalization/components.csv`
+- `stages/02-normalization/normalized-items.csv`
+- `stages/02-normalization/exceptions.csv`
 
 ## Количество записей
 
