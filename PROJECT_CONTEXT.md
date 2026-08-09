@@ -118,10 +118,11 @@ OpenRouter
 Этап 2 — ACCEPTED WITH DEBT
 Этап 3.1 — ACCEPTED / CLOSED
 Этап 3.2 — ACCEPTED / CLOSED
-Следующий подэтап — 3.3
+Этап 3.3 — ACCEPTED / CLOSED
+Следующий подэтап — 3.4
 ```
 
-### Этап 2
+### Этап 2 — нормализация
 
 Нормализованы три репрезентативных проекта:
 
@@ -183,8 +184,6 @@ P-2025-04-01
 P-2026-01-16
 ```
 
-Использованы нормализованные данные и визуальные PDF.
-
 Доказаны визуальные секционные ширины:
 
 ```text
@@ -209,108 +208,204 @@ P-2026-01-16
 
 `STUDIO_STANDARD` не доказан.
 
-Следствия:
-
-- компоновщик не должен вводить собственную студийную размерную сетку;
-- market baseline можно использовать как внешний приоритетный справочник;
-- неизвестные правила студии нельзя восстанавливать предположениями.
-
-Git commits Этапа 3.2:
+Принятый отчёт:
 
 ```text
-be66bea
-7a792c9
+docs/stage-3-calculation-model/stage-3.2-report.md
 ```
 
-После Этапа 3.2:
+### Этап 3.3 — детерминированный компоновщик
+
+Принятый отчёт:
 
 ```text
+docs/stage-3-calculation-model/stage-3.3-report.md
+```
+
+Реализован Python PoC прямого ряда:
+
+```text
+calculation_model/layout_configurator.py
+tests/test_layout_configurator.py
+```
+
+Принятые свойства:
+
+```text
+hard constraints > optimisation
+market baseline читается из canonical CSV
+A/B/C → automatic generic candidates
+D → только специализированная роль или явное разрешение
+E → автоматически не используется
+filler → отдельная сущность
+произвольная ширина → не создаётся
+NO_VALID_LAYOUT → явный результат
+STUDIO_STANDARD → не введён
+```
+
+Проверки:
+
+```text
+18 / 18 tests — PASS
+git diff --check — PASS
+source-materials — unchanged
+stages/02-normalization — unchanged
+```
+
+Git:
+
+```text
+implementation: a2af1b4
+final accepted result: 8535887
 branch: main
 working tree: clean
 push: NO
 ```
 
-## 6. Текущий подэтап 3.3
+Ограничение:
+
+```text
+corner / L / U layouts
+→ NOT_SUPPORTED
+пока нет принятого system-specific профиля
+```
+
+## 6. Подтверждённые расчётные факты из Этапов 1–2
+
+Использовать только с provenance и с учётом конкретного типа источника.
+
+### Геометрическая площадь
+
+```text
+area_m2 = length_mm × width_mm × qty × 0.000001
+```
+
+### Legacy material
+
+```text
+material_cost = area_m2 × price_per_m2
+```
+
+### Basis
+
+```text
+item_cost = order_qty × price
+```
+
+### Кромка
+
+```text
+edge_length_m =
+    (length_mm × qty × edge_length_flag × 0.001)
+  + (width_mm × qty × edge_width_flag × 0.001)
+
+edge_cost = edge_length_m × edge_rate
+```
+
+### Area-based work
+
+```text
+work_cost = area_m2 × work_rate
+```
+
+### Legacy detail total
+
+Исторически подтверждена логика:
+
+```text
+detail_cost =
+    (material_cost + edge_cost + work_costs)
+    × J2
+
+if K2 != 0:
+    detail_cost = detail_cost / K2
+```
+
+В проверенных legacy-примерах:
+
+```text
+J2 = 1
+K2 = 0
+```
+
+### Известные legacy totals
+
+```text
+P-2021-08-01 → 424022.31
+P-2024-08-01 → 362372.73
+```
+
+### Ограничения
+
+- Basis имеет компонентные суммы, но не всегда имеет однозначный whole-project total.
+- В Basis существуют альтернативные варианты; их нельзя суммировать как одновременно выбранные.
+- В некоторых источниках встречаются коэффициенты заказа 1.15–1.20 для листовых материалов/кромки; универсальное правило округления не доказано.
+- Исторические цены не являются текущим pricebook.
+- Для countertop в основном наблюдается `price × qty`, но есть ручная аномалия доставки `800 × 1 → 5000`.
+- Medvedev содержит экспертные/неформализованные детали и фурнитуру. Нельзя изобретать скрытые правила. Использовать только явно присутствующие строки и доказанные зависимости.
+- Прямой доказанный mapping `module → parts` пока не принят как универсальный норматив.
+
+## 7. Текущий подэтап 3.4
 
 Цель:
 
 ```text
-room/run dimensions
-+ mandatory functional modules
-+ market baseline
-+ explicit constraints
-        ↓
-deterministic layout/configurator
-        ↓
-ordered set of kitchen modules
+ordered modules
+→ parts / explicit calculation items
+→ quantities
+→ materials
+→ hardware
+→ works
 ```
 
-3.3 проектирует правила компоновки.
+с разделением:
 
-3.3 не должен:
+```text
+quantity model × pricebook = cost
+```
 
-- рассчитывать материалы;
-- строить BOM;
-- рассчитывать фурнитуру;
-- рассчитывать работы;
-- использовать цены;
-- создавать Google Sheets;
-- реализовывать Apps Script Web App;
-- начинать Этап 3.4 или следующие этапы.
+Этап 3.4 должен формализовать только доказанные правила и явно маркировать недоказанные переходы.
+
+Статусы правил:
+
+```text
+CONFIRMED
+DERIVED
+PROVISIONAL
+REQUIRES_EXPERT
+NOT_SUPPORTED
+```
 
 Подробный контракт:
 
 ```text
-docs/stage-3-calculation-model/stage-3.3-context.md
+docs/stage-3-calculation-model/stage-3.4-context.md
 ```
 
-## 7. Управление реализацией
+## 8. Управление реализацией
 
-Режимы:
+Постоянные правила Codex:
 
 ```text
-FAST
-NORMAL
-CONTROLLED
+AI_FURNITURE_EXECUTION.md
 ```
 
-По умолчанию используется `NORMAL`.
+По умолчанию:
 
-Штаб задаёт:
-- цель;
-- baseline;
-- scope;
-- ограничения;
-- acceptance criteria.
+```text
+NORMAL
+```
 
-Codex самостоятельно:
-- исследует репозиторий;
-- декомпозирует работу;
-- выбирает локальные технические решения;
-- реализует;
-- тестирует;
-- исправляет ошибки;
-- повторяет цикл до выполнения acceptance criteria;
-- создаёт итоговый отчёт.
+Штаб управляет целью, scope, baseline, риском и acceptance criteria.
 
-Эскалация нужна только при:
-- продуктовой или архитектурной развилке;
-- необходимости выйти за scope;
-- обнаружении проблемы в принятом baseline;
-- существенном необратимом риске.
+Codex управляет технической декомпозицией, реализацией, тестами, исправлениями, Git commit и stage report.
 
-## 8. Рабочие пути
+## 9. Рабочие пути
 
-Корень проекта:
+Корень:
 
 ```text
 C:\Project_all\ai-furniture-estimator
-```
-
-Нормализованные данные Этапа 2 — искать в текущей структуре репозитория; известный provenance указывает на:
-
-```text
-stages/02-normalization/
 ```
 
 Контекст и артефакты Этапа 3:
@@ -319,28 +414,34 @@ stages/02-normalization/
 docs/stage-3-calculation-model/
 ```
 
-Внешний market baseline:
+Market baseline:
 
 ```text
 source-materials/kitchen-module-reference-comparison.csv
 ```
 
-Исходные материалы не изменять.
-
-## 9. Правило контекста
-
-Этот файл — общий проектный baseline.
-
-Контекст конкретного этапа хранится отдельно:
+Нормализованные данные Этапа 2 — найти в текущей структуре репозитория; известный provenance указывает на:
 
 ```text
-docs/<stage>/stage-X-context.md
+stages/02-normalization/
 ```
 
-Результат этапа Codex фиксирует отдельным отчётом:
+Исходные материалы по умолчанию READ ONLY.
+
+## 10. Правило локального контекста
 
 ```text
-docs/<stage>/stage-X-report.md
+AI_FURNITURE_EXECUTION.md
+→ как Codex работает
+
+PROJECT_CONTEXT.md
+→ общий принятый baseline проекта
+
+stage-X-context.md
+→ контракт текущего этапа
+
+stage-X-report.md
+→ фактический итог этапа
 ```
 
-Промт Codex должен ссылаться на локальные файлы, а не дублировать весь проектный контекст.
+Промт Codex должен ссылаться на эти файлы и не дублировать весь контекст.
