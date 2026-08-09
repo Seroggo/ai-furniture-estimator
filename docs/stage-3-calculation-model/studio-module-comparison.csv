@@ -1,0 +1,167 @@
+project_id,module_class,dimension,observed_value_mm,market_match,market_rank,studio_classification,observation_count,component_count,project_count,evidence_type,confidence,source_reference,notes
+P-2024-08-01,detail,length,86,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,118,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,162,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,190,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,199,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,318,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,350,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,380,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,418,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,450,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,453,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,493,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,512,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,568,NOT_COMPARABLE,,UNRESOLVED,6,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,580,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,593,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,600,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,668,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,700,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,713,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,720,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,747,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,760,NOT_COMPARABLE,,UNRESOLVED,5,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,763,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,860,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,863,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,898,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,930,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,1098,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,1168,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,1200,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,1708,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,1772,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,1810,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,1818,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,1830,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,2029,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,2314,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,2330,NOT_COMPARABLE,,UNRESOLVED,4,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,2410,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,length,2580,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,28,NOT_COMPARABLE,,UNRESOLVED,5,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,35,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,40,NOT_COMPARABLE,,UNRESOLVED,4,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,50,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,55,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,65,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,70,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,84,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,100,NOT_COMPARABLE,,UNRESOLVED,7,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,120,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,150,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,300,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,324,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,350,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,372,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,450,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,476,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,481,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,488,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,498,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,514,NOT_COMPARABLE,,UNRESOLVED,7,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,550,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,560,NOT_COMPARABLE,,UNRESOLVED,2,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,580,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,581,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,588,NOT_COMPARABLE,,UNRESOLVED,3,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,600,NOT_COMPARABLE,,UNRESOLVED,9,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,612,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,690,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,700,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,713,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,750,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,938,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2024-08-01,detail,width,2298,NOT_COMPARABLE,,UNRESOLVED,1,0,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension. Component ID absent.
+P-2026-01-16,countertop,length,630,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT countertop dimension; not a module dimension.
+P-2026-01-16,countertop,length,690,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT countertop dimension; not a module dimension.
+P-2026-01-16,countertop,length,1360,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT countertop dimension; not a module dimension.
+P-2026-01-16,countertop,length,1450,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT countertop dimension; not a module dimension.
+P-2026-01-16,countertop,length,2250,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT countertop dimension; not a module dimension.
+P-2026-01-16,countertop,length,2645,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT countertop dimension; not a module dimension.
+P-2026-01-16,countertop,width,500,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT countertop dimension; not a module dimension.
+P-2026-01-16,countertop,width,600,NOT_COMPARABLE,,UNRESOLVED,5,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT countertop dimension; not a module dimension.
+P-2026-01-16,detail,length,268,NOT_COMPARABLE,,UNRESOLVED,4,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,300,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,388,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,420,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,481,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,493,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,513,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,568,NOT_COMPARABLE,,UNRESOLVED,4,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,600,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,744,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,748,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,760,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,764,NOT_COMPARABLE,,UNRESOLVED,3,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,780,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,858,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,868,NOT_COMPARABLE,,UNRESOLVED,7,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,890,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,900,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,948,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,967,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,993,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,1068,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,1100,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,1374,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,1390,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,2268,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,length,2284,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,70,NOT_COMPARABLE,,UNRESOLVED,4,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,80,NOT_COMPARABLE,,UNRESOLVED,3,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,88,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,164,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,167,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,171,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,180,NOT_COMPARABLE,,UNRESOLVED,3,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,201,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,220,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,268,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,310,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,330,NOT_COMPARABLE,,UNRESOLVED,3,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,388,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,444,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,450,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,460,NOT_COMPARABLE,,UNRESOLVED,3,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,476,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,500,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,513,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,516,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,544,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,560,NOT_COMPARABLE,,UNRESOLVED,8,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,568,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,detail,width,868,NOT_COMPARABLE,,UNRESOLVED,3,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT detail dimension; not a module dimension.
+P-2026-01-16,facade,length,163,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,174,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,220,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,266,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,377,NOT_COMPARABLE,,UNRESOLVED,3,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,466,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,535,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,686,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,760,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,777,NOT_COMPARABLE,,UNRESOLVED,5,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,780,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,806,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,900,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,1010,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,1390,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,2265,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,length,2994,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,34,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,70,NOT_COMPARABLE,,UNRESOLVED,2,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,100,NOT_COMPARABLE,,UNRESOLVED,8,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,297,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,414,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,447,NOT_COMPARABLE,,UNRESOLVED,3,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,542,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,597,NOT_COMPARABLE,,UNRESOLVED,5,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,1094,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2026-01-16,facade,width,1097,NOT_COMPARABLE,,UNRESOLVED,1,1,1,DIRECT,high,stages/02-normalization/normalized-items.csv,DIRECT facade dimension; not a module dimension.
+P-2024-08-01,section_unknown,width,600,WIDTH_PRESENT_IN_MARKET_BASELINE,,UNRESOLVED,3,3,1,DIRECT_VISUAL,high,docs/stage-3-calculation-model/studio-module-visual-evidence.csv,Direct visual columns chain; role is not established.
+P-2025-04-01,section_unknown,width,600,WIDTH_PRESENT_IN_MARKET_BASELINE,,UNRESOLVED,6,6,1,DIRECT_VISUAL,high,docs/stage-3-calculation-model/studio-module-visual-evidence.csv,Direct visual main and island chains; role is not established.
+P-2025-04-01,section_unknown,width,900,WIDTH_PRESENT_IN_MARKET_BASELINE,,UNRESOLVED,2,2,1,DIRECT_VISUAL,high,docs/stage-3-calculation-model/studio-module-visual-evidence.csv,Direct visual main and island chains; role is not established.
+P-2025-04-01,base_dishwasher_slot,appliance_slot_width,600,EXACT_MARKET_MATCH,A,MARKET_STANDARD,1,1,1,DIRECT_VISUAL,high,docs/stage-3-calculation-model/studio-module-visual-evidence.csv,ПММ is labelled and its 600-mm slot is directly dimensioned in the island chain.
+P-2026-01-16,section_unknown,width,450,WIDTH_PRESENT_IN_MARKET_BASELINE,,UNRESOLVED,4,4,1,DIRECT_VISUAL,high,docs/stage-3-calculation-model/studio-module-visual-evidence.csv,Direct visual 450|450|450|450 chain; role is not established.

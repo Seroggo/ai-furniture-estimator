@@ -1,0 +1,24 @@
+project_id,source_file,page_or_view,run_id,position_in_run,dimension_type,observed_value_mm,section_role,evidence_type,confidence,notes
+P-2024-08-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.08.24.pdf,5 / Размеры. Колонны,legacy-columns,1,section_width,390,unknown,DIRECT_VISUAL,high,First labelled segment of the 2580-mm columns chain.
+P-2024-08-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.08.24.pdf,5 / Размеры. Колонны,legacy-columns,2,section_width,350,unknown,DIRECT_VISUAL,high,Second labelled segment of the 2580-mm columns chain.
+P-2024-08-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.08.24.pdf,5 / Размеры. Колонны,legacy-columns,3,section_width,600,unknown,DIRECT_VISUAL,high,Third labelled segment of the 2580-mm columns chain.
+P-2024-08-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.08.24.pdf,5 / Размеры. Колонны,legacy-columns,4,section_width,600,unknown,DIRECT_VISUAL,high,Fourth labelled segment of the 2580-mm columns chain.
+P-2024-08-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.08.24.pdf,5 / Размеры. Колонны,legacy-columns,5,section_width,600,unknown,DIRECT_VISUAL,high,Fifth labelled segment of the 2580-mm columns chain.
+P-2024-08-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.08.24.pdf,5 / Размеры. Колонны,legacy-columns,6,filler_width,40,filler,DIRECT_VISUAL,high,Terminal labelled segment of the 2580-mm columns chain.
+P-2024-08-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.08.24.pdf,5 / Размеры. Колонны,legacy-columns,0,run_length,2580,columns_run,DIRECT_VISUAL,high,Overall labelled width of the same chain.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,3 / Основная часть,basis-main-bottom,1,filler_width,100,filler,DIRECT_VISUAL,high,First labelled segment of bottom chain.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,3 / Основная часть,basis-main-bottom,2,section_width,600,unknown,DIRECT_VISUAL,high,Labelled section in bottom chain.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,3 / Основная часть,basis-main-bottom,3,section_width,600,unknown,DIRECT_VISUAL,high,Labelled section in bottom chain.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,3 / Основная часть,basis-main-bottom,4,section_width,900,unknown,DIRECT_VISUAL,high,Labelled section in bottom chain.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,3 / Основная часть,basis-main-bottom,5,section_width,600,unknown,DIRECT_VISUAL,high,Labelled section in bottom chain.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,3 / Основная часть,basis-main-bottom,6,filler_width,100,filler,DIRECT_VISUAL,high,Penultimate labelled segment of bottom chain.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,3 / Основная часть,basis-main-bottom,7,section_width,600,unknown,DIRECT_VISUAL,high,Final labelled section in bottom chain.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,4 / Остров со стороны кухни,basis-island,2,section_width,600,unknown,DIRECT_VISUAL,high,Labelled island-chain section.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,4 / Остров со стороны кухни,basis-island,3,section_width,600,unknown,DIRECT_VISUAL,high,Labelled island-chain section.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,4 / Остров со стороны кухни,basis-island,4,section_width,900,unknown,DIRECT_VISUAL,high,Labelled island-chain section.
+P-2025-04-01,source-materials/Medvedev.Works.Calc.zip::Кухня_01.04.25.pdf,4 / Остров со стороны кухни,basis-island,6,appliance_slot_width,600,dishwasher_slot,DIRECT_VISUAL,high,Labelled ПММ section; width is directly dimensioned in the same chain.
+P-2026-01-16,source-materials/Medvedev.Works.Calc.zip::Кухня_16.01.26.pdf,5 / Размеры по стороне с вида 3,medvedev-view3,1,section_width,450,unknown,DIRECT_VISUAL,high,First directly labelled section in 450|450|450|450 chain.
+P-2026-01-16,source-materials/Medvedev.Works.Calc.zip::Кухня_16.01.26.pdf,5 / Размеры по стороне с вида 3,medvedev-view3,2,section_width,450,unknown,DIRECT_VISUAL,high,Second directly labelled section in chain.
+P-2026-01-16,source-materials/Medvedev.Works.Calc.zip::Кухня_16.01.26.pdf,5 / Размеры по стороне с вида 3,medvedev-view3,3,section_width,450,unknown,DIRECT_VISUAL,high,Third directly labelled section in chain.
+P-2026-01-16,source-materials/Medvedev.Works.Calc.zip::Кухня_16.01.26.pdf,5 / Размеры по стороне с вида 3,medvedev-view3,4,section_width,450,unknown,DIRECT_VISUAL,high,Fourth directly labelled section in chain.
+P-2026-01-16,source-materials/Medvedev.Works.Calc.zip::Кухня_16.01.26.pdf,5 / Размеры по стороне с вида 3,medvedev-view3,0,run_length,1800,unknown,DIRECT_VISUAL,high,The drawing also labels the two 900-mm grouped spans; 450x4=1800 is a confirmed chain arithmetic check.
