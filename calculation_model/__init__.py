@@ -1,4 +1,25 @@
-"""Deterministic calculation-model proofs of concept."""
+"""Deterministic layout, quantity, and cost proofs of concept."""
+
+from .calculation_engine import (
+    RULE_REGISTRY,
+    RULE_STATUSES,
+    CalculationItem,
+    CalculationRule,
+    ComponentCost,
+    ComponentCostSummary,
+    CostResult,
+    LegacyDetailCost,
+    ModulePartsResolution,
+    PriceInput,
+    area_quantity_item,
+    calculate_cost,
+    edge_quantity_item,
+    explicit_quantity_item,
+    get_rule,
+    legacy_detail_cost,
+    resolve_module_parts,
+    summarize_component_costs,
+)
 
 from .layout_configurator import (
     Filler,
@@ -14,14 +35,32 @@ from .layout_configurator import (
 )
 
 __all__ = [
+    "RULE_REGISTRY",
+    "RULE_STATUSES",
+    "CalculationItem",
+    "CalculationRule",
+    "ComponentCost",
+    "ComponentCostSummary",
+    "CostResult",
     "Filler",
     "FillerPolicy",
     "LayoutItem",
     "LayoutRequest",
     "LayoutResult",
+    "LegacyDetailCost",
     "MarketBaseline",
+    "ModulePartsResolution",
     "PositionConstraint",
+    "PriceInput",
     "RequiredModule",
+    "area_quantity_item",
+    "calculate_cost",
     "compose_layout",
     "default_market_baseline_path",
+    "edge_quantity_item",
+    "explicit_quantity_item",
+    "get_rule",
+    "legacy_detail_cost",
+    "resolve_module_parts",
+    "summarize_component_costs",
 ]
