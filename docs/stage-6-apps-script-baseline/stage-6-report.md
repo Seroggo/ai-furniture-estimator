@@ -3,13 +3,13 @@
 ## Status
 
 ```text
-PARTIAL — READY_FOR_CLASP_CHECKPOINT
+COMPLETE
 ```
 
 Локальная подготовка, remote preflight, первый controlled push и round-trip
 verification завершены. Clasp auth и link с существующим bound DEV project
-подтверждены. Новый Apps Script project не создавался. Для COMPLETE ожидается
-только ручной post-sync `setupSystem()` smoke на DEV workbook.
+подтверждены. Post-sync `setupSystem()` smoke и read-only workbook verification
+PASS. Новый Apps Script project не создавался.
 
 ## Toolchain
 
@@ -154,17 +154,47 @@ Approved default `Код.js` отсутствует remote после push.
 ## Post-sync setupSystem smoke
 
 ```text
-NOT RUN — MANUAL CHECKPOINT REQUIRED
+PASS
 ```
 
 `clasp run setupSystem` проверен и вернул `Script function not found. Please make
 sure script is deployed as API executable.` Новый API Executable/deployment не
-создавался. Требуется один ручной `setupSystem()` run в bound editor с проверкой
-отсутствия duplicate sheets, data loss и schema drift.
+создавался. Пользователь выполнил один ручной run в bound editor:
+
+```text
+started:  2026-08-11 17:21:49 +05:00
+finished: 2026-08-11 17:22:13 +05:00
+exception: none
+```
+
+Read-only connector verification после run:
+
+```text
+title: AI Furniture Calculation Base — DEV
+locale: ru_RU
+time zone: Asia/Yekaterinburg
+canonical sheets/order: 11 / 11 PASS
+frozen header rows: 11 / 11 PASS
+exact headers: 136 / 136 PASS
+strict validations row 2: 66 / 66 PASS
+strict validations row 1000: 66 / 66 PASS
+number formats row 2: 136 / 136 PASS
+number formats row 1000: 136 / 136 PASS
+Schema_Meta rows / unique IDs: 1 / 1
+Calculation_Rules rows / unique IDs: 1 / 1
+Reference_Values rows / unique IDs: 79 / 79
+production/master-data sheets: 0 rows
+duplicate sheets / IDs: none
+schema drift: none
+data loss: none
+```
+
+Accepted `SCHEMA_STAGE4_PRICE_PATCH_V1`, `MODULE_TO_PARTS_V1:1` и все 79
+generated reference seed IDs точно совпадают с canonical manifest.
 
 ## Tests
 
-Локально до remote checkpoint:
+Финальный локальный прогон:
 
 ```text
 Stage 6 Node checks:        9 / 9 PASS
@@ -180,8 +210,8 @@ py_compile:                 PASS
 git diff --check:           PASS
 ```
 
-`appsscript.json` validation, remote preflight, controlled push и round-trip
-PASS. Post-sync smoke ожидает manual checkpoint.
+`appsscript.json` validation, remote preflight, controlled push, round-trip и
+post-sync smoke PASS.
 
 ## Developer workflow
 
@@ -203,9 +233,8 @@ baseline: 894cf92
 Git push: NO
 ```
 
-Stage 6 local artifacts должны быть committed и working tree должен быть clean
-перед возвратом checkpoint. Remote write разрешён только в следующем checkpoint
-после выполнения всех gates.
+Stage 6 завершён локальными commits. Working tree после финального commit clean.
+Git push не выполнялся.
 
 Local commits:
 
@@ -215,5 +244,6 @@ a0bb0d0 build: establish safe clasp development workflow
 59f0f44 docs: record stage 6 clasp checkpoint
 b23be70 build: reconcile bound Apps Script preflight
 b571078 chore: mark Git as Apps Script source of truth
-post-push checkpoint: current HEAD after commit
+29b412d docs: record controlled clasp round trip
+completion report/context: current HEAD after final commit
 ```

@@ -10,15 +10,16 @@ Stage 3 — ACCEPTED / CLOSED
 Stage 4 — ACCEPTED / CLOSED
 Stage 4 Price Patch — ACCEPTED / CLOSED
 Stage 5 — ACCEPTED / CLOSED
+Stage 6 — ACCEPTED / CLOSED
 
-Текущий этап — Stage 6
+Stage 7 — NOT STARTED
 ```
 
-Git baseline после Stage 5:
+Git baseline после Stage 6:
 
 ```text
 branch: main
-HEAD: 894cf92
+HEAD: final Stage 6 commit (see git log)
 working tree: clean
 push: NO
 ```
@@ -174,13 +175,13 @@ docs/stage-5-setup-system/stage-5-report.md
 docs/stage-5-setup-system/stage-5-google-verification.md
 ```
 
-## Stage 6 — текущая цель
+## Stage 6 — accepted Apps Script baseline
 
 ```text
 Apps Script baseline + clasp
 ```
 
-Цель:
+Accepted flow:
 
 ```text
 локальный Git repository
@@ -190,25 +191,40 @@ controlled clasp sync
 существующий bound Apps Script DEV project
 ```
 
-После Stage 6 локальный Git repository должен стать каноническим source of truth для Apps Script source code.
+Локальный Git repository является canonical source of truth для Apps Script
+source code. Remote bound Apps Script project является DEV execution/debug
+target.
 
-Stage 6 должен:
+Final verification:
 
-- подключить существующий bound Apps Script project, не создавая новый;
-- безопасно настроить clasp;
-- зафиксировать Apps Script manifest;
-- ограничить push только Apps Script source;
-- доказать controlled push/pull round-trip без потери Stage 5 functionality;
-- исключить credentials/environment config из Git;
-- документировать безопасный development workflow.
+```text
+existing bound DEV project — PASS
+new project creation — NO
+@google/clasp 3.3.0 exact-pinned — PASS
+remote-derived appsscript.json — PASS
+exact three-file push scope — PASS
+pre-push remote snapshot/diff — PASS
+first controlled push — PASS
+round-trip equivalence — PASS
+unknown remote files — 0
+post-sync setupSystem() — PASS
+11 sheets / 136 headers — PASS
+66 strict validations — PASS
+79 unique Reference_Values — PASS
+Stage 5/4/3 regression tests — PASS
+secrets in Git — NONE
+```
 
 Подробный контракт:
 
 ```text
 docs/stage-6-apps-script-baseline/stage-6-context.md
+docs/stage-6-apps-script-baseline/stage-6-report.md
+docs/stage-6-apps-script-baseline/apps-script-development.md
 ```
 
-Stage 6 НЕ реализует OpenRouter parser, Web App или business runtime следующих этапов.
+Stage 7 не начат. OpenRouter parser, Web App и business runtime следующих этапов
+не реализовывались.
 
 ## Контекстная иерархия
 
