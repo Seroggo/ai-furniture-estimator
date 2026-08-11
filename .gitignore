@@ -10,3 +10,20 @@ __pycache__/
 *.pyc
 *.tmp
 ~$*
+
+# Node development dependencies
+node_modules/
+
+# Local clasp target/auth configuration and remote snapshots
+.clasp.json
+.clasprc.json
+.clasp-snapshots/
+
+# Google credentials and browser/session exports
+client_secret*.json
+credentials*.json
+service-account*.json
+service_account*.json
+*oauth-token*.json
+*refresh-token*.json
+cookies*.json

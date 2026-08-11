@@ -1,0 +1,5 @@
+# Deny everything under rootDir, then allow only canonical Apps Script source.
+**/**
+!appsscript.json
+!setup_system.gs
+!generated/schema_manifest.gs

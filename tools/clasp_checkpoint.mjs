@@ -1,0 +1,128 @@
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, relative, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const canonicalRoot = resolve(repositoryRoot, 'apps-script');
+const snapshotsRoot = resolve(repositoryRoot, '.clasp-snapshots');
+const expectedFiles = [
+  'appsscript.json',
+  'generated/schema_manifest.gs',
+  'setup_system.gs',
+];
+
+function fail(message) {
+  console.error(`ERROR: ${message}`);
+  process.exit(1);
+}
+
+function readJson(path, label) {
+  try {
+    return JSON.parse(readFileSync(path, 'utf8'));
+  } catch (error) {
+    fail(`${label} is missing or invalid JSON: ${error.message}`);
+  }
+}
+
+function validateLink() {
+  const configPath = resolve(repositoryRoot, '.clasp.json');
+  const config = readJson(configPath, '.clasp.json');
+  if (!config.scriptId || config.scriptId.includes('PASTE_')) {
+    fail('.clasp.json must contain the existing bound DEV Script ID.');
+  }
+  if (config.rootDir !== 'apps-script') {
+    fail('.clasp.json rootDir must be exactly "apps-script".');
+  }
+  return { config, configPath };
+}
+
+function walkFiles(root, current = root) {
+  if (!existsSync(current)) return [];
+  const result = [];
+  for (const name of readdirSync(current)) {
+    const path = resolve(current, name);
+    if (statSync(path).isDirectory()) result.push(...walkFiles(root, path));
+    else if (name !== '.clasp.json') result.push(relative(root, path).replaceAll('\\', '/'));
+  }
+  return result.sort();
+}
+
+function hash(path) {
+  return createHash('sha256').update(readFileSync(path)).digest('hex');
+}
+
+function normalized(path) {
+  return readFileSync(path, 'utf8').replace(/\r\n/g, '\n').replace(/\s+$/u, '') + '\n';
+}
+
+function snapshot(label) {
+  const { config } = validateLink();
+  const directory = resolve(snapshotsRoot, label);
+  if (!directory.startsWith(snapshotsRoot + '\\') && directory !== snapshotsRoot) {
+    fail('Snapshot label resolves outside .clasp-snapshots.');
+  }
+  if (existsSync(directory) && walkFiles(directory).length) {
+    fail(`Snapshot already contains files: ${relative(repositoryRoot, directory)}.`);
+  }
+  mkdirSync(directory, { recursive: true });
+  const snapshotConfig = resolve(directory, '.clasp.json');
+  writeFileSync(snapshotConfig, JSON.stringify({ scriptId: config.scriptId, rootDir: '.' }, null, 2) + '\n');
+
+  const claspEntry = resolve(repositoryRoot, 'node_modules', '@google', 'clasp', 'build', 'src', 'index.js');
+  const result = spawnSync(process.execPath, [claspEntry, '--project', snapshotConfig, 'pull'], {
+    cwd: repositoryRoot,
+    encoding: 'utf8',
+    stdio: 'inherit',
+  });
+  if (result.status !== 0) fail(`clasp pull failed for ${label}.`);
+  console.log(`SNAPSHOT: ${relative(repositoryRoot, directory)}`);
+  console.log(`FILES: ${walkFiles(directory).join(', ') || '(none)'}`);
+}
+
+function compare(label) {
+  const directory = resolve(snapshotsRoot, label);
+  if (!existsSync(directory)) fail(`Snapshot does not exist: ${relative(repositoryRoot, directory)}.`);
+  const remoteFiles = walkFiles(directory);
+  const localFiles = walkFiles(canonicalRoot);
+  const allFiles = [...new Set([...remoteFiles, ...localFiles])].sort();
+  const rows = allFiles.map((file) => {
+    const localPath = resolve(canonicalRoot, file);
+    const remotePath = resolve(directory, file);
+    let status = 'SAME';
+    if (!existsSync(localPath)) status = 'REMOTE_ONLY';
+    else if (!existsSync(remotePath)) status = 'LOCAL_ONLY';
+    else if (normalized(localPath) !== normalized(remotePath)) status = 'DIFFERENT';
+    return {
+      file,
+      status,
+      localSha256: existsSync(localPath) ? hash(localPath) : null,
+      remoteSha256: existsSync(remotePath) ? hash(remotePath) : null,
+    };
+  });
+  const audit = {
+    snapshot: label,
+    comparedAt: new Date().toISOString(),
+    expectedFiles,
+    localFiles,
+    remoteFiles,
+    unknownRemoteFiles: remoteFiles.filter((file) => !expectedFiles.includes(file)),
+    missingRemoteFiles: expectedFiles.filter((file) => !remoteFiles.includes(file)),
+    files: rows,
+  };
+  const auditPath = resolve(snapshotsRoot, `${label}-audit.json`);
+  writeFileSync(auditPath, JSON.stringify(audit, null, 2) + '\n');
+  for (const row of rows) console.log(`${row.status.padEnd(11)} ${row.file}`);
+  console.log(`AUDIT: ${relative(repositoryRoot, auditPath)}`);
+  if (audit.unknownRemoteFiles.length) {
+    console.log(`UNKNOWN_REMOTE: ${audit.unknownRemoteFiles.join(', ')}`);
+  }
+}
+
+const [command, label] = process.argv.slice(2);
+if (!['snapshot', 'compare'].includes(command) || !label || !/^[A-Za-z0-9_-]+$/.test(label)) {
+  fail('Usage: node tools/clasp_checkpoint.mjs <snapshot|compare> <safe-label>');
+}
+if (command === 'snapshot') snapshot(label);
+else compare(label);

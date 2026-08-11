@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "npm run test:stage6 && npm run test:regression",
+    "test:stage6": "node --test tests/test_stage6_apps_script.mjs",
+    "test:regression": "python -m unittest discover -s tests -p \"test_*.py\"",
+    "schema:check": "python tools/generate_setup_schema.py --check",
+    "gas:login": "clasp login",
+    "gas:status": "clasp status",
+    "gas:snapshot:preflight": "node tools/clasp_checkpoint.mjs snapshot preflight",
+    "gas:compare:preflight": "node tools/clasp_checkpoint.mjs compare preflight",
+    "gas:snapshot:roundtrip": "node tools/clasp_checkpoint.mjs snapshot roundtrip",
+    "gas:compare:roundtrip": "node tools/clasp_checkpoint.mjs compare roundtrip",
+    "gas:preflight": "node tools/check_clasp_preflight.mjs",
+    "gas:push": "npm run gas:preflight && clasp push",
+    "gas:open": "clasp open"
+  },
+  "devDependencies": {
+    "@google/clasp": "3.3.0"
+  }
+}
