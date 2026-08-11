@@ -3,6 +3,8 @@ REL_RECIPE_ITEM_RECIPE,Module_Recipe_Items,recipe_id,Module_Recipes,recipe_id,ma
 REL_RECIPE_ITEM_CATALOG,Module_Recipe_Items,catalog_item_code,Catalog_Items,catalog_item_code,many_to_one,true,foreign_key_and_orphan_check,"Every recipe item uses one catalog item"
 REL_RECIPE_ITEM_RULE_VERSION,Module_Recipe_Items,quantity_rule_version_id,Calculation_Rules,rule_version_id,many_to_one,true,foreign_key_and_orphan_check,"Every recipe item pins one exact quantity-rule version"
 REL_RECIPE_ITEM_PRICE_CODE,Module_Recipe_Items,price_code,Catalog_Items,price_code,many_to_one,true,foreign_key_and_orphan_check,"Recipe quantity points to a stable price code without storing a price"
+REL_WORKING_PRICE_CATALOG,spr_price,catalog_item_code,Catalog_Items,catalog_item_code,many_to_one,true,foreign_key_and_orphan_check,"Every working price identifies its catalog item"
+REL_WORKING_PRICE_CODE,spr_price,price_code,Catalog_Items,price_code,one_to_one,true,foreign_key_and_orphan_check,"One mutable working row maintains each stable catalog price code"
 REL_PRICE_VERSION,Prices,pricebook_version_id,Pricebook_Versions,pricebook_version_id,many_to_one,true,foreign_key_and_orphan_check,"Every price belongs to one immutable pricebook snapshot"
 REL_PRICE_CATALOG,Prices,catalog_item_code,Catalog_Items,catalog_item_code,many_to_one,true,foreign_key_and_orphan_check,"Every price identifies its catalog item"
 REL_PRICE_CODE,Prices,price_code,Catalog_Items,price_code,many_to_one,true,foreign_key_and_orphan_check,"Every price uses the catalog stable price code"

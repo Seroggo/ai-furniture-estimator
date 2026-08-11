@@ -41,6 +41,47 @@ ALLOWED_DATA_TYPES = {"string", "integer", "decimal", "boolean", "date", "dateti
 ALLOWED_BOOLEANS = {"true", "false"}
 ALLOWED_CARDINALITIES = {"many_to_one", "one_to_many", "one_to_one", "optional_many_to_one"}
 
+PRICE_PATCH_SHEETS = {
+    "Schema_Meta",
+    "System_Config",
+    "Module_Size_Rules",
+    "Module_Recipes",
+    "Module_Recipe_Items",
+    "Catalog_Items",
+    "spr_price",
+    "Pricebook_Versions",
+    "Prices",
+    "Calculation_Rules",
+    "Reference_Values",
+}
+PRICING_MODES = {"MANUAL_RUB", "FX_AUTO", "FX_MANUAL"}
+SPR_PRICE_COLUMNS = {
+    "working_price_id": ("string", "true", "true"),
+    "price_code": ("string", "true", "true"),
+    "catalog_item_code": ("string", "true", "false"),
+    "display_name": ("string", "true", "false"),
+    "unit": ("string", "true", "false"),
+    "pricing_mode": ("string", "true", "false"),
+    "source_currency": ("string", "false", "false"),
+    "source_price": ("decimal", "false", "false"),
+    "fx_rate_source": ("string", "false", "false"),
+    "fx_rate_manual": ("decimal", "false", "false"),
+    "fx_rate_current": ("decimal", "false", "false"),
+    "fx_rate_used_preview": ("decimal", "false", "false"),
+    "current_price_rub": ("decimal", "true", "false"),
+    "status": ("string", "true", "false"),
+    "source_ref": ("string", "false", "false"),
+    "updated_at": ("datetime", "true", "false"),
+    "notes": ("string", "false", "false"),
+}
+PUBLISHED_PROVENANCE_COLUMNS = {
+    "source_currency": "string",
+    "source_price": "decimal",
+    "fx_rate_used": "decimal",
+    "fx_rate_source": "string",
+    "price_derivation_mode": "string",
+}
+
 
 def _read_csv(path: Path, required_fields: tuple[str, ...], label: str) -> tuple[list[dict[str, str]], list[str]]:
     errors: list[str] = []
@@ -189,6 +230,66 @@ def validate_schema(columns_path: Path, relations_path: Path) -> list[str]:
                 f"columns row {row_number}: reference has no relation declaration: "
                 f"{relation_key[0]}.{relation_key[1]} -> {relation_key[2]}.{relation_key[3]}"
             )
+
+    rows_by_key = {
+        (row.get("sheet_name", "").strip(), row.get("column_name", "").strip()): row
+        for row in columns
+    }
+    actual_sheets = {row.get("sheet_name", "").strip() for row in columns}
+    missing_patch_sheets = sorted(PRICE_PATCH_SHEETS - actual_sheets)
+    extra_patch_sheets = sorted(actual_sheets - PRICE_PATCH_SHEETS)
+    if missing_patch_sheets:
+        errors.append(f"price patch: missing required sheets: {', '.join(missing_patch_sheets)}")
+    if extra_patch_sheets:
+        errors.append(f"price patch: unexpected sheets: {', '.join(extra_patch_sheets)}")
+
+    for column, expected in SPR_PRICE_COLUMNS.items():
+        row = rows_by_key.get(("spr_price", column))
+        if row is None:
+            errors.append(f"price patch: spr_price missing required column: {column}")
+            continue
+        actual = tuple(row.get(field, "").strip() for field in ("data_type", "required", "unique"))
+        if actual != expected:
+            errors.append(
+                f"price patch: invalid spr_price contract for {column}: "
+                f"expected type/required/unique={expected}, got {actual}"
+            )
+
+    pricing_mode = rows_by_key.get(("spr_price", "pricing_mode"))
+    if pricing_mode is not None:
+        actual_modes = set(pricing_mode.get("enum_values", "").split("|"))
+        if actual_modes != PRICING_MODES:
+            errors.append("price patch: pricing_mode must be MANUAL_RUB|FX_AUTO|FX_MANUAL")
+        if "mode_contract(" not in pricing_mode.get("validation", ""):
+            errors.append("price patch: pricing_mode lacks mode-specific field contract")
+
+    mode_validation_tokens = {
+        "source_currency": ("required_for(FX_AUTO,FX_MANUAL)", "blank_for(MANUAL_RUB)"),
+        "source_price": ("required_for(FX_AUTO,FX_MANUAL)", "blank_for(MANUAL_RUB)"),
+        "fx_rate_manual": ("required_for(FX_MANUAL)", "blank_for(MANUAL_RUB,FX_AUTO)"),
+        "fx_rate_current": ("required_for(FX_AUTO)", "blank_for(MANUAL_RUB)"),
+        "fx_rate_used_preview": ("required_for(FX_AUTO,FX_MANUAL)", "blank_for(MANUAL_RUB)"),
+    }
+    for column, tokens in mode_validation_tokens.items():
+        row = rows_by_key.get(("spr_price", column))
+        if row is None:
+            continue
+        validation = row.get("validation", "")
+        for token in tokens:
+            if token not in validation:
+                errors.append(f"price patch: {column} validation lacks {token}")
+
+    for column, data_type in PUBLISHED_PROVENANCE_COLUMNS.items():
+        row = rows_by_key.get(("Prices", column))
+        if row is None:
+            errors.append(f"price patch: Prices missing immutable provenance column: {column}")
+            continue
+        if row.get("data_type", "").strip() != data_type or row.get("required", "").strip() != "true":
+            errors.append(f"price patch: Prices.{column} must be required {data_type}")
+
+    published_mode = rows_by_key.get(("Prices", "price_derivation_mode"))
+    if published_mode is not None and set(published_mode.get("enum_values", "").split("|")) != PRICING_MODES:
+        errors.append("price patch: Prices.price_derivation_mode must preserve all pricing modes")
 
     counts = Counter(errors)
     return sorted(error if count == 1 else f"{error} ({count} occurrences)" for error, count in counts.items())

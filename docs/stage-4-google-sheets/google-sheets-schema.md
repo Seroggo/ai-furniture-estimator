@@ -28,6 +28,7 @@ LayoutItem
 | `Module_Recipes` | Заголовки будущих рецептов по class/role/variant | пусто до экспертной приёмки |
 | `Module_Recipe_Items` | Строки quantity model будущего рецепта | пусто; synthetic BOM запрещён |
 | `Catalog_Items` | Общий каталог материалов, кромки, фурнитуры и работ | только production-approved master data |
+| `spr_price` | Редактируемый рабочий источник актуальных цен до публикации | пусто до production price population |
 | `Pricebook_Versions` | Неизменяемые версии pricebook и effective periods | historical fixtures не импортируются |
 | `Prices` | Цены внутри версии pricebook | пусто до production price population |
 | `Calculation_Rules` | Реестр metadata-контрактов правил и их версий | Stage 3 rules могут быть перенесены с теми же IDs/statuses |
@@ -43,7 +44,7 @@ LayoutItem
 - Все relation keys ASCII-safe и не зависят от display name.
 - Published IDs/codes immutable. Переименование меняет только `display_name`.
 - Row identity: `config_entry_id`, `module_rule_id`, `recipe_id`,
-  `recipe_item_id`, `catalog_item_code`, `pricebook_version_id`,
+  `recipe_item_id`, `catalog_item_code`, `working_price_id`, `pricebook_version_id`,
   `price_entry_id`, `rule_version_id`, `reference_value_id`, `schema_version_id`.
 - Логические стабильные коды, переживающие версии: `config_key`, `price_code`,
   `rule_id`, `reference_code`.
@@ -67,6 +68,60 @@ Runtime обязан соединять их по `price_code`, дополнит
 Historical values из `stages/02-normalization` имеют контекст
 `historical_fixture` и не являются допустимым источником автоматического наполнения
 `Pricebook_Versions`/`Prices`.
+
+### 4.1. Working prices и publication boundary
+
+Ценовые роли физически разделены:
+
+```text
+spr_price (mutable working current prices)
+  -> publication validation
+  -> new Pricebook_Versions row
+  -> new immutable Prices rows
+  -> official calculation / quote reprice
+```
+
+`spr_price` — source of truth только для текущих рабочих price inputs и human
+preview. Он не является расчётной истиной зафиксированного КП. Его input fields
+может редактировать pricing manager/admin; будущий setup может управлять только
+явно определёнными preview/formula fields. Publication workflow читает только
+полные `READY` rows и создаёт новый snapshot, не изменяя опубликованные строки.
+
+Одна строка `spr_price` имеет immutable row identity `working_price_id` и один
+уникальный стабильный `price_code`, связанный с `Catalog_Items`. `display_name`
+никогда не является ключом. `unit` совпадает с catalog/default unit либо использует
+отдельно принятую conversion rule.
+
+Поддерживаемые contracts:
+
+- `MANUAL_RUB`: `current_price_rub` вводится вручную; FX-only inputs пусты;
+- `FX_AUTO`: обязательны `source_currency`, `source_price`, `fx_rate_current` и
+  выбранный `fx_rate_used_preview`; `fx_rate_manual` пуст;
+- `FX_MANUAL`: обязательны `source_currency`, `source_price`, `fx_rate_manual` и
+  равный ему `fx_rate_used_preview`.
+
+Для FX modes `current_price_rub = source_price * fx_rate_used_preview`.
+`current_price_rub`, `fx_rate_current` и `fx_rate_used_preview` являются mutable
+preview values, а не опубликованными фактами.
+
+`GOOGLEFINANCE` сейчас не реализован. На Stage 5 он может стать setup-managed
+источником только `fx_rate_current` для рабочего preview; formula strings не
+хранятся как произвольный исполняемый код в master-data cells. Запрещена прямая
+цепочка `Quote -> volatile GOOGLEFINANCE -> total`. Разрешён только snapshot flow:
+
+```text
+source price + working FX preview
+  -> current_price_rub
+  -> publish
+  -> fixed unit_price + fixed FX/source provenance
+```
+
+При публикации `Prices` фиксирует `unit_price`, `currency`, `source_currency`,
+`source_price`, `fx_rate_used`, `fx_rate_source` и `price_derivation_mode`. Для
+`MANUAL_RUB`: `source_currency=RUB`, `source_price=unit_price`, `fx_rate_used=1`,
+`fx_rate_source=NOT_APPLICABLE`. Для валютных modes значения копируются из
+прошедшего validation рабочего состояния. Поэтому published price объясним и не
+зависит после публикации от дальнейших правок `spr_price` или FX preview.
 
 ## 5. Pricebook version/effective-period policy
 
@@ -161,13 +216,15 @@ production checks реализуются на Stage 5/8 по этому конт
 | `Module_Recipes` | furniture-expert approved recipes | expert/admin workflow | recipe resolver | DRAFT only |
 | `Module_Recipe_Items` | accepted recipe quantities | expert/admin workflow | quantity engine | DRAFT only |
 | `Catalog_Items` | production catalog master | catalog admin | recipes/pricebook/runtime | DRAFT only |
+| `spr_price` | working current price inputs only | pricing manager/admin; future setup-managed preview fields | publication workflow/human preview | input fields allowed |
 | `Pricebook_Versions` | published pricebook snapshots | pricing admin | price resolver/audit | DRAFT only |
 | `Prices` | prices of one immutable version | pricing admin/import | price resolver | DRAFT only |
 | `Calculation_Rules` | accepted rule registry | controlled code/schema release | calculation engine/audit | DRAFT metadata only |
 | `Reference_Values` | accepted enum registry | schema/admin release | validation/setup/runtime | DRAFT only |
 | `Schema_Meta` | repository schema release | setup/schema release | setup/validator/runtime | no ad-hoc edit |
 
-`ACTIVE`/published rows are append-only. Historical normalized datasets remain
+`spr_price` остаётся mutable и не имеет статуса published. `Pricebook_Versions` и
+`Prices` после публикации immutable/append-only. Historical normalized datasets remain
 read-only evidence and never become production truth through an implicit import.
 
 ## 11. Минимальный contract с Google Sheets №2
@@ -193,10 +250,21 @@ IDs/provenance. `result_snapshot_json` сохраняет cost results, вклю
 rule IDs. Точный `pricebook_version_id` и rule-version snapshot обеспечивают
 воспроизводимость. CRM workflow, dashboard, PDF, IMPORTRANGE и access model вне scope.
 
+Будущий quote display contract различает два режима:
+
+- `ORIGINAL` использует зафиксированные quantity/input/result snapshots и точный
+  `pricebook_version_id` исходного расчёта;
+- `CURRENT_REPRICE` использует тот же quantity/calculation snapshot и последнюю
+  applicable `ACTIVE` опубликованную `Pricebook_Versions` на момент reprice.
+
+`CURRENT_REPRICE` не выполняет новый layout, BOM или quantity calculation и не
+читает `spr_price`/`GOOGLEFINANCE` напрямую. Его граница: `spr_price -> publish ->
+latest applicable ACTIVE pricebook -> CURRENT_REPRICE`. Preview по неопубликованным
+ценам является отдельной будущей функцией и не входит в этот contract.
+
 ## 12. Machine-readable artifacts
 
 - `sheets-columns.csv` — sheets, columns, types и column validations;
 - `sheets-relations.csv` — foreign-key relations;
 - `tools/validate_sheets_schema.py` — минимальный artifact validator;
 - `tests/test_sheets_schema.py` — positive и negative validator tests.
-
