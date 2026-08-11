@@ -157,18 +157,15 @@ function dataValidationForColumn_(column, sheetsByName) {
     return builder.requireCheckbox().build();
   }
   if (column.dataType === 'integer') {
-    var integerMinimum = column.validation.indexOf('integer >= 1') !== -1 ? 1 : 0;
-    var integerCell = columnLetter_(column.order) + '2';
+    var integerMinimum = null;
     if (column.validation.indexOf('integer >= 1') !== -1) {
-      return builder.requireFormulaSatisfied(
-        '=AND(ISNUMBER(' + integerCell + '),' + integerCell + '=INT(' + integerCell + '),' +
-        integerCell + '>=' + integerMinimum + ')'
-      ).build();
+      integerMinimum = 1;
+    } else if (column.validation.indexOf('integer >= 0') !== -1) {
+      integerMinimum = 0;
     }
-    if (column.validation.indexOf('integer >= 0') !== -1) {
+    if (integerMinimum !== null) {
       return builder.requireFormulaSatisfied(
-        '=AND(ISNUMBER(' + integerCell + '),' + integerCell + '=INT(' + integerCell + '),' +
-        integerCell + '>=' + integerMinimum + ')'
+        integerValidationFormula_(column.order, integerMinimum)
       ).build();
     }
   }
@@ -334,6 +331,13 @@ function columnLetter_(columnNumber) {
     value = Math.floor(value / 26);
   }
   return result;
+}
+
+
+function integerValidationFormula_(columnNumber, minimum) {
+  var cell = columnLetter_(columnNumber) + '2';
+  return '=ISNUMBER(' + cell + ')*(' + cell + '=INT(' + cell + '))*(' +
+    cell + '>=' + minimum + ')=1';
 }
 
 

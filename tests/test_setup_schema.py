@@ -110,6 +110,55 @@ class SetupSchemaTests(unittest.TestCase):
         self.assertIn("Unknown sheets must be removed manually", source)
         self.assertNotIn("GOOGLEFINANCE(", source)
 
+    def _evaluate_setup_expression(self, expression: str) -> str:
+        node_script = (
+            "const fs=require('fs');const vm=require('vm');"
+            "vm.runInThisContext(fs.readFileSync('apps-script/setup_system.gs','utf8'));"
+            f"process.stdout.write(String({expression}));"
+        )
+        result = subprocess.run(
+            ["node", "-e", node_script],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        return result.stdout
+
+    def test_integer_validation_formula_is_locale_neutral_for_russia(self) -> None:
+        minimum_one = self._evaluate_setup_expression("integerValidationFormula_(3,1)")
+        minimum_zero = self._evaluate_setup_expression("integerValidationFormula_(5,0)")
+        self.assertEqual("=ISNUMBER(C2)*(C2=INT(C2))*(C2>=1)=1", minimum_one)
+        self.assertEqual("=ISNUMBER(E2)*(E2=INT(E2))*(E2>=0)=1", minimum_zero)
+        for formula in (minimum_one, minimum_zero):
+            self.assertNotIn(",", formula)
+            self.assertNotIn(";", formula)
+            self.assertIn("ISNUMBER", formula)
+            self.assertIn("=INT(", formula)
+
+    def test_custom_formula_audit_is_controlled(self) -> None:
+        source = SETUP_SCRIPT.read_text(encoding="utf-8")
+        self.assertEqual(1, source.count("requireFormulaSatisfied("))
+        self.assertIn("integerValidationFormula_(column.order, integerMinimum)", source)
+        self.assertNotIn("=AND(", source)
+        self.assertNotIn("=OR(", source)
+        self.assertNotIn("=IF(", source)
+        self.assertNotIn("=IFERROR(", source)
+
+    def test_non_integer_strict_validations_are_preserved(self) -> None:
+        source = SETUP_SCRIPT.read_text(encoding="utf-8")
+        for contract in (
+            ".setAllowInvalid(false)",
+            "requireValueInList(",
+            "requireValueInRange(",
+            "requireCheckbox()",
+            "requireNumberGreaterThan(0)",
+            "requireNumberGreaterThanOrEqualTo(0)",
+            "requireDate()",
+        ):
+            self.assertIn(contract, source)
+
     def test_generator_check_command_passes(self) -> None:
         result = subprocess.run(
             [sys.executable, "tools/generate_setup_schema.py", "--check"],
