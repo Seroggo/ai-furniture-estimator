@@ -20,6 +20,8 @@ Google Sheets хранит расчётные данные и результат
 
 LLM не является источником цен и не рассчитывает итоговую стоимость.
 
+---
+
 ## 2. Каноническая архитектура MVP
 
 ```text
@@ -29,14 +31,16 @@ Google Drive
 └── итоговые PDF
 
 Google Sheets №1 — Расчётная база
-├── reference data
-├── нормативы модулей
+├── schema / system config
+├── module size rules
 ├── module recipes
-├── материалы / фурнитура / работы
-├── актуальный pricebook
-├── правила расчёта
-├── справочники
-└── конфигурация системы
+├── module recipe items
+├── catalog
+├── working prices
+├── published pricebook versions
+├── published prices
+├── calculation rules
+└── reference values
 
 Apps Script Web App
 ├── интерфейс менеджера
@@ -77,7 +81,9 @@ LLM API:
 OpenRouter
 ```
 
-## 3. Канонический план
+---
+
+## 3. Канонический план проекта
 
 ```text
 Этап 0. Репозиторий и Wiki
@@ -99,7 +105,9 @@ OpenRouter
 
 Любой старый сокращённый план считать неканоническим.
 
-## 4. Статус проекта
+---
+
+## 4. Текущее состояние
 
 ```text
 Этап 0 — ACCEPTED
@@ -109,20 +117,23 @@ OpenRouter
 Этап 3.2 — ACCEPTED / CLOSED
 Этап 3.3 — ACCEPTED / CLOSED
 Этап 3.4 — ACCEPTED / CLOSED
-
 Этап 3 — CLOSED
+Этап 4 — ACCEPTED / CLOSED
+Stage 4 Price Patch — ACCEPTED / CLOSED
 
-Текущий этап — 4
+Следующий этап — 5
 ```
 
-Git baseline после Этапа 3.4:
+Git baseline после окончательного Stage 4:
 
 ```text
 branch: main
-HEAD: 3dd047b
+HEAD: f075d66
 working tree: clean
 push: NO
 ```
+
+---
 
 ## 5. Этап 2 — нормализация
 
@@ -151,6 +162,8 @@ P-2021-08-01
 P-2023-07-01
 P-2026-05-22
 ```
+
+---
 
 ## 6. Этап 3 — принятый расчётный baseline
 
@@ -264,9 +277,11 @@ layout regression: 18 / 18 PASS
 total: 29 / 29 PASS
 ```
 
-## 7. Открытый экспертный долг
+---
 
-Не блокирует Этап 4.
+## 7. Экспертный долг
+
+Не блокирует переход к Этапу 5.
 
 ```text
 module → parts = REQUIRES_EXPERT
@@ -276,29 +291,400 @@ hidden Medvedev logic = REQUIRES_EXPERT / NOT_SUPPORTED
 legacy J2/K2 semantics = REQUIRES_EXPERT
 ```
 
-Этап 4 должен предусмотреть место для будущих module recipes и экспертных правил, но не заполнять их выдуманными значениями.
+Будущие production module recipes должны содержать:
 
-## 8. Этап 4 — цель
+- part IDs;
+- dimensions/formulas;
+- quantities;
+- materials;
+- edge;
+- hardware;
+- works.
 
-Спроектировать каноническую схему Google Sheets №1 — «Расчётная база».
+Synthetic BOM запрещён.
 
-Этап 4:
+---
+
+## 8. Этап 4 — каноническая схема Google Sheets №1
+
+Stage 4 завершён как локальный data contract.
+
+Реальный Google Sheet ещё не создан.
+
+Принятые schema artifacts:
 
 ```text
-НЕ создаёт реальный Google Sheet
-НЕ пишет Apps Script
-НЕ пишет setupSystem()
+docs/stage-4-google-sheets/google-sheets-schema.md
+docs/stage-4-google-sheets/sheets-columns.csv
+docs/stage-4-google-sheets/sheets-relations.csv
+docs/stage-4-google-sheets/stage-4-report.md
+docs/stage-4-google-sheets/stage-4-price-patch-report.md
 ```
 
-Он создаёт локальный, проверяемый контракт данных, на основании которого Этап 5 сможет механически создать рабочую таблицу.
-
-Подробный контракт:
+Итоговая схема после price patch:
 
 ```text
-docs/stage-4-google-sheets/stage-4-context.md
+11 sheets
+136 columns
+9 relations
 ```
 
-## 9. Постоянные правила реализации
+Итоговые sheets:
+
+```text
+Schema_Meta
+System_Config
+Module_Size_Rules
+Module_Recipes
+Module_Recipe_Items
+Catalog_Items
+spr_price
+Pricebook_Versions
+Prices
+Calculation_Rules
+Reference_Values
+```
+
+---
+
+## 9. Stable IDs
+
+Runtime не должен связывать сущности по display name.
+
+Используются стабильные ASCII-safe IDs/codes, включая:
+
+```text
+schema_version_id
+config_entry_id
+module_rule_id
+recipe_id
+recipe_item_id
+catalog_item_code
+working_price_id
+pricebook_version_id
+price_entry_id
+rule_version_id
+reference_value_id
+```
+
+Логические stable codes:
+
+```text
+config_key
+price_code
+rule_id
+reference_code
+```
+
+Published IDs immutable.
+
+Display names хранятся отдельно.
+
+---
+
+## 10. Module recipes
+
+Схема поддерживает:
+
+```text
+module class / role / variant
+→ Module_Recipes
+→ Module_Recipe_Items
+```
+
+Но production recipes пока не заполнены.
+
+Принятый статус:
+
+```text
+MODULE_TO_PARTS_V1 = REQUIRES_EXPERT
+```
+
+Fake recipe / placeholder BOM не создаются.
+
+---
+
+## 11. Rule registry
+
+`Calculation_Rules` хранит metadata-контракт правил.
+
+Статусы:
+
+```text
+CONFIRMED
+DERIVED
+PROVISIONAL
+REQUIRES_EXPERT
+NOT_SUPPORTED
+```
+
+Исполняемые formulas остаются в детерминированном коде.
+
+Принятые execution modes:
+
+```text
+CODE_BINDING
+METADATA_ONLY
+BLOCKING_STATUS
+```
+
+Произвольный Python / JavaScript / formula code в master-data cells запрещён.
+
+---
+
+## 12. Каноническая ценовая архитектура
+
+После Stage 4 Price Patch принята схема:
+
+```text
+spr_price
+(mutable working price source)
+        ↓
+validation / publication
+        ↓
+Pricebook_Versions
+        ↓
+Prices
+(immutable published calculation truth)
+```
+
+### 12.1. `spr_price`
+
+Рабочий лист текущих цен.
+
+Поддерживает режимы:
+
+```text
+MANUAL_RUB
+FX_AUTO
+FX_MANUAL
+```
+
+Он используется для:
+
+- ручного ввода текущей цены;
+- хранения валютной исходной цены;
+- будущего FX preview;
+- подготовки новой версии pricebook.
+
+`spr_price` не является расчётной истиной зафиксированного КП.
+
+### 12.2. GOOGLEFINANCE
+
+На текущем этапе не реализован.
+
+Принята policy:
+
+```text
+GOOGLEFINANCE
+→ допустим как future working FX preview source
+→ НЕ является прямой зависимостью официального расчёта или КП
+```
+
+Нельзя допускать:
+
+```text
+Quote
+→ volatile GOOGLEFINANCE
+→ total меняется автоматически
+```
+
+### 12.3. Публикация цены
+
+Будущий publish flow:
+
+```text
+spr_price mutable state
+→ validation
+→ new Pricebook_Versions row
+→ new immutable Prices rows
+```
+
+Pricebook lifecycle:
+
+```text
+DRAFT → ACTIVE → RETIRED
+```
+
+Effective periods:
+
+```text
+[effective_from, effective_to)
+```
+
+Published snapshots immutable.
+
+Новая цена создаёт новую version.
+
+Старые цены не перезаписываются.
+
+### 12.4. Published price provenance
+
+`Prices` должна сохранять минимум:
+
+```text
+unit_price
+currency
+price_code
+pricebook_version_id
+
+source_currency
+source_price
+fx_rate_used
+fx_rate_source
+price_derivation_mode
+provenance
+```
+
+Для `MANUAL_RUB`:
+
+```text
+source_currency = RUB
+source_price = unit_price
+fx_rate_used = 1
+fx_rate_source = NOT_APPLICABLE
+```
+
+---
+
+## 13. ORIGINAL / CURRENT_REPRICE
+
+Будущая База КП должна поддерживать два режима:
+
+```text
+ORIGINAL
+CURRENT_REPRICE
+```
+
+### ORIGINAL
+
+Использует:
+
+```text
+исходный quantity / calculation snapshot
++
+зафиксированный pricebook_version_id
+```
+
+Цель:
+
+```text
+воспроизвести стоимость на момент исходного расчёта
+```
+
+### CURRENT_REPRICE
+
+Использует:
+
+```text
+тот же quantity / calculation snapshot
++
+latest applicable ACTIVE pricebook
+```
+
+Ключевое правило:
+
+```text
+CURRENT_REPRICE
+≠ новый layout
+≠ новый BOM
+≠ новый quantity calculation
+```
+
+Это только repricing уже рассчитанного изделия.
+
+`CURRENT_REPRICE` не читает `spr_price` или `GOOGLEFINANCE` напрямую.
+
+---
+
+## 14. Минимальный будущий quote snapshot contract
+
+Stage 4 не проектирует полноценный Google Sheets №2.
+
+Принят только минимальный контракт:
+
+```text
+quote_id
+project_id
+calculation_model_version
+schema_version_id
+pricebook_version_id
+rule_version_snapshot_json
+input_snapshot_json
+result_snapshot_json
+total
+currency
+created_at
+```
+
+На будущих этапах этот контракт может быть расширен без изменения расчётного baseline.
+
+---
+
+## 15. Проверки Stage 4
+
+После price patch:
+
+```text
+schema:
+11 sheets
+136 columns
+9 relations
+
+schema validator tests:
+20 / 20 PASS
+
+Stage 3 calculation regression:
+11 / 11 PASS
+
+Stage 3 layout regression:
+18 / 18 PASS
+
+full suite:
+49 / 49 PASS
+
+py_compile:
+PASS
+
+git diff --check:
+PASS
+
+source-materials:
+unchanged
+
+stages/02-normalization:
+unchanged
+```
+
+---
+
+## 16. Текущий этап — 5
+
+Следующий этап:
+
+```text
+Этап 5. setupSystem()
+```
+
+Цель:
+
+```text
+принятый Stage 4 data contract
+        ↓
+Apps Script setupSystem()
+        ↓
+физическое создание Google Sheets №1
+```
+
+Именно на Этапе 5 разрешается начинать реальную Google Sheets / Apps Script интеграцию.
+
+Stage 5 должен использовать принятые machine-readable schema artifacts Stage 4 как источник структуры, а не заново проектировать workbook.
+
+Stage 5 не должен менять архитектуру Stage 4 без отдельной эскалации Штабу.
+
+---
+
+## 17. Постоянные правила реализации
 
 Использовать:
 
@@ -312,23 +698,23 @@ AI_FURNITURE_EXECUTION.md
 NORMAL
 ```
 
-## 10. Контекстная иерархия
+Контекстная иерархия:
 
 ```text
 AI_FURNITURE_EXECUTION.md
-→ постоянные правила реализации
+→ как Codex работает
 
 PROJECT_CONTEXT.md
-→ текущий общий baseline
+→ общий accepted baseline
 
 stage-X-context.md
-→ контракт этапа
+→ контракт текущего этапа
 
 stage-X-report.md
-→ принятый фактический результат
+→ фактический итог этапа
 
 код / CSV / tests
 → канонические технические данные
 ```
 
-Промт Codex должен ссылаться на локальные файлы, а не дублировать весь контекст.
+Промт Codex должен ссылаться на локальные файлы и не дублировать весь контекст.
