@@ -42,9 +42,15 @@ for (const file of expected) {
 JSON.parse(readFileSync(resolve(root, 'apps-script', 'appsscript.json'), 'utf8'));
 
 run('python', ['tools/generate_setup_schema.py', '--check']);
-run(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['test'], {
-  shell: process.platform === 'win32',
-});
+if (process.env.npm_execpath) {
+  run(process.execPath, [process.env.npm_execpath, 'test']);
+} else if (process.platform === 'win32') {
+  const npmCli = resolve(dirname(process.execPath), 'node_modules', 'npm', 'bin', 'npm-cli.js');
+  if (!existsSync(npmCli)) fail('npm CLI entrypoint is unavailable.');
+  run(process.execPath, [npmCli, 'test']);
+} else {
+  run('npm', ['test']);
+}
 
 const auditPath = resolve(root, '.clasp-snapshots', 'preflight-audit.json');
 if (!existsSync(auditPath)) fail('Run gas:snapshot:preflight and gas:compare:preflight first.');

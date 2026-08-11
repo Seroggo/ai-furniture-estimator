@@ -144,6 +144,19 @@ npm.cmd run gas:push
 автоматически. Если clasp отказывается обновлять remote manifest, сначала снова
 получить snapshot, понять конфликт и отдельно обосновать force-write.
 
+В clasp 3.3.0 non-interactive terminal не может ответить на prompt
+`Manifest file has been updated`. Если команда возвращает `Skipping push`, а
+remote-derived manifest повторно подтверждён preflight как эквивалентный,
+допустим один явно обоснованный запуск:
+
+```powershell
+npx.cmd clasp push --force
+```
+
+В этом случае `--force` подтверждает overwrite manifest; он не заменяет clean
+Git, snapshot, diff, exact file inspection или tests. Для обычных следующих
+push без manifest reconciliation использовать `npm.cmd run gas:push`.
+
 ## Round-trip verification
 
 После push получить новый отдельный snapshot:

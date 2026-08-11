@@ -6,9 +6,10 @@
 PARTIAL — READY_FOR_CLASP_CHECKPOINT
 ```
 
-Локальная подготовка и remote preflight завершены. Clasp auth и link с
-существующим bound DEV project подтверждены; первый remote write ещё не
-выполнялся. Новый Apps Script project не создавался.
+Локальная подготовка, remote preflight, первый controlled push и round-trip
+verification завершены. Clasp auth и link с существующим bound DEV project
+подтверждены. Новый Apps Script project не создавался. Для COMPLETE ожидается
+только ручной post-sync `setupSystem()` smoke на DEV workbook.
 
 ## Toolchain
 
@@ -111,26 +112,55 @@ OAuth scopes и deployment config не расширялись.
 ## First controlled push
 
 ```text
-NOT RUN — awaiting clean pre-push gates after completed preflight
+PASS
+files pushed: 3
+appsscript.json
+generated/schema_manifest.gs
+setup_system.gs
 ```
+
+Обычный non-interactive `clasp push` дважды вернул `Skipping push`, потому что
+clasp 3.3.0 требовал interactive подтверждение manifest overwrite. Remote write
+в этих попытках не выполнялся. После инспекции pinned clasp source и повторного
+clean preflight использован один обоснованный `clasp push --force`:
+
+- force относился к remote-derived manifest confirmation;
+- manifest values совпадали с preflight snapshot;
+- scopes/deployments не добавлялись;
+- push отправил ровно три reviewed canonical files.
+
+Apps Script API был включён пользователем перед успешной попыткой.
 
 ## Round-trip verification
 
 ```text
-NOT RUN — first controlled push pending
+PASS
 ```
 
-Подготовлены отдельные ignored round-trip snapshot и comparison commands.
+Post-push isolated snapshot:
+
+```text
+appsscript.json                    SAME
+generated/schema_manifest.js
+  → generated/schema_manifest.gs  SAME
+setup_system.js
+  → setup_system.gs                SAME
+unknown remote files:             0
+missing remote files:             0
+```
+
+Approved default `Код.js` отсутствует remote после push.
 
 ## Post-sync setupSystem smoke
 
 ```text
-NOT RUN — controlled push pending
+NOT RUN — MANUAL CHECKPOINT REQUIRED
 ```
 
-API Executable/deployment не создавались. После sync допустим один ручной
-`setupSystem()` run в bound editor с проверкой отсутствия duplicate sheets,
-data loss и schema drift.
+`clasp run setupSystem` проверен и вернул `Script function not found. Please make
+sure script is deployed as API executable.` Новый API Executable/deployment не
+создавался. Требуется один ручной `setupSystem()` run в bound editor с проверкой
+отсутствия duplicate sheets, data loss и schema drift.
 
 ## Tests
 
@@ -150,8 +180,8 @@ py_compile:                 PASS
 git diff --check:           PASS
 ```
 
-`appsscript.json` validation и remote preflight PASS. Controlled push,
-round-trip и post-sync smoke ещё не выполнялись.
+`appsscript.json` validation, remote preflight, controlled push и round-trip
+PASS. Post-sync smoke ожидает manual checkpoint.
 
 ## Developer workflow
 
@@ -182,5 +212,8 @@ Local commits:
 ```text
 1622ed4 docs: define stage 6 clasp baseline
 a0bb0d0 build: establish safe clasp development workflow
-stage report: final reporting commit (current HEAD after commit)
+59f0f44 docs: record stage 6 clasp checkpoint
+b23be70 build: reconcile bound Apps Script preflight
+b571078 chore: mark Git as Apps Script source of truth
+post-push checkpoint: current HEAD after commit
 ```
