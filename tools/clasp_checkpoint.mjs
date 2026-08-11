@@ -54,7 +54,20 @@ function hash(path) {
 }
 
 function normalized(path) {
-  return readFileSync(path, 'utf8').replace(/\r\n/g, '\n').replace(/\s+$/u, '') + '\n';
+  return readFileSync(path, 'utf8')
+    .replace(/^\uFEFF/, '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\s+$/u, '') + '\n';
+}
+
+function canonicalRemoteFile(file) {
+  const normalizedFile = file.replaceAll('\\', '/');
+  if (normalizedFile === 'appsscript.json') return 'appsscript.json';
+  if (/^(?:.*\/)?setup_system\.(?:js|gs)$/.test(normalizedFile)) return 'setup_system.gs';
+  if (/^(?:generated\/)?schema_manifest\.(?:js|gs)$/.test(normalizedFile)) {
+    return 'generated/schema_manifest.gs';
+  }
+  return null;
 }
 
 function snapshot(label) {
@@ -86,19 +99,30 @@ function compare(label) {
   if (!existsSync(directory)) fail(`Snapshot does not exist: ${relative(repositoryRoot, directory)}.`);
   const remoteFiles = walkFiles(directory);
   const localFiles = walkFiles(canonicalRoot);
-  const allFiles = [...new Set([...remoteFiles, ...localFiles])].sort();
+  const remoteByCanonical = new Map();
+  for (const remoteFile of remoteFiles) {
+    const canonicalFile = canonicalRemoteFile(remoteFile);
+    if (!canonicalFile) continue;
+    if (remoteByCanonical.has(canonicalFile)) {
+      fail(`Multiple remote files map to ${canonicalFile}.`);
+    }
+    remoteByCanonical.set(canonicalFile, remoteFile);
+  }
+  const allFiles = [...new Set([...remoteByCanonical.keys(), ...localFiles])].sort();
   const rows = allFiles.map((file) => {
     const localPath = resolve(canonicalRoot, file);
-    const remotePath = resolve(directory, file);
+    const remoteFile = remoteByCanonical.get(file) || null;
+    const remotePath = remoteFile ? resolve(directory, remoteFile) : null;
     let status = 'SAME';
     if (!existsSync(localPath)) status = 'REMOTE_ONLY';
-    else if (!existsSync(remotePath)) status = 'LOCAL_ONLY';
+    else if (!remotePath || !existsSync(remotePath)) status = 'LOCAL_ONLY';
     else if (normalized(localPath) !== normalized(remotePath)) status = 'DIFFERENT';
     return {
       file,
+      remoteFile,
       status,
       localSha256: existsSync(localPath) ? hash(localPath) : null,
-      remoteSha256: existsSync(remotePath) ? hash(remotePath) : null,
+      remoteSha256: remotePath && existsSync(remotePath) ? hash(remotePath) : null,
     };
   });
   const audit = {
@@ -107,8 +131,9 @@ function compare(label) {
     expectedFiles,
     localFiles,
     remoteFiles,
-    unknownRemoteFiles: remoteFiles.filter((file) => !expectedFiles.includes(file)),
-    missingRemoteFiles: expectedFiles.filter((file) => !remoteFiles.includes(file)),
+    normalizedRemoteFiles: [...remoteByCanonical.keys()].sort(),
+    unknownRemoteFiles: remoteFiles.filter((file) => !canonicalRemoteFile(file)),
+    missingRemoteFiles: expectedFiles.filter((file) => !remoteByCanonical.has(file)),
     files: rows,
   };
   const auditPath = resolve(snapshotsRoot, `${label}-audit.json`);

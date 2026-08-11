@@ -90,3 +90,13 @@ test('generated schema manifest is current', () => {
   const result = run('python', ['tools/generate_setup_schema.py', '--check']);
   assert.equal(result.status, 0, result.stdout + result.stderr);
 });
+
+test('checkpoint comparison normalizes clasp pull representation and gates remote removals', () => {
+  const checkpoint = readFileSync(resolve(root, 'tools/clasp_checkpoint.mjs'), 'utf8');
+  const preflight = readFileSync(resolve(root, 'tools/check_clasp_preflight.mjs'), 'utf8');
+  assert.match(checkpoint, /schema_manifest\\\.\(\?:js\|gs\)/);
+  assert.match(checkpoint, /setup_system\\\.\(\?:js\|gs\)/);
+  assert.match(checkpoint, /generated\/schema_manifest\.gs/);
+  assert.match(preflight, /preflight-approved-removals\.json/);
+  assert.match(preflight, /must exactly match unknown remote files/);
+});

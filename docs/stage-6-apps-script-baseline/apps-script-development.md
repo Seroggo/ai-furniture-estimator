@@ -115,8 +115,13 @@ npm.cmd run gas:preflight
 ```
 
 `gas:preflight` требует clean Git state, CURRENT schema manifest, PASS tests,
-реальный `.clasp.json`, preflight audit без unknown remote files и точный push
-file set:
+реальный `.clasp.json`, preflight audit и точный push file set. Unknown remote
+files должны отсутствовать либо быть явно reviewed для удаления в ignored
+`.clasp-snapshots/preflight-approved-removals.json`: список должен точно
+совпадать с audit и содержать причину. Такое approval допустимо только после
+инспекции содержимого каждого файла.
+
+Canonical push file set:
 
 ```text
 apps-script/appsscript.json

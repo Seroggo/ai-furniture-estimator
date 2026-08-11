@@ -6,9 +6,9 @@
 PARTIAL — READY_FOR_CLASP_CHECKPOINT
 ```
 
-Локальная подготовка завершена. Remote checkpoint не начат: в environment нет
-clasp auth и Script ID существующего bound DEV project. Новый Apps Script project
-не создавался, remote write не выполнялся.
+Локальная подготовка и remote preflight завершены. Clasp auth и link с
+существующим bound DEV project подтверждены; первый remote write ещё не
+выполнялся. Новый Apps Script project не создавался.
 
 ## Toolchain
 
@@ -29,13 +29,14 @@ Canonical root подготовлен как `apps-script/`:
 
 ```text
 apps-script/
+├── appsscript.json
 ├── setup_system.gs
 └── generated/
     └── schema_manifest.gs
 ```
 
-`apps-script/appsscript.json` намеренно не изобретён до remote snapshot. Его
-получение и reconciliation остаются частью checkpoint.
+`apps-script/appsscript.json` получен из remote snapshot и сохранён как
+canonical baseline.
 
 Generated manifest CURRENT и содержит 11 sheets, 136 columns, 9 relations,
 79 enum reference seeds и один accepted blocking calculation rule.
@@ -49,29 +50,57 @@ AI Furniture Calculation Base — DEV
 spreadsheet_id: 1begIbLngVMshpAmnn142TozbHWgIAD-QBvKX6y8NNvs
 ```
 
-In-app browser открыл workbook и подтвердил 11 canonical tabs, но сессия была
-не авторизована. Переход Extensions → Apps Script не раскрыл Script ID. Drive
-metadata search также не вернул доступный Apps Script target. Локальные
-`.clasp.json` и user-home `.clasprc.json` отсутствуют.
+Clasp OAuth: `loggedIn=true`. User-supplied Script ID существующего bound project
+привязан только в ignored `.clasp.json`; suffix target: `...HvYv52`.
 
-Remote snapshot не получен, remote/local diff не выполнялся. Подготовлен helper,
-который делает pull только в ignored `.clasp-snapshots/<label>/` и никогда не
-пишет поверх canonical source.
+До первого push выполнен isolated pull в `.clasp-snapshots/preflight/`.
+Canonical local files не перезаписывались. Snapshot содержал:
+
+```text
+appsscript.json
+setup_system.js
+schema_manifest.js
+Код.js
+```
+
+После нормализации clasp extension/path representation:
+
+```text
+appsscript.json                       SAME
+setup_system.js → setup_system.gs     SAME
+schema_manifest.js
+  → generated/schema_manifest.gs     SAME
+```
+
+`Код.js` проинспектирован: только стандартный пустой `myFunction()`, business
+logic отсутствует. Файл осознанно approved для удаления первым canonical push;
+approval хранится только в ignored preflight audit location.
 
 ## Manifest reconciliation
 
 ```text
-remote appsscript.json: PENDING
-local appsscript.json:  PENDING REMOTE BASELINE
-reconciliation:         NOT RUN
+remote appsscript.json: ACQUIRED
+local appsscript.json:  ADOPTED
+reconciliation:         SAME / PASS
 ```
 
-Workflow сохраняет remote timezone/runtime/logging/scopes/dependencies и
-запрещает слепое расширение scopes или deployment config.
+Manifest baseline:
+
+```text
+timeZone:        Asia/Yekaterinburg
+runtimeVersion:  V8
+exceptionLogging: STACKDRIVER
+dependencies:    empty
+oauthScopes:      not explicitly set
+webapp/executionApi: absent
+```
+
+OAuth scopes и deployment config не расширялись.
 
 ## Clasp configuration / security
 
 - `.clasp.example.json` фиксирует `rootDir: apps-script` без реального Script ID;
+- ignored `.clasp.json` связан с подтверждённым existing bound DEV Script ID;
 - `.clasp.json`, `.clasprc.json`, snapshots и credential patterns исключены Git;
 - `.claspignore` — deny-all с allowlist только canonical Apps Script files;
 - `clasp status --json` на safe example выбирает только файлы внутри
@@ -82,7 +111,7 @@ Workflow сохраняет remote timezone/runtime/logging/scopes/dependencies 
 ## First controlled push
 
 ```text
-NOT RUN — auth, Script ID, remote snapshot and manifest reconciliation pending
+NOT RUN — awaiting clean pre-push gates after completed preflight
 ```
 
 ## Round-trip verification
@@ -108,7 +137,7 @@ data loss и schema drift.
 Локально до remote checkpoint:
 
 ```text
-Stage 6 Node checks:        8 / 8 PASS
+Stage 6 Node checks:        9 / 9 PASS
 Stage 5 setup tests:        PASS
 Stage 4 schema tests:       PASS
 Stage 3 calculation tests:  PASS
@@ -121,8 +150,8 @@ py_compile:                 PASS
 git diff --check:           PASS
 ```
 
-`appsscript.json` validation, strict remote preflight, round-trip и post-sync
-smoke остаются checkpoint checks, а не локально симулированные PASS.
+`appsscript.json` validation и remote preflight PASS. Controlled push,
+round-trip и post-sync smoke ещё не выполнялись.
 
 ## Developer workflow
 

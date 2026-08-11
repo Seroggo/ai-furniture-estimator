@@ -49,14 +49,28 @@ run(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['test'], {
 const auditPath = resolve(root, '.clasp-snapshots', 'preflight-audit.json');
 if (!existsSync(auditPath)) fail('Run gas:snapshot:preflight and gas:compare:preflight first.');
 const audit = JSON.parse(readFileSync(auditPath, 'utf8'));
-if (audit.unknownRemoteFiles?.length) fail(`Reconcile unknown remote files: ${audit.unknownRemoteFiles.join(', ')}.`);
+const unknownRemoteFiles = audit.unknownRemoteFiles || [];
+if (unknownRemoteFiles.length) {
+  const approvalsPath = resolve(root, '.clasp-snapshots', 'preflight-approved-removals.json');
+  if (!existsSync(approvalsPath)) {
+    fail(`Reconcile unknown remote files: ${unknownRemoteFiles.join(', ')}.`);
+  }
+  const approvals = JSON.parse(readFileSync(approvalsPath, 'utf8'));
+  const approved = [...new Set(approvals.remoteFiles || [])].sort();
+  const unknown = [...unknownRemoteFiles].sort();
+  if (!approvals.reason || JSON.stringify(approved) !== JSON.stringify(unknown)) {
+    fail('Approved remote removals must exactly match unknown remote files and include a reason.');
+  }
+}
 const snapshotConfigPath = resolve(root, '.clasp-snapshots', 'preflight', '.clasp.json');
 if (!existsSync(snapshotConfigPath)) fail('Preflight snapshot link config is missing.');
 const snapshotConfig = JSON.parse(readFileSync(snapshotConfigPath, 'utf8'));
 if (snapshotConfig.scriptId !== config.scriptId) fail('Preflight snapshot belongs to a different Script ID.');
 for (const row of audit.files || []) {
   const localPath = resolve(root, 'apps-script', row.file);
-  const remotePath = resolve(root, '.clasp-snapshots', 'preflight', row.file);
+  const remotePath = row.remoteFile
+    ? resolve(root, '.clasp-snapshots', 'preflight', row.remoteFile)
+    : resolve(root, '.clasp-snapshots', 'preflight', row.file);
   const localHash = existsSync(localPath) ? hash(localPath) : null;
   const remoteHash = existsSync(remotePath) ? hash(remotePath) : null;
   if (localHash !== row.localSha256 || remoteHash !== row.remoteSha256) {
