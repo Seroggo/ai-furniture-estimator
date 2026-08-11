@@ -3,11 +3,12 @@
 ## Статус
 
 ```text
-PARTIAL — READY_FOR_GOOGLE_RUN
+COMPLETE
 ```
 
-Локальная реализация завершена и проверена. Статус не `COMPLETE`, потому что
-`setupSystem()` ещё не был фактически выполнен в dedicated DEV Google Spreadsheet.
+Локальная реализация и реальный dedicated DEV Google checkpoint завершены.
+Первый retry и второй idempotency run `setupSystem()` прошли успешно; финальная
+connector verification подтверждает accepted workbook contract.
 
 ## Что реализовано
 
@@ -120,17 +121,24 @@ preview; официальный calculation/quote не зависит от volat
 - title: `AI Furniture Calculation Base — DEV`;
 - preflight metadata: один sheet `Лист1`, grid 1000 x 26;
 - preflight bounded cell read `Лист1!A1:Z10`: пусто;
-- first run: `NOT RUN`;
-- second run / idempotency: `NOT RUN`;
-- verification: `PENDING`.
+- first run/retry: `PASS`;
+- second run / idempotency: `PASS`;
+- connector verification: `PASS`;
+- verification artifact:
+  `docs/stage-5-setup-system/stage-5-google-verification.md`.
 
-Причина: авторизованный Google Sheets connector доступен для metadata/cell
-verification, но не умеет создавать или выполнять bound Apps Script project.
-Доступная browser session показала форму входа Google и не имела безопасной
-авторизованной сессии. Workbook через API не изменялся, чтобы сохранить честный
-blank first-run checkpoint.
+Подтверждено:
 
-Ручной checkpoint: `docs/stage-5-setup-system/google-run-checklist.md`.
+```text
+11 canonical sheets in exact order
+136 exact headers
+11 / 11 frozen header rows
+66 / 66 strict validations
+136 / 136 expected number formats
+79 unique Reference_Values seeds
+no duplicate sheets / headers / seeds
+no synthetic production data
+```
 
 ## Deferred Google/runtime behavior
 
@@ -138,7 +146,6 @@ blank first-run checkpoint.
 - pricebook publication runtime;
 - `CURRENT_REPRICE` runtime;
 - полноценная Apps Script architecture / clasp (Stage 6);
-- финальный Google verification artifact до фактического первого и второго run.
 
 ## Tests
 
@@ -149,11 +156,11 @@ python tools/generate_setup_schema.py --check
 python tools/validate_sheets_schema.py
 -> VALID: 11 sheets, 136 columns
 
-new Stage 5 setup/schema tests: 8 / 8 PASS
+new Stage 5 setup/schema tests: 11 / 11 PASS
 Stage 4 schema tests:          20 / 20 PASS
 Stage 3 calculation tests:     11 / 11 PASS
 Stage 3 layout tests:          18 / 18 PASS
-full suite:                    57 / 57 PASS
+full suite:                    60 / 60 PASS
 
 py_compile: PASS
 Apps Script JavaScript syntax (node --check via stdin): PASS
@@ -169,11 +176,9 @@ Credentials, OAuth tokens, cookies, service-account keys и secrets не соз�
 
 ## Ограничения / blocker
 
-Единственный blocker статуса `COMPLETE`: пользователь должен один раз выполнить
-первый и второй Google run по checklist в авторизованной Google-сессии. После
-этого нужна connector verification и финальный verification artifact/report update.
-
-Stage 6 не начат.
+Blockers Stage 5 отсутствуют. Publication runtime, `CURRENT_REPRICE`, автоматическое
+управление `GOOGLEFINANCE` preview rows и полноценная Apps Script architecture
+остаются deferred согласно scope. Stage 6 не начат.
 
 ## Git
 
@@ -181,7 +186,7 @@ Stage 6 не начат.
 - baseline: `f075d66`;
 - Stage 5 context: `2838606`;
 - implementation/tests: `9e1a76b`;
-- report/checklist: финальный docs commit;
-- working tree: clean после финального docs commit;
+- locale validation fix: `ea52905`;
+- Google verification/report: финальный Stage 5 commit;
+- working tree: clean после финального commit;
 - push: NO.
-
