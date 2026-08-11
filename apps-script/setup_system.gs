@@ -1,4 +1,4 @@
-/** Stage 5 deterministic workbook bootstrap. */
+/** Stage 5 deterministic workbook bootstrap; canonical source is local Git from Stage 6. */
 
 function setupSystem() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
