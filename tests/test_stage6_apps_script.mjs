@@ -27,6 +27,7 @@ function walk(current = appsRoot) {
 }
 
 function run(command, args, input) {
+  if (command === 'git') args = ['-c', `safe.directory=${root.replaceAll('\\', '/')}`, ...args];
   return spawnSync(command, args, { cwd: root, encoding: 'utf8', input });
 }
 
@@ -108,4 +109,5 @@ test('checkpoint comparison normalizes clasp pull representation and gates remot
   assert.match(checkpoint, /generated\/schema_manifest\.gs/);
   assert.match(preflight, /preflight-approved-removals\.json/);
   assert.match(preflight, /must exactly match unknown remote files/);
+  assert.match(preflight, /safe\.directory=/);
 });

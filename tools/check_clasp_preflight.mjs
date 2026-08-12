@@ -33,7 +33,7 @@ function hash(path) {
   return createHash('sha256').update(readFileSync(path)).digest('hex');
 }
 
-const gitState = run('git', ['status', '--porcelain']);
+const gitState = run('git', ['-c', `safe.directory=${root.replaceAll('\\', '/')}`, 'status', '--porcelain']);
 if (gitState) fail('Git working tree must be clean before a remote write.');
 
 const configPath = resolve(root, '.clasp.json');
