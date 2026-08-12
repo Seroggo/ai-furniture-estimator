@@ -9,6 +9,8 @@ const canonicalRoot = resolve(repositoryRoot, 'apps-script');
 const snapshotsRoot = resolve(repositoryRoot, '.clasp-snapshots');
 const expectedFiles = [
   'appsscript.json',
+  'custom_price.gs',
+  'generated/human_ux_manifest.gs',
   'generated/schema_manifest.gs',
   'setup_system.gs',
 ];
@@ -63,7 +65,11 @@ function normalized(path) {
 function canonicalRemoteFile(file) {
   const normalizedFile = file.replaceAll('\\', '/');
   if (normalizedFile === 'appsscript.json') return 'appsscript.json';
+  if (/^(?:.*\/)?custom_price\.(?:js|gs)$/.test(normalizedFile)) return 'custom_price.gs';
   if (/^(?:.*\/)?setup_system\.(?:js|gs)$/.test(normalizedFile)) return 'setup_system.gs';
+  if (/^(?:generated\/)?human_ux_manifest\.(?:js|gs)$/.test(normalizedFile)) {
+    return 'generated/human_ux_manifest.gs';
+  }
   if (/^(?:generated\/)?schema_manifest\.(?:js|gs)$/.test(normalizedFile)) {
     return 'generated/schema_manifest.gs';
   }

@@ -18,7 +18,8 @@ function setupSystem() {
     'reference_value_id'
   );
   appendCalculationRuleSeeds_(sheetsByName.Calculation_Rules, manifest.calculationRuleSeeds);
-  orderCanonicalSheets_(spreadsheet, manifest.sheetOrder);
+  configureCustomPriceSheet_(sheetsByName.Custom_Price);
+  orderCanonicalSheets_(spreadsheet, [HUMAN_UX_MANIFEST.sheetName].concat(manifest.sheetOrder));
   SpreadsheetApp.flush();
 
   return verifySetupSystem_();
@@ -30,13 +31,14 @@ function verifySetupSystem_() {
   var manifest = STAGE5_SCHEMA_MANIFEST;
   var actualSheets = spreadsheet.getSheets();
   var actualNames = actualSheets.map(function (sheet) { return sheet.getName(); });
-  if (JSON.stringify(actualNames) !== JSON.stringify(manifest.sheetOrder)) {
+  var expectedNames = [HUMAN_UX_MANIFEST.sheetName].concat(manifest.sheetOrder);
+  if (JSON.stringify(actualNames) !== JSON.stringify(expectedNames)) {
     throw new Error('Workbook sheet order differs from the canonical manifest.');
   }
 
   var totalColumns = 0;
   manifest.sheets.forEach(function (definition, index) {
-    var sheet = actualSheets[index];
+    var sheet = spreadsheet.getSheetByName(definition.name);
     var headers = sheet.getRange(1, 1, 1, definition.columns.length).getDisplayValues()[0];
     var expected = definition.columns.map(function (column) { return column.name; });
     if (JSON.stringify(headers) !== JSON.stringify(expected)) {
@@ -50,6 +52,7 @@ function verifySetupSystem_() {
   if (totalColumns !== 136) {
     throw new Error('Canonical manifest must contain exactly 136 columns; got ' + totalColumns + '.');
   }
+  verifyCustomPriceSheet_(spreadsheet.getSheetByName(HUMAN_UX_MANIFEST.sheetName));
   return {
     status: 'PASS',
     spreadsheetId: spreadsheet.getId(),
@@ -63,6 +66,7 @@ function verifySetupSystem_() {
 function prepareCanonicalSheets_(spreadsheet, manifest) {
   var canonical = {};
   manifest.sheetOrder.forEach(function (name) { canonical[name] = true; });
+  canonical[HUMAN_UX_MANIFEST.sheetName] = true;
   var sheets = spreadsheet.getSheets();
   var existingCanonical = sheets.filter(function (sheet) { return canonical[sheet.getName()]; });
   var unknown = sheets.filter(function (sheet) { return !canonical[sheet.getName()]; });
@@ -80,7 +84,7 @@ function prepareCanonicalSheets_(spreadsheet, manifest) {
 
   var byName = {};
   spreadsheet.getSheets().forEach(function (sheet) { byName[sheet.getName()] = sheet; });
-  manifest.sheetOrder.forEach(function (name) {
+  [HUMAN_UX_MANIFEST.sheetName].concat(manifest.sheetOrder).forEach(function (name) {
     if (!byName[name]) {
       byName[name] = spreadsheet.insertSheet(name);
     }

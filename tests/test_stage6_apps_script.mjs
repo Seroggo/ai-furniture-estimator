@@ -10,6 +10,8 @@ const appsRoot = resolve(root, 'apps-script');
 const claspEntry = resolve(root, 'node_modules', '@google', 'clasp', 'build', 'src', 'index.js');
 const allowedSource = new Set([
   'appsscript.json',
+  'custom_price.gs',
+  'generated/human_ux_manifest.gs',
   'generated/schema_manifest.gs',
   'setup_system.gs',
 ]);
@@ -45,7 +47,14 @@ test('safe clasp example targets only apps-script root', () => {
 test('clasp ignore is an exact deploy whitelist', () => {
   const rules = readFileSync(resolve(root, '.claspignore'), 'utf8')
     .split(/\r?\n/).map((line) => line.trim()).filter((line) => line && !line.startsWith('#'));
-  assert.deepEqual(rules, ['**/**', '!appsscript.json', '!setup_system.gs', '!generated/schema_manifest.gs']);
+  assert.deepEqual(rules, [
+    '**/**',
+    '!appsscript.json',
+    '!custom_price.gs',
+    '!setup_system.gs',
+    '!generated/human_ux_manifest.gs',
+    '!generated/schema_manifest.gs',
+  ]);
   for (const file of walk()) assert.ok(allowedSource.has(file), `unexpected deployable source: ${file}`);
 });
 

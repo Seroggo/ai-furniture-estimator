@@ -5,7 +5,13 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const expected = ['appsscript.json', 'generated/schema_manifest.gs', 'setup_system.gs'];
+const expected = [
+  'appsscript.json',
+  'custom_price.gs',
+  'generated/human_ux_manifest.gs',
+  'generated/schema_manifest.gs',
+  'setup_system.gs',
+];
 const claspEntry = resolve(root, 'node_modules', '@google', 'clasp', 'build', 'src', 'index.js');
 
 function fail(message) {
@@ -42,6 +48,7 @@ for (const file of expected) {
 JSON.parse(readFileSync(resolve(root, 'apps-script', 'appsscript.json'), 'utf8'));
 
 run('python', ['tools/generate_setup_schema.py', '--check']);
+run('python', ['tools/generate_human_ux_manifest.py', '--check']);
 if (process.env.npm_execpath) {
   run(process.execPath, [process.env.npm_execpath, 'test']);
 } else if (process.platform === 'win32') {

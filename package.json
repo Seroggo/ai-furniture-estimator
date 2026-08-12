@@ -4,7 +4,7 @@
     "test": "npm run test:stage6 && npm run test:regression",
     "test:stage6": "node --test tests/test_stage6_apps_script.mjs",
     "test:regression": "python -m unittest discover -s tests -p \"test_*.py\"",
-    "schema:check": "python tools/generate_setup_schema.py --check",
+    "schema:check": "python tools/generate_setup_schema.py --check && python tools/generate_human_ux_manifest.py --check",
     "gas:login": "clasp login",
     "gas:status": "clasp status",
     "gas:snapshot:preflight": "node tools/clasp_checkpoint.mjs snapshot preflight",
