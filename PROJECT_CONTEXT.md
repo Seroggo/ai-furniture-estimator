@@ -1,31 +1,33 @@
 # AI Мебельщик — PROJECT_CONTEXT
 
-## Статус
+## 1. Назначение
+
+AI Мебельщик — MVP-система предварительного расчёта кухонной мебели.
+
+Единственная категория MVP:
 
 ```text
-Stage 0 — ACCEPTED
-Stage 1 — ACCEPTED
-Stage 2 — ACCEPTED WITH DEBT
-Stage 3 — ACCEPTED / CLOSED
-Stage 4 — ACCEPTED / CLOSED
-Stage 4 Price Patch — ACCEPTED / CLOSED
-Stage 5 — ACCEPTED / CLOSED
-Stage 6 — ACCEPTED / CLOSED
-Human UX Patch before Stage 7 — ACCEPTED / CLOSED
-
-Stage 7 — NOT STARTED
+Кухни
 ```
 
-Git baseline после Human UX Patch:
+Базовый принцип:
 
 ```text
-branch: main
-HEAD: final Human UX Patch commit (see git log)
-working tree: clean
-push: NO
+LLM понимает и структурирует вход.
+Детерминированный код проверяет, конфигурирует и рассчитывает.
+Google Sheets хранит master data, рабочие цены и результаты.
 ```
 
-## Канонический план
+LLM:
+
+- не является источником цен;
+- не рассчитывает итоговую стоимость;
+- не изобретает production module recipes;
+- не заменяет deterministic validation/calculation.
+
+---
+
+## 2. Канонический план
 
 ```text
 0. Репозиторий и Wiki
@@ -35,6 +37,7 @@ push: NO
 4. Схема Google Sheets
 5. setupSystem()
 6. Apps Script baseline + clasp
+Human UX Patch
 7. OpenRouter parser
 8. Расчётное ядро
 9. Web App
@@ -45,32 +48,104 @@ push: NO
 14. Ограниченный пилот
 ```
 
-## Accepted calculation baseline
+Human UX Patch — accepted corrective baseline между Stage 6 и Stage 7, а не отдельная
+новая продуктовая фаза.
+
+---
+
+## 3. Статус
+
+```text
+Stage 0 — ACCEPTED
+Stage 1 — ACCEPTED
+Stage 2 — ACCEPTED WITH DEBT
+Stage 3 — ACCEPTED / CLOSED
+Stage 4 — ACCEPTED / CLOSED
+Stage 4 Price Patch — ACCEPTED / CLOSED
+Stage 5 — ACCEPTED / CLOSED
+Stage 6 — ACCEPTED / CLOSED
+Human UX Patch — ACCEPTED / CLOSED
+
+Текущий этап — Stage 7
+```
+
+Git baseline после Human UX Patch:
+
+```text
+branch: main
+HEAD: fb9b9e0
+working tree: clean
+Git push: NO
+```
+
+Перед любой работой проверить фактический HEAD и working tree.
+
+---
+
+## 4. Accepted calculation baseline
+
+### Layout
 
 ```text
 calculation_model/layout_configurator.py
-calculation_model/calculation_engine.py
+tests/test_layout_configurator.py
 ```
 
 Принципы:
 
 ```text
 hard constraints > optimisation
-quantity model × pricebook = cost
-historical prices = fixtures/evidence only
-MODULE_TO_PARTS_V1 = REQUIRES_EXPERT
-synthetic BOM forbidden
+A/B/C → automatic generic candidates
+D → specialized / explicit only
+E → not automatic
+filler → separate entity
+NO_VALID_LAYOUT → explicit
+arbitrary custom widths → forbidden
+L/U/corners → NOT_SUPPORTED without system profile
 ```
 
-## Accepted Google Sheets schema
+`STUDIO_STANDARD` не доказан.
+
+### Quantity / cost
 
 ```text
-11 sheets
-136 columns
+calculation_model/calculation_engine.py
+tests/test_calculation_engine.py
+```
+
+Принцип:
+
+```text
+quantity model × published pricebook = cost
+```
+
+Historical prices — только fixtures/evidence.
+
+Открытый expert debt:
+
+```text
+MODULE_TO_PARTS_V1 = REQUIRES_EXPERT
+Basis alternative selection = REQUIRES_EXPERT
+order coefficients / rounding = REQUIRES_EXPERT
+hidden Medvedev logic = REQUIRES_EXPERT / NOT_SUPPORTED
+legacy J2/K2 semantics = REQUIRES_EXPERT
+```
+
+Synthetic BOM запрещён.
+
+---
+
+## 5. Google Sheets baseline
+
+Accepted technical contract:
+
+```text
+11 technical sheets
+136 technical columns
 9 relations
 ```
 
-Sheets:
+Technical sheets:
 
 ```text
 Schema_Meta
@@ -93,21 +168,47 @@ docs/stage-4-google-sheets/sheets-columns.csv
 docs/stage-4-google-sheets/sheets-relations.csv
 ```
 
-## Accepted pricing architecture
+Physical DEV workbook после Human UX Patch:
 
 ```text
-spr_price
-(mutable working source)
-        ↓
-validation / publication
-        ↓
-Pricebook_Versions
-        ↓
-Prices
-(immutable published truth)
+12 sheets total
+= Custom_Price + 11 technical sheets
 ```
 
-Pricing modes:
+---
+
+## 6. Accepted Human UX baseline
+
+Human-facing сейчас:
+
+```text
+Custom_Price → Актуальный прайс
+```
+
+Future Stage 10 contracts:
+
+```text
+Calculations → Реестр расчётов
+Offer        → Коммерческое предложение
+```
+
+`Calculations` и `Offer` физически сейчас не существуют.
+
+Pricing flow:
+
+```text
+Custom_Price
+        ↓ explicit syncCustomPrice()
+Catalog_Items + spr_price
+        ↓ future explicit publication
+Pricebook_Versions + Prices
+        ↓
+official calculation / quote
+```
+
+`Custom_Price` не публикует immutable prices автоматически.
+
+Accepted pricing modes:
 
 ```text
 MANUAL_RUB
@@ -115,167 +216,193 @@ FX_AUTO
 FX_MANUAL
 ```
 
-`GOOGLEFINANCE` — только future working FX preview source.
-Официальный расчёт/КП не зависит напрямую от volatile `spr_price`/FX preview.
-
-Future quote modes:
+`GOOGLEFINANCE`:
 
 ```text
-ORIGINAL
-CURRENT_REPRICE
+working preview only
 ```
 
-`CURRENT_REPRICE` использует тот же quantity/calculation snapshot и новую ACTIVE pricebook version; новый layout/BOM/quantity calculation не выполняется.
+Official calculation, ORIGINAL и CURRENT_REPRICE не читают volatile FX cache.
 
-## Stage 5 — accepted physical DEV workbook
-
-Dedicated workbook:
+Accepted UX docs:
 
 ```text
-AI Furniture Calculation Base — DEV
-locale: ru_RU
-time zone: Asia/Yekaterinburg
-```
-
-Pipeline:
-
-```text
-sheets-columns.csv + sheets-relations.csv
-        ↓
-tools/generate_setup_schema.py
-        ↓
-apps-script/generated/schema_manifest.gs
-        ↓
-apps-script/setup_system.gs :: setupSystem()
-```
-
-Final verification:
-
-```text
-11 canonical sheets — PASS
-136 exact headers — PASS
-canonical order — PASS
-11/11 frozen headers — PASS
-66 strict validations — PASS
-expected formats — PASS
-Schema_Meta — PASS
-79 unique Reference_Values seeds — PASS
-MODULE_TO_PARTS_V1 = REQUIRES_EXPERT — PASS
-production data absent — PASS
-first setup run — PASS
-second/idempotency run — PASS
-60 / 60 tests — PASS
-```
-
-Locale regression исправлен: integer validations используют separator-free custom formulas и работают на `ru_RU`.
-
-Accepted reports:
-
-```text
-docs/stage-5-setup-system/stage-5-report.md
-docs/stage-5-setup-system/stage-5-google-verification.md
-```
-
-## Stage 6 — accepted Apps Script baseline
-
-```text
-Apps Script baseline + clasp
-```
-
-Accepted flow:
-
-```text
-локальный Git repository
-        ↕
-controlled clasp sync
-        ↕
-существующий bound Apps Script DEV project
-```
-
-Локальный Git repository является canonical source of truth для Apps Script
-source code. Remote bound Apps Script project является DEV execution/debug
-target.
-
-Final verification:
-
-```text
-existing bound DEV project — PASS
-new project creation — NO
-@google/clasp 3.3.0 exact-pinned — PASS
-remote-derived appsscript.json — PASS
-exact three-file push scope — PASS
-pre-push remote snapshot/diff — PASS
-first controlled push — PASS
-round-trip equivalence — PASS
-unknown remote files — 0
-post-sync setupSystem() — PASS
-11 sheets / 136 headers — PASS
-66 strict validations — PASS
-79 unique Reference_Values — PASS
-Stage 5/4/3 regression tests — PASS
-secrets in Git — NONE
-```
-
-Подробный контракт:
-
-```text
-docs/stage-6-apps-script-baseline/stage-6-context.md
-docs/stage-6-apps-script-baseline/stage-6-report.md
-docs/stage-6-apps-script-baseline/apps-script-development.md
-```
-
-Stage 7 не начат. OpenRouter parser, Web App и business runtime следующих этапов
-не реализовывались.
-
-## Human UX Patch before Stage 7 — accepted
-
-Поверх accepted machine-oriented Stage 4–6 baseline добавлен human-facing
-upstream слой цен:
-
-```text
-Custom_Price (human working input)
-        ↓ explicit syncCustomPrice()
-Catalog_Items + spr_price (normalized machine working layer)
-        ↓ separate explicit publication, outside this patch
-Pricebook_Versions + Prices (immutable published truth)
-```
-
-Физический DEV workbook содержит `Custom_Price` первым листом и прежние 11
-technical sheets; technical contract остаётся 136 columns / 9 relations.
-`Calculations` и `Offer` имеют только deferred Stage 10 UX contracts и физически
-не создаются. `MANUAL_RUB`, `FX_AUTO` и `FX_MANUAL` поддержаны; один hidden
-`GOOGLEFINANCE` cache на USD/EUR/CNY используется только как working preview.
-
-Canonical artifacts:
-
-```text
-docs/human-ux-patch/custom-price-schema.json
 docs/human-ux-patch/human-ux-contract.md
 docs/human-ux-patch/calculations-ux-contract.md
 docs/human-ux-patch/offer-ux-contract.md
 docs/human-ux-patch/human-ux-patch-report.md
-apps-script/custom_price.gs
-apps-script/generated/human_ux_manifest.gs
 ```
 
-Google/clasp verification: clean preflight PASS; controlled push without
-`--force`; five-file round trip SAME; repeated `setupSystem()` PASS; empty
-`syncCustomPrice()` PASS; no production price rows created; Stage 7 NOT STARTED.
+---
 
-## Контекстная иерархия
+## 7. Apps Script / clasp baseline
+
+Local Git repository = canonical Apps Script source.
+
+```text
+apps-script/
+├── appsscript.json
+├── setup_system.gs
+├── custom_price.gs
+├── generated/
+│   ├── schema_manifest.gs
+│   └── [Human UX generated manifest]
+└── [Stage 7 files will be added here]
+```
+
+Фактические имена generated Human UX files проверить в repo; не создавать duplicate
+только из-за примера выше.
+
+Target:
+
+```text
+existing bound DEV Apps Script project
+→ AI Furniture Calculation Base — DEV
+```
+
+Clasp:
+
+```text
+@google/clasp 3.3.0 pinned
+```
+
+Remote workflow:
+
+```text
+local changes
+→ tests
+→ clean preflight
+→ isolated remote snapshot/diff
+→ controlled clasp push
+→ round-trip verification
+```
+
+Новый Apps Script project не создавать.
+
+Secrets / `.clasp.json` / `.clasprc.json` не коммитить.
+
+---
+
+## 8. Stage 7 — OpenRouter parser
+
+Stage 7 создаёт слой понимания пользовательского входа:
+
+```text
+text
++ optional images / sketches / renders
+        ↓
+OpenRouter
+        ↓
+strict structured parser output
+        ↓
+deterministic local validation
+        ↓
+Project Input JSON
+```
+
+Это parser, а не calculation engine.
+
+Stage 7 должен уметь:
+
+- принять свободный русский текст;
+- принять optional image input;
+- извлечь только явно поддерживаемые project facts;
+- отличить explicit fact от inference;
+- сохранить неизвестное как unknown/missing;
+- вернуть список вопросов/нехватающих данных;
+- вернуть structured Project Input JSON;
+- записать parser metadata/provenance для воспроизводимости;
+- не рассчитывать цену;
+- не создавать layout;
+- не создавать BOM;
+- не публиковать pricebook.
+
+Detailed contract:
+
+```text
+docs/stage-7-openrouter-parser/stage-7-context.md
+```
+
+---
+
+## 9. OpenRouter integration boundary
+
+OpenRouter используется через стандартный HTTP API из Apps Script.
+
+Security:
+
+```text
+OPENROUTER_API_KEY
+→ Script Properties / secure runtime property
+→ NEVER Google Sheet
+→ NEVER Git
+→ NEVER logs
+```
+
+Model slug — operational config, не secret.
+
+Parser result должен фиксировать:
+
+```text
+provider = openrouter
+model_requested
+model_returned, если доступно
+parser_schema_version
+prompt_version
+parsed_at
+```
+
+Выбор модели не должен быть зашит в business schema как вечный стандарт.
+
+---
+
+## 10. Project Input principle
+
+Project Input JSON — контракт между probabilistic parser и deterministic Stage 8.
+
+Главный принцип:
+
+```text
+LLM may interpret
+but deterministic code decides whether data is usable
+```
+
+Parser не должен silently default неизвестные бизнес-параметры.
+
+Допустимые состояния должны позволять выразить:
+
+```text
+KNOWN
+INFERRED
+UNKNOWN
+CONFLICT
+NOT_APPLICABLE
+```
+
+или эквивалентный компактный contract.
+
+Каждое существенное inferred значение должно быть явно отмечено и не превращаться
+в hard calculation input без validation/confirmation policy.
+
+---
+
+## 11. Контекстная иерархия
 
 ```text
 AI_FURNITURE_EXECUTION.md
 → HOW Codex works
 
 PROJECT_CONTEXT.md
-→ accepted project baseline
+→ accepted baseline
 
 stage-X-context.md
-→ current stage contract
+→ current task contract
 
-accepted reports / code / CSV / tests
-→ factual technical baseline
+accepted reports/docs
+→ factual outcomes
+
+code / JSON schema / CSV / tests
+→ canonical technical source
 ```
 
 Режим по умолчанию:
