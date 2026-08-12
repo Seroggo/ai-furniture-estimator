@@ -11,15 +11,16 @@ Stage 4 — ACCEPTED / CLOSED
 Stage 4 Price Patch — ACCEPTED / CLOSED
 Stage 5 — ACCEPTED / CLOSED
 Stage 6 — ACCEPTED / CLOSED
+Human UX Patch before Stage 7 — ACCEPTED / CLOSED
 
 Stage 7 — NOT STARTED
 ```
 
-Git baseline после Stage 6:
+Git baseline после Human UX Patch:
 
 ```text
 branch: main
-HEAD: final Stage 6 commit (see git log)
+HEAD: final Human UX Patch commit (see git log)
 working tree: clean
 push: NO
 ```
@@ -225,6 +226,41 @@ docs/stage-6-apps-script-baseline/apps-script-development.md
 
 Stage 7 не начат. OpenRouter parser, Web App и business runtime следующих этапов
 не реализовывались.
+
+## Human UX Patch before Stage 7 — accepted
+
+Поверх accepted machine-oriented Stage 4–6 baseline добавлен human-facing
+upstream слой цен:
+
+```text
+Custom_Price (human working input)
+        ↓ explicit syncCustomPrice()
+Catalog_Items + spr_price (normalized machine working layer)
+        ↓ separate explicit publication, outside this patch
+Pricebook_Versions + Prices (immutable published truth)
+```
+
+Физический DEV workbook содержит `Custom_Price` первым листом и прежние 11
+technical sheets; technical contract остаётся 136 columns / 9 relations.
+`Calculations` и `Offer` имеют только deferred Stage 10 UX contracts и физически
+не создаются. `MANUAL_RUB`, `FX_AUTO` и `FX_MANUAL` поддержаны; один hidden
+`GOOGLEFINANCE` cache на USD/EUR/CNY используется только как working preview.
+
+Canonical artifacts:
+
+```text
+docs/human-ux-patch/custom-price-schema.json
+docs/human-ux-patch/human-ux-contract.md
+docs/human-ux-patch/calculations-ux-contract.md
+docs/human-ux-patch/offer-ux-contract.md
+docs/human-ux-patch/human-ux-patch-report.md
+apps-script/custom_price.gs
+apps-script/generated/human_ux_manifest.gs
+```
+
+Google/clasp verification: clean preflight PASS; controlled push without
+`--force`; five-file round trip SAME; repeated `setupSystem()` PASS; empty
+`syncCustomPrice()` PASS; no production price rows created; Stage 7 NOT STARTED.
 
 ## Контекстная иерархия
 
