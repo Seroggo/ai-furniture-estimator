@@ -138,6 +138,17 @@ class HumanUxPatchTests(unittest.TestCase):
         self.assertNotIn("function onEdit", source)
         self.assertIn("publishedRowsChanged: 0", source)
 
+    def test_blank_google_checkbox_rows_are_ignored(self) -> None:
+        script = (
+            "const fs=require('fs'),vm=require('vm');"
+            "vm.runInThisContext(fs.readFileSync('apps-script/custom_price.gs','utf8'));"
+            "const row=Array(16).fill('');row[9]=false;"
+            "process.stdout.write(String(isCustomPriceRowBlank_(row)));"
+        )
+        result = subprocess.run(["node", "-e", script], cwd=ROOT, text=True, capture_output=True, check=False)
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual("true", result.stdout)
+
     def test_googlefinance_is_one_call_per_supported_currency_and_preview_only(self) -> None:
         formulas = [entry["formula"] for entry in self.manifest["fxCache"]]
         self.assertEqual(3, len(formulas))

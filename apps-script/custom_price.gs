@@ -325,7 +325,9 @@ function humanUxColumnIndexes_() {
 
 
 function isCustomPriceRowBlank_(row) {
-  return row.slice(0, 12).every(function (value) { return value === '' || value === null; });
+  return row.slice(0, 12).every(function (value) {
+    return value === '' || value === null || value === false;
+  });
 }
 
 
