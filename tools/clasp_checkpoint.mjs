@@ -11,7 +11,11 @@ const expectedFiles = [
   'appsscript.json',
   'custom_price.gs',
   'generated/human_ux_manifest.gs',
+  'generated/project_input_schema.gs',
   'generated/schema_manifest.gs',
+  'openrouter_client.gs',
+  'project_parser.gs',
+  'prompts/project_parser_prompt.gs',
   'setup_system.gs',
 ];
 
@@ -67,11 +71,19 @@ function canonicalRemoteFile(file) {
   if (normalizedFile === 'appsscript.json') return 'appsscript.json';
   if (/^(?:.*\/)?custom_price\.(?:js|gs)$/.test(normalizedFile)) return 'custom_price.gs';
   if (/^(?:.*\/)?setup_system\.(?:js|gs)$/.test(normalizedFile)) return 'setup_system.gs';
+  if (/^(?:.*\/)?openrouter_client\.(?:js|gs)$/.test(normalizedFile)) return 'openrouter_client.gs';
+  if (/^(?:.*\/)?project_parser\.(?:js|gs)$/.test(normalizedFile)) return 'project_parser.gs';
+  if (/^(?:prompts\/)?project_parser_prompt\.(?:js|gs)$/.test(normalizedFile)) {
+    return 'prompts/project_parser_prompt.gs';
+  }
   if (/^(?:generated\/)?human_ux_manifest\.(?:js|gs)$/.test(normalizedFile)) {
     return 'generated/human_ux_manifest.gs';
   }
   if (/^(?:generated\/)?schema_manifest\.(?:js|gs)$/.test(normalizedFile)) {
     return 'generated/schema_manifest.gs';
+  }
+  if (/^(?:generated\/)?project_input_schema\.(?:js|gs)$/.test(normalizedFile)) {
+    return 'generated/project_input_schema.gs';
   }
   return null;
 }

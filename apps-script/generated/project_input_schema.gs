@@ -60,7 +60,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -113,7 +115,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -173,7 +177,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -226,7 +232,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -279,7 +287,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -299,11 +309,10 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
       "properties": {
         "run_shape": {
           "type": "object",
-          "description": "Shape of the kitchen run.",
+          "description": "Shape explicitly requested or described by the user; the parser does not design a layout.",
           "properties": {
             "value": {
               "type": "string",
-              "description": "One of the known enum values or 'unknown' when UNKNOWN.",
               "enum": [
                 "straight",
                 "L-shaped",
@@ -346,7 +355,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -363,7 +374,8 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
           "properties": {
             "value": {
               "type": "integer",
-              "description": "Extracted integer value; 0 or null-like sentinel used only when fact_state = UNKNOWN or NOT_APPLICABLE."
+              "minimum": 0,
+              "description": "Extracted integer value; 0 is the sentinel for UNKNOWN, CONFLICT, or NOT_APPLICABLE."
             },
             "fact_state": {
               "type": "string",
@@ -399,7 +411,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -412,11 +426,10 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
         },
         "zone": {
           "type": "object",
-          "description": "Which zone the layout applies to.",
+          "description": "Which user-described zone the geometry applies to.",
           "properties": {
             "value": {
               "type": "string",
-              "description": "One of the known enum values or 'unknown' when UNKNOWN.",
               "enum": [
                 "base",
                 "wall",
@@ -458,7 +471,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -475,7 +490,8 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
           "properties": {
             "value": {
               "type": "integer",
-              "description": "Extracted integer value; 0 or null-like sentinel used only when fact_state = UNKNOWN or NOT_APPLICABLE."
+              "minimum": 0,
+              "description": "Extracted integer value; 0 is the sentinel for UNKNOWN, CONFLICT, or NOT_APPLICABLE."
             },
             "fact_state": {
               "type": "string",
@@ -511,7 +527,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -578,7 +596,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                       }
                     },
                     "required": [
-                      "source_type"
+                      "source_type",
+                      "source_ref",
+                      "evidence_note"
                     ],
                     "additionalProperties": false
                   }
@@ -631,7 +651,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                       }
                     },
                     "required": [
-                      "source_type"
+                      "source_type",
+                      "source_ref",
+                      "evidence_note"
                     ],
                     "additionalProperties": false
                   }
@@ -644,11 +666,10 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
               },
               "module_class": {
                 "type": "object",
-                "description": "Class of module (base, wall, tall) or unknown.",
+                "description": "User-requested class of module (base, wall, tall) or unknown.",
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "One of the known enum values or 'unknown' when UNKNOWN.",
                     "enum": [
                       "base",
                       "wall",
@@ -690,7 +711,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                       }
                     },
                     "required": [
-                      "source_type"
+                      "source_type",
+                      "source_ref",
+                      "evidence_note"
                     ],
                     "additionalProperties": false
                   }
@@ -707,7 +730,8 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 "properties": {
                   "value": {
                     "type": "integer",
-                    "description": "Extracted integer value; 0 or null-like sentinel used only when fact_state = UNKNOWN or NOT_APPLICABLE."
+                    "minimum": 0,
+                    "description": "Extracted integer value; 0 is the sentinel for UNKNOWN, CONFLICT, or NOT_APPLICABLE."
                   },
                   "fact_state": {
                     "type": "string",
@@ -743,7 +767,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                       }
                     },
                     "required": [
-                      "source_type"
+                      "source_type",
+                      "source_ref",
+                      "evidence_note"
                     ],
                     "additionalProperties": false
                   }
@@ -760,7 +786,8 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 "properties": {
                   "value": {
                     "type": "integer",
-                    "description": "Extracted integer value; 0 or null-like sentinel used only when fact_state = UNKNOWN or NOT_APPLICABLE."
+                    "minimum": 0,
+                    "description": "Extracted integer value; 0 is the sentinel for UNKNOWN, CONFLICT, or NOT_APPLICABLE."
                   },
                   "fact_state": {
                     "type": "string",
@@ -796,7 +823,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                       }
                     },
                     "required": [
-                      "source_type"
+                      "source_type",
+                      "source_ref",
+                      "evidence_note"
                     ],
                     "additionalProperties": false
                   }
@@ -860,7 +889,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                   }
                 },
                 "required": [
-                  "source_type"
+                  "source_type",
+                  "source_ref",
+                  "evidence_note"
                 ],
                 "additionalProperties": false
               }
@@ -917,7 +948,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                   }
                 },
                 "required": [
-                  "source_type"
+                  "source_type",
+                  "source_ref",
+                  "evidence_note"
                 ],
                 "additionalProperties": false
               }
@@ -978,7 +1011,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -1031,7 +1066,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -1084,7 +1121,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -1137,7 +1176,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -1190,7 +1231,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -1246,7 +1289,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                   }
                 },
                 "required": [
-                  "source_type"
+                  "source_type",
+                  "source_ref",
+                  "evidence_note"
                 ],
                 "additionalProperties": false
               }
@@ -1271,7 +1316,8 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
           "properties": {
             "value": {
               "type": "integer",
-              "description": "Extracted integer value; 0 or null-like sentinel used only when fact_state = UNKNOWN or NOT_APPLICABLE."
+              "minimum": 0,
+              "description": "Extracted integer value; 0 is the sentinel for UNKNOWN, CONFLICT, or NOT_APPLICABLE."
             },
             "fact_state": {
               "type": "string",
@@ -1307,7 +1353,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -1360,7 +1408,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -1413,7 +1463,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 }
               },
               "required": [
-                "source_type"
+                "source_type",
+                "source_ref",
+                "evidence_note"
               ],
               "additionalProperties": false
             }
@@ -1469,7 +1521,9 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                   }
                 },
                 "required": [
-                  "source_type"
+                  "source_type",
+                  "source_ref",
+                  "evidence_note"
                 ],
                 "additionalProperties": false
               }
@@ -1647,6 +1701,8 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
   },
   "required": [
     "schema_version",
+    "missing_questions",
+    "evidence",
     "parser_metadata"
   ],
   "additionalProperties": false,

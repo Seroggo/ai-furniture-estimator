@@ -2,8 +2,9 @@
 
 The canonical source of truth is docs/stage-7-openrouter-parser/project-input.schema.json.
 This generator resolves all internal $ref/$defs references into one self-contained
-JSON Schema object that Apps Script sends to OpenRouter as response_format and uses
-for deterministic local validation. No independent manual schema copy exists in JS.
+JSON Schema object that Apps Script uses for deterministic local validation. The
+OpenRouter response schema is derived from it by omitting only trusted parser metadata,
+which is attached by local code after the model response. No manual schema copy exists.
 """
 
 from __future__ import annotations
@@ -25,9 +26,7 @@ ANNOTATION_KEYWORDS = {
     "$id",
     "title",
     "description",
-    "enum_values",
 }
-STRIP_AFTER_RESOLVE = {"enum_values"}
 
 
 def _dereference(
@@ -56,11 +55,6 @@ def _dereference(
                 continue
             if key in ANNOTATION_KEYWORDS and value is not None:
                 resolved[key] = value
-        if "enum_values" in node:
-            if isinstance(resolved.get("properties"), dict) and "value" in resolved["properties"]:
-                resolved["properties"]["value"]["enum"] = list(node["enum_values"])
-            else:
-                raise ValueError(f"enum_values on {ref} has no resolvable value property")
         return _dereference(resolved, defs, guard)
 
     return {key: _dereference(value, defs, seen) for key, value in node.items()}
@@ -73,8 +67,6 @@ def _strip_keywords(node: Any) -> Any:
         return node
     cleaned: dict[str, Any] = {}
     for key, value in node.items():
-        if key in STRIP_AFTER_RESOLVE:
-            continue
         cleaned[key] = _strip_keywords(value)
     return cleaned
 
@@ -101,7 +93,9 @@ def build_schema(source: Path = DEFAULT_SOURCE) -> dict[str, Any]:
         "Evidence",
         "TextFact",
         "IntegerFact",
-        "EnumFact",
+        "LayoutShapeFact",
+        "ZoneFact",
+        "ModuleClassFact",
         "RequiredModule",
         "MissingQuestion",
         "EvidenceItem",

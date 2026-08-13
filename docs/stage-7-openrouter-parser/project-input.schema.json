@@ -49,18 +49,16 @@
       "description": "Requested kitchen geometry and dimensions.",
       "properties": {
         "run_shape": {
-          "$ref": "#/$defs/EnumFact",
-          "description": "Shape of the kitchen run.",
-          "enum_values": ["straight", "L-shaped", "U-shaped", "galley", "unknown"]
+          "$ref": "#/$defs/LayoutShapeFact",
+          "description": "Shape explicitly requested or described by the user; the parser does not design a layout."
         },
         "run_length_mm": {
           "$ref": "#/$defs/IntegerFact",
           "description": "Total available length for the run in millimetres."
         },
         "zone": {
-          "$ref": "#/$defs/EnumFact",
-          "description": "Which zone the layout applies to.",
-          "enum_values": ["base", "wall", "tall", "unknown"]
+          "$ref": "#/$defs/ZoneFact",
+          "description": "Which user-described zone the geometry applies to."
         },
         "wall_height_mm": {
           "$ref": "#/$defs/IntegerFact",
@@ -175,7 +173,7 @@
       "$ref": "#/$defs/ParserMetadata"
     }
   },
-  "required": ["schema_version", "parser_metadata"],
+  "required": ["schema_version", "missing_questions", "evidence", "parser_metadata"],
   "additionalProperties": false,
   "$defs": {
     "FactState": {
@@ -201,7 +199,7 @@
           "description": "Brief human-readable observation that supports this fact."
         }
       },
-      "required": ["source_type"],
+      "required": ["source_type", "source_ref", "evidence_note"],
       "additionalProperties": false
     },
     "TextFact": {
@@ -228,7 +226,8 @@
       "properties": {
         "value": {
           "type": "integer",
-          "description": "Extracted integer value; 0 or null-like sentinel used only when fact_state = UNKNOWN or NOT_APPLICABLE."
+          "minimum": 0,
+          "description": "Extracted integer value; 0 is the sentinel for UNKNOWN, CONFLICT, or NOT_APPLICABLE."
         },
         "fact_state": {
           "$ref": "#/$defs/FactState"
@@ -240,20 +239,44 @@
       "required": ["value", "fact_state"],
       "additionalProperties": false
     },
-    "EnumFact": {
+    "LayoutShapeFact": {
       "type": "object",
-      "description": "An enum-constrained fact with certainty and optional evidence.",
+      "description": "A user-described kitchen run shape with certainty and provenance.",
       "properties": {
         "value": {
           "type": "string",
-          "description": "One of the known enum values or 'unknown' when UNKNOWN."
+          "enum": ["straight", "L-shaped", "U-shaped", "galley", "unknown"]
         },
-        "fact_state": {
-          "$ref": "#/$defs/FactState"
+        "fact_state": {"$ref": "#/$defs/FactState"},
+        "evidence": {"$ref": "#/$defs/Evidence"}
+      },
+      "required": ["value", "fact_state"],
+      "additionalProperties": false
+    },
+    "ZoneFact": {
+      "type": "object",
+      "description": "A user-described kitchen zone with certainty and provenance.",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": ["base", "wall", "tall", "unknown"]
         },
-        "evidence": {
-          "$ref": "#/$defs/Evidence"
-        }
+        "fact_state": {"$ref": "#/$defs/FactState"},
+        "evidence": {"$ref": "#/$defs/Evidence"}
+      },
+      "required": ["value", "fact_state"],
+      "additionalProperties": false
+    },
+    "ModuleClassFact": {
+      "type": "object",
+      "description": "A user-requested module class with certainty and provenance.",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": ["base", "wall", "tall", "unknown"]
+        },
+        "fact_state": {"$ref": "#/$defs/FactState"},
+        "evidence": {"$ref": "#/$defs/Evidence"}
       },
       "required": ["value", "fact_state"],
       "additionalProperties": false
@@ -271,9 +294,8 @@
           "description": "Functional role (e.g. cooking, washing, storage)."
         },
         "module_class": {
-          "$ref": "#/$defs/EnumFact",
-          "description": "Class of module (base, wall, tall) or unknown.",
-          "enum_values": ["base", "wall", "tall", "unknown"]
+          "$ref": "#/$defs/ModuleClassFact",
+          "description": "User-requested class of module (base, wall, tall) or unknown."
         },
         "width_mm": {
           "$ref": "#/$defs/IntegerFact",

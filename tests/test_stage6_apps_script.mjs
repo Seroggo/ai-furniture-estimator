@@ -12,7 +12,11 @@ const allowedSource = new Set([
   'appsscript.json',
   'custom_price.gs',
   'generated/human_ux_manifest.gs',
+  'generated/project_input_schema.gs',
   'generated/schema_manifest.gs',
+  'openrouter_client.gs',
+  'project_parser.gs',
+  'prompts/project_parser_prompt.gs',
   'setup_system.gs',
 ]);
 
@@ -53,8 +57,12 @@ test('clasp ignore is an exact deploy whitelist', () => {
     '!appsscript.json',
     '!custom_price.gs',
     '!setup_system.gs',
+    '!openrouter_client.gs',
+    '!project_parser.gs',
+    '!prompts/project_parser_prompt.gs',
     '!generated/human_ux_manifest.gs',
     '!generated/schema_manifest.gs',
+    '!generated/project_input_schema.gs',
   ]);
   for (const file of walk()) assert.ok(allowedSource.has(file), `unexpected deployable source: ${file}`);
 });
@@ -98,6 +106,11 @@ test('remote-derived appsscript manifest is valid when checkpoint has supplied i
 
 test('generated schema manifest is current', () => {
   const result = run('python', ['tools/generate_setup_schema.py', '--check']);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test('generated project input schema is current', () => {
+  const result = run('python', ['tools/generate_project_input_schema.py', '--check']);
   assert.equal(result.status, 0, result.stdout + result.stderr);
 });
 

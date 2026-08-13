@@ -72,13 +72,16 @@ a separate validation/confirmation policy.
 
 ### 4.3. Evidence / provenance
 
-Each significant fact may carry an `evidence` object:
+Every `KNOWN`, `INFERRED`, and `CONFLICT` fact carries a complete `evidence` object:
 
 ```text
 source_type: TEXT | IMAGE | MULTI_SOURCE
 source_ref:  text span label / image index / attachment id
 evidence_note: brief observation
 ```
+
+`UNKNOWN` and `NOT_APPLICABLE` do not carry evidence. `CONFLICT` never selects one
+of the conflicting values; it uses the schema sentinel and explains the conflict.
 
 A separate `evidence` array at the top level aggregates input source observations.
 
@@ -101,7 +104,9 @@ reason:       why this information is needed
 
 ### 4.5. Parser metadata
 
-Every result includes technical metadata:
+Every successful result includes technical metadata. The model is not trusted to
+produce these operational fields: local code attaches them from the actual invocation
+after parsing and before final validation.
 
 ```text
 request_id
@@ -151,7 +156,7 @@ INPUT_INVALID         — invalid input (bad image, missing text, etc.)
 
 ### 6.2. Retry policy
 
-- Only transient HTTP/rate-limit/server failures are retried.
+- Only transport failures, HTTP 408/429, and HTTP 5xx failures are retried.
 - Maximum retry count: 2 (explicit and bounded).
 - Semantic-invalid results (`PARSER_OUTPUT_INVALID`) are NEVER retried.
 - Request timeout: 60 seconds.
@@ -169,9 +174,9 @@ After every successful HTTP response, the local validator runs:
    - Positive dimensions when present.
    - No negative quantities.
    - Accepted layout shape enum only.
-   - `KNOWN` must have evidence (`evidence.source_type`).
+   - `KNOWN` and `INFERRED` must have complete evidence.
    - `CONFLICT` must describe conflicting evidence.
-   - Blocking question paths exist in schema.
+   - Every missing-question path exists in schema and question IDs are unique.
    - Unknown fields / additional properties rejected.
    - No price/cost fields outside schema.
 4. On failure: return `PARSER_OUTPUT_INVALID` with safe diagnostic summary.

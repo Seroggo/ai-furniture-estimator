@@ -9,7 +9,11 @@ const expected = [
   'appsscript.json',
   'custom_price.gs',
   'generated/human_ux_manifest.gs',
+  'generated/project_input_schema.gs',
   'generated/schema_manifest.gs',
+  'openrouter_client.gs',
+  'project_parser.gs',
+  'prompts/project_parser_prompt.gs',
   'setup_system.gs',
 ];
 const claspEntry = resolve(root, 'node_modules', '@google', 'clasp', 'build', 'src', 'index.js');
@@ -49,6 +53,7 @@ JSON.parse(readFileSync(resolve(root, 'apps-script', 'appsscript.json'), 'utf8')
 
 run('python', ['tools/generate_setup_schema.py', '--check']);
 run('python', ['tools/generate_human_ux_manifest.py', '--check']);
+run('python', ['tools/generate_project_input_schema.py', '--check']);
 if (process.env.npm_execpath) {
   run(process.execPath, [process.env.npm_execpath, 'test']);
 } else if (process.platform === 'win32') {

@@ -3,5 +3,9 @@
 !appsscript.json
 !custom_price.gs
 !setup_system.gs
+!openrouter_client.gs
+!project_parser.gs
+!prompts/project_parser_prompt.gs
 !generated/human_ux_manifest.gs
 !generated/schema_manifest.gs
+!generated/project_input_schema.gs
