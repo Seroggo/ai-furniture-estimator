@@ -39,7 +39,12 @@ keeps v1 because no live output or accepted consumer existed for the incomplete 
 bumping the version would preserve an erroneous pre-checkpoint contract. The Python generator
 resolves internal references and produces only
 `apps-script/generated/project_input_schema.gs`; there is no second manually maintained
-schema.
+schema. That generated artifact now contains two explicitly named representations:
+`PROJECT_INPUT_SCHEMA` for canonical local validation and
+`PROJECT_INPUT_OPENROUTER_SCHEMA` for strict Structured Outputs transport. The latter
+is generated recursively from the former, requires every defined object property,
+uses nullable transport fields for canonical-optional values, and removes unsupported
+validation-only keywords such as `minimum`, `maximum`, and `format`.
 
 Codex fixed enum enforcement so layout shape, zone, and module class are true JSON
 Schema enums rather than custom annotations understood only by the generator. Integer
@@ -81,6 +86,10 @@ provider.require_parameters = true
 stream = false
 ```
 
+`response_format.json_schema.schema` uses only the generated
+`PROJECT_INPUT_OPENROUTER_SCHEMA`. The canonical schema is never sent as the transport
+contract and remains the sole final validation contract.
+
 Multimodal content is text-first followed by `image_url` data URLs. Supported MIME
 types are PNG, JPEG, and WebP. Source references are included in the text part for
 provenance. Base64 and MIME are validated before any HTTP call.
@@ -103,7 +112,9 @@ messages.
 
 ## Parser and deterministic validation
 
-Business output is parsed without silent repair. Trusted operational metadata is
+Business output is parsed without semantic repair. A deterministic transport decoder
+removes only `null` placeholders for properties that are optional in the canonical
+schema; required nulls remain invalid. Trusted operational metadata is
 attached locally from the actual call (`request_id`, schema/prompt versions, requested
 and returned models, timestamp, modalities, provider request ID, and sanitized token
 usage), then the complete Project Input is validated.
@@ -118,7 +129,7 @@ and forbidden price/cost/BOM fields.
 Mocked Stage 7 suite:
 
 ```text
-14 / 14 PASS
+19 / 19 PASS
 ```
 
 It covers complete text, incomplete input with `UNKNOWN` and questions, conflict,
@@ -132,7 +143,7 @@ The corrective contract regression proves that `KITCHEN` passes, a missing
 
 ```text
 Stage 6 Node checks:       10 / 10 PASS
-Stage 7 mocked checks:     14 / 14 PASS
+Stage 7 mocked checks:     19 / 19 PASS
 Python regression suite:  74 / 74 PASS
 Human UX regressions:     PASS
 Stage 5/4/3 regressions:  PASS

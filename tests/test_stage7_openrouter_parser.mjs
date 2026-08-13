@@ -130,6 +130,58 @@ function plain(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function assertStrictTransportSchema(node, path = '$') {
+  if (Array.isArray(node)) {
+    node.forEach((item, index) => assertStrictTransportSchema(item, `${path}[${index}]`));
+    return;
+  }
+  if (!node || typeof node !== 'object') return;
+  const types = Array.isArray(node.type) ? node.type : [node.type];
+  if (types.includes('object')) {
+    const properties = Object.keys(node.properties || {});
+    assert.deepEqual(Array.from(node.required || []).sort(), properties.sort(), `${path} must require every property`);
+    assert.equal(node.additionalProperties, false, `${path} must reject additional properties`);
+  }
+  assert.equal('format' in node, false, `${path} must not contain format`);
+  assert.equal('minimum' in node, false, `${path} must not contain minimum`);
+  assert.equal('maximum' in node, false, `${path} must not contain maximum`);
+  Object.entries(node).forEach(([key, value]) => assertStrictTransportSchema(value, `${path}.${key}`));
+}
+
+function unknownTransportOutput() {
+  const unknownText = () => ({ value: '', fact_state: 'UNKNOWN', evidence: null });
+  const unknownInteger = () => ({ value: 0, fact_state: 'UNKNOWN', evidence: null });
+  return {
+    schema_version: 'project-input-v1',
+    project_type: 'KITCHEN',
+    project: { name: unknownText(), notes: unknownText() },
+    client: { name: unknownText(), address: unknownText(), phone: unknownText() },
+    layout: {
+      run_shape: { value: 'unknown', fact_state: 'UNKNOWN', evidence: null },
+      run_length_mm: unknownInteger(),
+      zone: { value: 'unknown', fact_state: 'UNKNOWN', evidence: null },
+      wall_height_mm: unknownInteger(),
+    },
+    modules: { required_modules: [], forbidden_roles: [], preferred_module_order: [] },
+    materials: {
+      countertop_material: unknownText(),
+      facade_material: unknownText(),
+      facade_color: unknownText(),
+      body_material: unknownText(),
+      edge_material: unknownText(),
+      hardware_preferences: [],
+    },
+    constraints: {
+      budget_rub: unknownInteger(),
+      budget_notes: unknownText(),
+      deadline: unknownText(),
+      special_requirements: [],
+    },
+    missing_questions: [],
+    evidence: [],
+  };
+}
+
 test('complete text input produces validated facts and deterministic metadata', () => {
   const { context } = createRuntime();
   const result = context.parseProjectInput(
@@ -251,6 +303,7 @@ test('multimodal request is text-first, uses data URLs, and requires response_fo
   assert.equal(payload.response_format.type, 'json_schema');
   assert.equal(payload.response_format.json_schema.strict, true);
   assert.equal('parser_metadata' in payload.response_format.json_schema.schema.properties, false);
+  assert.deepEqual(payload.response_format.json_schema.schema, plain(context.PROJECT_INPUT_OPENROUTER_SCHEMA));
   assert.equal(payload.stream, false);
   assert.equal(options.timeoutSeconds, 60);
   assert.deepEqual(plain(result.data.parser_metadata.input_modalities), ['text', 'image']);
@@ -445,8 +498,64 @@ test('canonical schema is the only source and generated artifact is current', ()
   assert.equal(JSON.stringify(schema).includes('enum_values'), false);
   assert.deepEqual(schema.$defs.LayoutShapeFact.properties.value.enum, ['straight', 'L-shaped', 'U-shaped', 'galley', 'unknown']);
   assert.equal(schema.$defs.IntegerFact.properties.value.minimum, 0);
+  assert.equal(schema.$defs.ParserMetadata.properties.parsed_at.format, 'date-time');
   const generated = spawnSync('python', ['tools/generate_project_input_schema.py', '--check'], { cwd: root, encoding: 'utf8' });
   assert.equal(generated.status, 0, generated.stdout + generated.stderr);
+  const clientSource = readFileSync(resolve(appsRoot, 'openrouter_client.gs'), 'utf8');
+  assert.match(clientSource, /PROJECT_INPUT_OPENROUTER_SCHEMA/);
+  assert.doesNotMatch(clientSource, /delete schema\.properties\.parser_metadata/);
+});
+
+test('generated transport schema is strict-compatible while canonical constraints remain richer', () => {
+  const { context } = createRuntime();
+  const transport = plain(context.PROJECT_INPUT_OPENROUTER_SCHEMA);
+  const canonical = plain(context.PROJECT_INPUT_SCHEMA);
+  assertStrictTransportSchema(transport);
+  assert.equal('parser_metadata' in transport.properties, false);
+  assert.deepEqual(transport.properties.project_type.enum, ['KITCHEN']);
+  assert.deepEqual(transport.properties.missing_questions.type, 'array');
+  assert.equal(transport.properties.layout.additionalProperties, false);
+  assert.equal(canonical.properties.layout.properties.run_length_mm.properties.value.minimum, 0);
+  assert.equal(canonical.properties.parser_metadata.properties.parsed_at.format, 'date-time');
+});
+
+test('UNKNOWN transport null sentinels decode without weakening canonical validation', () => {
+  const { context } = createRuntime();
+  const output = unknownTransportOutput();
+  const result = context.parseProjectInput(
+    { text: 'No project facts are available.' },
+    { transport: successTransport(output), sleeper: () => {} },
+  );
+  assert.equal(result.status, 'SUCCESS', JSON.stringify(result));
+  assert.equal(result.data.layout.run_length_mm.fact_state, 'UNKNOWN');
+  assert.equal(result.data.layout.run_length_mm.value, 0);
+  assert.equal('evidence' in result.data.layout.run_length_mm, false);
+});
+
+test('transport-compatible values still fail canonical minimum and date-time checks', () => {
+  const { context } = createRuntime();
+  const output = unknownTransportOutput();
+  output.layout.run_length_mm = {
+    value: -1,
+    fact_state: 'KNOWN',
+    evidence: evidence('TEXT', 'text:1', 'Explicit negative test value.'),
+  };
+  let result = context.parseProjectInput(
+    { text: 'Synthetic negative dimension.' },
+    { transport: successTransport(output), sleeper: () => {} },
+  );
+  assert.equal(result.category, 'PARSER_OUTPUT_INVALID');
+  assert.match(result.errors.join('\n'), /greater than or equal to 0/);
+
+  result = context.parseProjectInput(
+    { text: 'Valid synthetic baseline.' },
+    { transport: successTransport(unknownTransportOutput()), sleeper: () => {} },
+  );
+  assert.equal(result.status, 'SUCCESS', JSON.stringify(result));
+  result.data.parser_metadata.parsed_at = 'not-a-date';
+  const validation = context.validateProjectInput(result.data);
+  assert.equal(validation.valid, false);
+  assert.match(validation.errors.join('\n'), /valid ISO 8601 date-time/);
 });
 
 test('project_type canonical constraint accepts only required KITCHEN', () => {

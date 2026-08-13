@@ -60,7 +60,7 @@ function parseProjectInput(input, options) {
     };
   }
 
-  var structured = clientResult.data;
+  var structured = decodeOpenRouterTransport_(clientResult.data, PROJECT_INPUT_SCHEMA);
   if (!structured || typeof structured !== 'object' || Array.isArray(structured)) {
     return buildParserOutputError_(clientResult, 'Model output must be a JSON object.');
   }
@@ -93,6 +93,31 @@ function parseProjectInput(input, options) {
     usage: clientResult.usage,
     latencyMs: clientResult.latencyMs,
   };
+}
+
+
+/** Removes only transport nulls that represent properties optional in the canonical schema. */
+function decodeOpenRouterTransport_(data, canonicalSchema) {
+  if (Array.isArray(data)) {
+    var itemSchema = canonicalSchema && canonicalSchema.items;
+    return data.map(function (item) {
+      return decodeOpenRouterTransport_(item, itemSchema);
+    });
+  }
+  if (!data || typeof data !== 'object' || !canonicalSchema || typeof canonicalSchema !== 'object') {
+    return data;
+  }
+
+  var decoded = {};
+  var required = canonicalSchema.required || [];
+  var properties = canonicalSchema.properties || {};
+  var keys = Object.keys(data);
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    if (data[key] === null && required.indexOf(key) === -1 && properties[key]) continue;
+    decoded[key] = decodeOpenRouterTransport_(data[key], properties[key]);
+  }
+  return decoded;
 }
 
 

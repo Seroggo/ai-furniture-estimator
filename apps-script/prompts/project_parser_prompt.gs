@@ -25,6 +25,8 @@ var PROJECT_INPUT_PROMPT = [
   'Evidence:',
   '- Every KNOWN, INFERRED, and CONFLICT fact MUST include complete evidence: source_type, source_ref, and evidence_note.',
   '- UNKNOWN and NOT_APPLICABLE facts use an empty string, 0, or "unknown" sentinel and MUST NOT include evidence.',
+  '- The transport schema requires every property. Populate every object section; use UNKNOWN sentinel facts and empty arrays when information is absent.',
+  '- For UNKNOWN or NOT_APPLICABLE facts set the required transport evidence property to null; it is removed before canonical validation.',
   '- CONFLICT uses an empty/zero/unknown sentinel and evidence_note describes all conflicting observations; never choose one value.',
   '- source_ref identifies the relevant text span, image index, or attachment.',
   '',

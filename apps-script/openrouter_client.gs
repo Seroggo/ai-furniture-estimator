@@ -95,12 +95,7 @@ function buildRequestPayload_(payload, model) {
 
 
 function buildModelOutputSchema_() {
-  var schema = JSON.parse(JSON.stringify(PROJECT_INPUT_SCHEMA));
-  delete schema.properties.parser_metadata;
-  schema.required = schema.required.filter(function (name) {
-    return name !== 'parser_metadata';
-  });
-  return schema;
+  return JSON.parse(JSON.stringify(PROJECT_INPUT_OPENROUTER_SCHEMA));
 }
 
 

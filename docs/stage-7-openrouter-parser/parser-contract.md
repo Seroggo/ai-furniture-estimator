@@ -15,9 +15,11 @@ text + optional images
         ↓
 OpenRouter (chat/completions, json_schema mode)
         ↓
-strict structured output
+generated strict transport schema output
         ↓
-deterministic local validation
+deterministic removal of canonical-optional null placeholders
+        ↓
+canonical deterministic local validation
         ↓
 Project Input JSON
 ```
@@ -46,7 +48,15 @@ docs/stage-7-openrouter-parser/project-input.schema.json
 
 Every parser result MUST pass `validateProjectInput()` against this schema before
 being returned to the caller. Invalid model output is reported as
-`PARSER_OUTPUT_INVALID` and is never silently repaired.
+`PARSER_OUTPUT_INVALID`. The only transport decoding step removes `null` from fields
+that the canonical schema already marks optional; it never changes a substantive
+value or relaxes canonical validation.
+
+The OpenRouter schema is a generated representation of this canonical source. It
+requires every object property for strict Structured Outputs, preserves types/enums,
+arrays, and `additionalProperties: false`, and omits provider-unsupported validation
+keywords. Richer constraints such as numeric minimum and date-time format remain in
+the canonical schema and are enforced only by `validateProjectInput()`.
 
 ### 4.1. Schema version
 

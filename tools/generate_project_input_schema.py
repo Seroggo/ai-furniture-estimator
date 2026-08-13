@@ -2,9 +2,9 @@
 
 The canonical source of truth is docs/stage-7-openrouter-parser/project-input.schema.json.
 This generator resolves all internal $ref/$defs references into one self-contained
-JSON Schema object that Apps Script uses for deterministic local validation. The
-OpenRouter response schema is derived from it by omitting only trusted parser metadata,
-which is attached by local code after the model response. No manual schema copy exists.
+JSON Schema object that Apps Script uses for deterministic local validation, plus an
+OpenRouter/OpenAI strict Structured Outputs transport representation generated from
+the same resolved canonical schema. No manual schema copy exists.
 """
 
 from __future__ import annotations
@@ -25,6 +25,15 @@ ANNOTATION_KEYWORDS = {
     "$schema",
     "$id",
     "title",
+    "description",
+}
+TRANSPORT_ALLOWED_KEYWORDS = {
+    "type",
+    "properties",
+    "required",
+    "additionalProperties",
+    "items",
+    "enum",
     "description",
 }
 
@@ -119,6 +128,59 @@ def build_schema(source: Path = DEFAULT_SOURCE) -> dict[str, Any]:
     return cleaned
 
 
+def _make_nullable(schema: dict[str, Any]) -> dict[str, Any]:
+    """Encode a canonical-optional property using the strict-output null convention."""
+    nullable = copy.deepcopy(schema)
+    schema_type = nullable.get("type")
+    if isinstance(schema_type, str):
+        nullable["type"] = [schema_type, "null"]
+    elif isinstance(schema_type, list) and "null" not in schema_type:
+        nullable["type"] = [*schema_type, "null"]
+    if isinstance(nullable.get("enum"), list) and None not in nullable["enum"]:
+        nullable["enum"].append(None)
+    return nullable
+
+
+def _build_transport_node(node: Any) -> Any:
+    """Convert a resolved canonical node to the supported strict-output subset."""
+    if isinstance(node, list):
+        return [_build_transport_node(item) for item in node]
+    if not isinstance(node, dict):
+        return node
+
+    cleaned: dict[str, Any] = {}
+    for key, value in node.items():
+        if key not in TRANSPORT_ALLOWED_KEYWORDS:
+            continue
+        if key == "properties":
+            continue
+        cleaned[key] = _build_transport_node(value)
+
+    properties = node.get("properties")
+    if isinstance(properties, dict):
+        canonical_required = set(node.get("required", []))
+        transport_properties: dict[str, Any] = {}
+        for name, property_schema in properties.items():
+            converted = _build_transport_node(property_schema)
+            if name not in canonical_required:
+                converted = _make_nullable(converted)
+            transport_properties[name] = converted
+        cleaned["properties"] = transport_properties
+        cleaned["required"] = list(transport_properties)
+        cleaned["additionalProperties"] = False
+    return cleaned
+
+
+def build_openrouter_schema(canonical_schema: dict[str, Any]) -> dict[str, Any]:
+    """Build the model-owned strict Structured Outputs transport contract."""
+    model_schema = copy.deepcopy(canonical_schema)
+    model_schema["properties"].pop("parser_metadata", None)
+    model_schema["required"] = [
+        name for name in model_schema.get("required", []) if name != "parser_metadata"
+    ]
+    return _build_transport_node(model_schema)
+
+
 def _find_refs(node: Any, found: list[str] | None = None) -> list[str]:
     if found is None:
         found = []
@@ -135,14 +197,18 @@ def _find_refs(node: Any, found: list[str] | None = None) -> list[str]:
 
 
 def render_schema(schema: dict[str, Any]) -> str:
-    payload = json.dumps(schema, ensure_ascii=False, indent=2)
+    canonical_payload = json.dumps(schema, ensure_ascii=False, indent=2)
+    transport_payload = json.dumps(build_openrouter_schema(schema), ensure_ascii=False, indent=2)
     version = schema["properties"]["schema_version"]["enum"][0]
     return (
         "// GENERATED FILE. DO NOT EDIT.\n"
         "// Source: docs/stage-7-openrouter-parser/project-input.schema.json.\n"
         "// Regenerate: python tools/generate_project_input_schema.py\n"
         f"var PROJECT_INPUT_SCHEMA_VERSION = {json.dumps(version, ensure_ascii=False)};\n"
-        f"var PROJECT_INPUT_SCHEMA = Object.freeze({payload});\n"
+        "// Canonical business/local validation contract.\n"
+        f"var PROJECT_INPUT_SCHEMA = Object.freeze({canonical_payload});\n"
+        "// Generated OpenRouter/OpenAI strict Structured Outputs transport contract.\n"
+        f"var PROJECT_INPUT_OPENROUTER_SCHEMA = Object.freeze({transport_payload});\n"
     )
 
 
