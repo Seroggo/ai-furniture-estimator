@@ -186,7 +186,14 @@ function processResponse_(response, latencyMs) {
     return buildErrorResult_('UPSTREAM_ERROR', 'Upstream server error (HTTP ' + httpStatus + ').', latencyMs, httpStatus, true);
   }
   if (httpStatus !== 200) {
-    return buildErrorResult_('UPSTREAM_ERROR', 'Unexpected HTTP status ' + httpStatus + '.', latencyMs, httpStatus);
+    return buildErrorResult_(
+      'UPSTREAM_ERROR',
+      'Unexpected HTTP status ' + httpStatus + '.',
+      latencyMs,
+      httpStatus,
+      false,
+      classifyOpenRouterError_(body, httpStatus)
+    );
   }
 
   var parsed = tryParseJson_(body);
@@ -248,7 +255,7 @@ function buildChoiceErrorResult_(choice, latencyMs, httpStatus) {
 }
 
 
-function buildErrorResult_(category, message, latencyMs, httpStatus, retryable) {
+function buildErrorResult_(category, message, latencyMs, httpStatus, retryable, diagnosticCode) {
   var result = {
     status: 'ERROR',
     category: category,
@@ -257,7 +264,21 @@ function buildErrorResult_(category, message, latencyMs, httpStatus, retryable) 
   if (latencyMs !== undefined) result.latencyMs = latencyMs;
   if (httpStatus !== undefined) result.httpStatus = httpStatus;
   result.retryable = retryable === true;
+  if (diagnosticCode) result.diagnosticCode = diagnosticCode;
   return result;
+}
+
+
+function classifyOpenRouterError_(body, httpStatus) {
+  var parsed = tryParseJson_(body);
+  var message = parsed && parsed.error && typeof parsed.error.message === 'string'
+    ? parsed.error.message.toLowerCase()
+    : '';
+  if (/schema|response[_ -]?format|structured output/.test(message)) return 'SCHEMA_REJECTED';
+  if (/image|vision|multimodal|mime/.test(message)) return 'IMAGE_REJECTED';
+  if (/model|provider|endpoint|route/.test(message)) return 'MODEL_OR_PROVIDER_UNAVAILABLE';
+  if (/credit|payment|balance|quota/.test(message) || httpStatus === 402) return 'CREDITS_OR_QUOTA';
+  return 'REQUEST_REJECTED';
 }
 
 

@@ -55,6 +55,7 @@ function parseProjectInput(input, options) {
       message: clientResult.message,
       latencyMs: clientResult.latencyMs,
       httpStatus: clientResult.httpStatus,
+      diagnosticCode: clientResult.diagnosticCode,
     };
   }
 
@@ -576,6 +577,8 @@ function summarizeLiveSmokeResult_(result, requireImageEvidence) {
   return {
     status: success && evidenceValid ? 'PASS' : 'FAIL',
     category: success ? '' : result.category,
+    http_status: success ? result.httpStatus || 200 : result.httpStatus || 0,
+    diagnostic_code: success ? '' : result.diagnosticCode || '',
     schema_valid: success,
     metadata_valid: success && Boolean(result.data.parser_metadata),
     evidence_valid: evidenceValid,

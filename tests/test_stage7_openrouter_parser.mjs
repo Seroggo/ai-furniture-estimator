@@ -354,6 +354,25 @@ test('retry is bounded and only transient failures are retried', () => {
   assert.equal(calls, 1);
 });
 
+test('privacy-safe upstream diagnostics classify schema rejection without raw error text', () => {
+  const { context } = createRuntime();
+  const sensitiveRaw = 'Invalid response_format JSON schema near PRIVATE CUSTOMER TEXT';
+  const result = context.parseProjectInput(
+    { text: 'PRIVATE CUSTOMER TEXT' },
+    {
+      transport: () => ({
+        getResponseCode: () => 400,
+        getContentText: () => JSON.stringify({ error: { message: sensitiveRaw } }),
+      }),
+      sleeper: () => {},
+    },
+  );
+  assert.equal(result.category, 'UPSTREAM_ERROR');
+  assert.equal(result.httpStatus, 400);
+  assert.equal(result.diagnosticCode, 'SCHEMA_REJECTED');
+  assert.doesNotMatch(JSON.stringify(result), /PRIVATE CUSTOMER TEXT|response_format JSON schema/);
+});
+
 test('canonical schema is the only source and generated artifact is current', () => {
   const schema = JSON.parse(readFileSync(resolve(root, 'docs/stage-7-openrouter-parser/project-input.schema.json'), 'utf8'));
   assert.equal(schema.additionalProperties, false);
