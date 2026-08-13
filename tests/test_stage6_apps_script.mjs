@@ -100,6 +100,10 @@ test('remote-derived appsscript manifest is valid when checkpoint has supplied i
   assert.ok(manifest.timeZone.length > 0);
   assert.equal(manifest.runtimeVersion, 'V8');
   assert.equal(typeof manifest.exceptionLogging, 'string');
+  assert.deepEqual(manifest.oauthScopes, [
+    'https://www.googleapis.com/auth/spreadsheets.currentonly',
+    'https://www.googleapis.com/auth/script.external_request',
+  ]);
   assert.equal('webapp' in manifest, false);
   assert.equal('executionApi' in manifest, false);
 });
