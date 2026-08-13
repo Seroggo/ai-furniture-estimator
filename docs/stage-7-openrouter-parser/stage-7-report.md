@@ -3,13 +3,13 @@
 ## Status
 
 ```text
-MANUAL GOOGLE CHECKPOINT
+STAGE 7 — COMPLETE
 ```
 
-Stage 7 is implemented, locally validated, and synchronized with the bound DEV Apps
-Script project. Both required Script Properties exist. The configured model is
-`openai/gpt-5.6-luna`. Final live acceptance is pending a user-authorized manual run
-in the bound Apps Script editor. Stage 8 was not started.
+Stage 7 is implemented, locally validated, synchronized with the bound DEV Apps
+Script project, and accepted through successful manual text-only and multimodal live
+verification. The configured and returned model is `openai/gpt-5.6-luna`. Stage 8 was
+not started.
 
 ## Received from Kilo
 
@@ -166,18 +166,23 @@ Preflight confirmed that `OPENROUTER_API_KEY` and `OPENROUTER_MODEL` exist in Sc
 Properties without logging either property value or any authorization material. The
 configured non-secret model slug is `openai/gpt-5.6-luna`.
 
-Automated editor attempts stopped before an OpenRouter HTTP response because the
-current Apps Script editor session had not granted the newly explicit
-`script.external_request` OAuth scope. The privacy-safe runner reported
-`PERMISSION_DENIED` with HTTP status `0`; therefore no provider response was treated
-as a smoke result. Per the accepted checkpoint procedure, Google OAuth is left to the
-user and is not automated.
+After manual Google authorization, the user ran `runStage7LiveSmoke()` in the bound
+DEV Apps Script editor. Both synthetic/non-sensitive requests reached OpenRouter and
+passed the generated transport schema, canonical deterministic validator, trusted
+metadata checks, and evidence checks. Both responses included a provider request ID
+and returned the configured model slug.
 
 ```text
-live text smoke:        PENDING MANUAL GOOGLE CHECKPOINT
-live image+text smoke:  PENDING MANUAL GOOGLE CHECKPOINT
-checkpoint status:      MANUAL GOOGLE CHECKPOINT
-manual function:        runStage7LiveSmoke
+overall status:                    PASS
+live text smoke:                   HTTP 200 / PASS
+text schema / metadata / evidence: PASS / PASS / PASS
+text provider request ID:          PRESENT
+text model returned:               openai/gpt-5.6-luna
+live image+text smoke:             HTTP 200 / PASS
+image schema / metadata / evidence: PASS / PASS / PASS
+image provider request ID:         PRESENT
+image model returned:              openai/gpt-5.6-luna
+final Stage 7 status:              COMPLETE
 ```
 
 ## Clasp verification
@@ -219,6 +224,7 @@ implementation commit: 4983c18
 contract patch: 4bf0c52
 safe live diagnostics: 39ccd70, 233fd1d
 external-request scope: eff74a9
+strict transport schema: e1dfdfb
 report checkpoint: this report's final local commit
 working tree: clean after final report commit
 Git push: NO
