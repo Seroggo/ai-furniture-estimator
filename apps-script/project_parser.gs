@@ -536,6 +536,14 @@ function isNonEmptyString_(value) {
 }
 
 
+/** Requests the OAuth scope required by the Stage 7 OpenRouter checkpoint. */
+function authorizeStage7ExternalRequest() {
+  ScriptApp.requireScopes(ScriptApp.AuthMode.FULL, [
+    'https://www.googleapis.com/auth/script.external_request'
+  ]);
+}
+
+
 /** Synthetic, non-sensitive checkpoint for manual execution in the bound DEV editor. */
 function runStage7LiveSmoke() {
   var configReady = Boolean(getOpenRouterApiKey_() && getOpenRouterModel_());

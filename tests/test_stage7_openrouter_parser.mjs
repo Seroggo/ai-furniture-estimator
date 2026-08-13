@@ -18,6 +18,7 @@ const stage7Files = [
 function createRuntime({ apiKey = 'test-openrouter-key', model = 'vendor/test-vision-model' } = {}) {
   const config = { apiKey, model };
   const sleeps = [];
+  const requiredScopes = [];
   const context = vm.createContext({
     PropertiesService: {
       getScriptProperties() {
@@ -39,11 +40,17 @@ function createRuntime({ apiKey = 'test-openrouter-key', model = 'vendor/test-vi
         throw new Error('Unexpected real HTTP call');
       },
     },
+    ScriptApp: {
+      AuthMode: { FULL: 'FULL' },
+      requireScopes(authMode, scopes) {
+        requiredScopes.push({ authMode, scopes });
+      },
+    },
   });
   for (const file of stage7Files) {
     vm.runInContext(readFileSync(resolve(appsRoot, file), 'utf8'), context, { filename: file });
   }
-  return { context, config, sleeps };
+  return { context, config, sleeps, requiredScopes };
 }
 
 function evidence(sourceType = 'TEXT', sourceRef = 'text:1', note = 'Explicitly stated by the user.') {
@@ -432,4 +439,14 @@ test('project_type canonical constraint accepts only required KITCHEN', () => {
   );
   assert.equal(result.category, 'PARSER_OUTPUT_INVALID');
   assert.match(result.errors.join('\n'), /project_type must be one of the allowed enum values/);
+});
+
+test('Stage 7 authorization helper requests only external_request with FULL auth mode', () => {
+  const { context, requiredScopes } = createRuntime();
+  context.authorizeStage7ExternalRequest();
+  assert.equal(requiredScopes.length, 1);
+  assert.equal(requiredScopes[0].authMode, 'FULL');
+  assert.deepEqual(Array.from(requiredScopes[0].scopes), [
+    'https://www.googleapis.com/auth/script.external_request',
+  ]);
 });
