@@ -3,12 +3,13 @@
 ## Status
 
 ```text
-PARTIAL — READY_FOR_OPENROUTER_CHECKPOINT
+MANUAL GOOGLE CHECKPOINT
 ```
 
 Stage 7 is implemented, locally validated, and synchronized with the bound DEV Apps
-Script project. Live OpenRouter smoke is pending because both required Script
-Properties are absent. Stage 8 was not started.
+Script project. Both required Script Properties exist. The configured model is
+`openai/gpt-5.6-luna`. Final live acceptance is pending a user-authorized manual run
+in the bound Apps Script editor. Stage 8 was not started.
 
 ## Received from Kilo
 
@@ -96,7 +97,7 @@ missing values produce `CONFIG_ERROR`; there is no hardcoded model fallback. Tra
 exceptions are converted to fixed diagnostics so keys, authorization headers, user
 text, images, and raw provider responses are not returned or logged.
 
-The repository secret scan covered 76 tracked/untracked non-ignored files and passed.
+The repository secret scan covered all tracked/untracked non-ignored files and passed.
 Scope-term inspection found price/BOM terms only in explicit guardrails and rejection
 messages.
 
@@ -117,7 +118,7 @@ and forbidden price/cost/BOM fields.
 Mocked Stage 7 suite:
 
 ```text
-12 / 12 PASS
+14 / 14 PASS
 ```
 
 It covers complete text, incomplete input with `UNKNOWN` and questions, conflict,
@@ -131,7 +132,7 @@ The corrective contract regression proves that `KITCHEN` passes, a missing
 
 ```text
 Stage 6 Node checks:       10 / 10 PASS
-Stage 7 mocked checks:     12 / 12 PASS
+Stage 7 mocked checks:     14 / 14 PASS
 Python regression suite:  74 / 74 PASS
 Human UX regressions:     PASS
 Stage 5/4/3 regressions:  PASS
@@ -150,14 +151,22 @@ A non-sensitive `runStage7LiveSmoke()` checkpoint is included for the bound DEV 
 - text plus synthetic 1×1 PNG input;
 - safe summary only (status/category/model/evidence/metadata), never raw inputs or output.
 
-The authorized Apps Script UI was inspected without reading or exposing any secret
-value. Neither `OPENROUTER_API_KEY` nor `OPENROUTER_MODEL` is currently present in
-Script Properties, so no external OpenRouter call was made.
+Preflight confirmed that `OPENROUTER_API_KEY` and `OPENROUTER_MODEL` exist in Script
+Properties without logging either property value or any authorization material. The
+configured non-secret model slug is `openai/gpt-5.6-luna`.
+
+Automated editor attempts stopped before an OpenRouter HTTP response because the
+current Apps Script editor session had not granted the newly explicit
+`script.external_request` OAuth scope. The privacy-safe runner reported
+`PERMISSION_DENIED` with HTTP status `0`; therefore no provider response was treated
+as a smoke result. Per the accepted checkpoint procedure, Google OAuth is left to the
+user and is not automated.
 
 ```text
-live text smoke:        NOT RUN — CONFIG ABSENT
-live image+text smoke:  NOT RUN — CONFIG ABSENT
-checkpoint status:      READY_FOR_OPENROUTER_CHECKPOINT
+live text smoke:        PENDING MANUAL GOOGLE CHECKPOINT
+live image+text smoke:  PENDING MANUAL GOOGLE CHECKPOINT
+checkpoint status:      MANUAL GOOGLE CHECKPOINT
+manual function:        runStage7LiveSmoke
 ```
 
 ## Clasp verification
@@ -169,8 +178,11 @@ authorized Apps Script project settings. A fresh isolated preflight snapshot con
 the five accepted Stage 6/Human UX files as `SAME`; the four Stage 7 files were the only
 expected `LOCAL_ONLY` files. Unknown remote files: 0.
 
-Controlled `clasp push` (without `--force`) pushed exactly nine allowlisted files.
-The post-push isolated snapshot reported:
+The corrective checkpoint added the explicit `spreadsheets.currentonly` and
+`script.external_request` scopes required by the bound runtime. The ordinary push
+correctly paused on the manifest change; the accepted controlled workflow then used
+the required manifest-authorized force push for exactly nine allowlisted files. The
+fresh post-push isolated snapshot reported:
 
 ```text
 SAME:          9 / 9
@@ -193,6 +205,9 @@ push was implemented.
 ```text
 branch: main
 implementation commit: 4983c18
+contract patch: 4bf0c52
+safe live diagnostics: 39ccd70, 233fd1d
+external-request scope: eff74a9
 report checkpoint: this report's final local commit
 working tree: clean after final report commit
 Git push: NO
