@@ -195,13 +195,15 @@ function processResponse_(response, latencyMs) {
     return buildErrorResult_('UPSTREAM_ERROR', 'Upstream server error (HTTP ' + httpStatus + ').', latencyMs, httpStatus, true);
   }
   if (httpStatus !== 200) {
+    var safeDiagnostic = extractOpenRouterErrorDiagnostic_(body);
     return buildErrorResult_(
       'UPSTREAM_ERROR',
       'Unexpected HTTP status ' + httpStatus + '.',
       latencyMs,
       httpStatus,
       false,
-      classifyOpenRouterError_(body, httpStatus)
+      classifyOpenRouterError_(body, httpStatus),
+      safeDiagnostic
     );
   }
 
@@ -264,7 +266,7 @@ function buildChoiceErrorResult_(choice, latencyMs, httpStatus) {
 }
 
 
-function buildErrorResult_(category, message, latencyMs, httpStatus, retryable, diagnosticCode) {
+function buildErrorResult_(category, message, latencyMs, httpStatus, retryable, diagnosticCode, upstreamDiagnostic) {
   var result = {
     status: 'ERROR',
     category: category,
@@ -274,6 +276,9 @@ function buildErrorResult_(category, message, latencyMs, httpStatus, retryable, 
   if (httpStatus !== undefined) result.httpStatus = httpStatus;
   result.retryable = retryable === true;
   if (diagnosticCode) result.diagnosticCode = diagnosticCode;
+  if (upstreamDiagnostic && Object.keys(upstreamDiagnostic).length > 0) {
+    result.upstreamDiagnostic = upstreamDiagnostic;
+  }
   return result;
 }
 
@@ -288,6 +293,60 @@ function classifyOpenRouterError_(body, httpStatus) {
   if (/model|provider|endpoint|route/.test(message)) return 'MODEL_OR_PROVIDER_UNAVAILABLE';
   if (/credit|payment|balance|quota/.test(message) || httpStatus === 402) return 'CREDITS_OR_QUOTA';
   return 'REQUEST_REJECTED';
+}
+
+
+/** Extracts only explicitly allowlisted, sanitized fields from an OpenRouter error envelope. */
+function extractOpenRouterErrorDiagnostic_(body) {
+  var parsed = tryParseJson_(body);
+  if (!parsed || !parsed.error || typeof parsed.error !== 'object') return {};
+
+  var error = parsed.error;
+  var metadata = error.metadata && typeof error.metadata === 'object' ? error.metadata : {};
+  var diagnostic = {};
+  var errorCode = sanitizeDiagnosticIdentifier_(error.code, 64);
+  var errorMessage = sanitizeOpenRouterErrorMessage_(error.message);
+  var providerName = sanitizeDiagnosticIdentifier_(metadata.provider_name || metadata.providerName, 80);
+  var requestId = sanitizeDiagnosticIdentifier_(
+    metadata.request_id || metadata.requestId || parsed.request_id || parsed.id,
+    128
+  );
+  var providerRequestId = sanitizeDiagnosticIdentifier_(
+    metadata.provider_request_id || metadata.providerRequestId,
+    128
+  );
+
+  if (errorCode) diagnostic.error_code = errorCode;
+  if (errorMessage) diagnostic.error_message = errorMessage;
+  if (providerName) diagnostic.provider_name = providerName;
+  if (requestId) diagnostic.request_id = requestId;
+  if (providerRequestId) diagnostic.provider_request_id = providerRequestId;
+  return diagnostic;
+}
+
+
+function sanitizeOpenRouterErrorMessage_(value) {
+  if (typeof value !== 'string') return '';
+  var sanitized = value
+    .replace(/[\r\n\t]+/g, ' ')
+    .replace(/Bearer\s+\S+/gi, 'Bearer [REDACTED]')
+    .replace(/sk-or-v1-[A-Za-z0-9_-]+/gi, '[REDACTED]')
+    .replace(/data:image\/[a-z0-9.+-]+;base64,[A-Za-z0-9+/=_-]+/gi, '[IMAGE REDACTED]')
+    .replace(/[A-Za-z0-9+/=_-]{48,}/g, '[REDACTED]')
+    .replace(/(["']).{1,160}\1/g, '$1[REDACTED]$1')
+    .replace(/\b(near|request content|input text|prompt)\b.*$/i, '$1 [REDACTED]')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (sanitized.length > 240) sanitized = sanitized.slice(0, 237) + '...';
+  return sanitized;
+}
+
+
+function sanitizeDiagnosticIdentifier_(value, maxLength) {
+  if (typeof value !== 'string' && typeof value !== 'number') return '';
+  var normalized = String(value).trim();
+  if (!normalized || normalized.length > maxLength) return '';
+  return /^[A-Za-z0-9._:\/-]+$/.test(normalized) ? normalized : '';
 }
 
 

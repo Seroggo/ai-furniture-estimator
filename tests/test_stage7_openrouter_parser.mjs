@@ -377,7 +377,44 @@ test('privacy-safe upstream diagnostics classify schema rejection without raw er
   assert.equal(result.category, 'UPSTREAM_ERROR');
   assert.equal(result.httpStatus, 400);
   assert.equal(result.diagnosticCode, 'SCHEMA_REJECTED');
-  assert.doesNotMatch(JSON.stringify(result), /PRIVATE CUSTOMER TEXT|response_format JSON schema/);
+  assert.equal(result.upstreamDiagnostic.error_code, undefined);
+  assert.equal(result.upstreamDiagnostic.error_message, 'Invalid response_format JSON schema near [REDACTED]');
+  assert.doesNotMatch(JSON.stringify(result), /PRIVATE CUSTOMER TEXT/);
+});
+
+test('OpenRouter 400 exposes only allowlisted sanitized error envelope fields', () => {
+  const { context } = createRuntime();
+  const result = context.parseProjectInput(
+    { text: 'PRIVATE CUSTOMER TEXT' },
+    {
+      transport: () => ({
+        getResponseCode: () => 400,
+        getContentText: () => JSON.stringify({
+          id: 'req-safe-123',
+          error: {
+            code: 400,
+            message: 'No endpoints found matching required provider parameters. Bearer sk-or-v1-PRIVATESECRET',
+            metadata: {
+              provider_name: 'OpenAI',
+              provider_request_id: 'provider-safe-456',
+              hidden_payload: 'PRIVATE CUSTOMER TEXT',
+            },
+          },
+          request_messages: ['PRIVATE CUSTOMER TEXT'],
+        }),
+      }),
+      sleeper: () => {},
+    },
+  );
+  assert.equal(result.diagnosticCode, 'MODEL_OR_PROVIDER_UNAVAILABLE');
+  assert.deepEqual(JSON.parse(JSON.stringify(result.upstreamDiagnostic)), {
+    error_code: '400',
+    error_message: 'No endpoints found matching required provider parameters. Bearer [REDACTED]',
+    provider_name: 'OpenAI',
+    request_id: 'req-safe-123',
+    provider_request_id: 'provider-safe-456',
+  });
+  assert.doesNotMatch(JSON.stringify(result), /PRIVATE CUSTOMER TEXT|PRIVATESECRET|hidden_payload|request_messages/);
 });
 
 test('transport configuration errors are classified safely and are not retried', () => {

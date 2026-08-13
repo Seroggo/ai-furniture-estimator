@@ -56,6 +56,7 @@ function parseProjectInput(input, options) {
       latencyMs: clientResult.latencyMs,
       httpStatus: clientResult.httpStatus,
       diagnosticCode: clientResult.diagnosticCode,
+      upstreamDiagnostic: clientResult.upstreamDiagnostic,
     };
   }
 
@@ -587,6 +588,7 @@ function summarizeLiveSmokeResult_(result, requireImageEvidence) {
     category: success ? '' : result.category,
     http_status: success ? result.httpStatus || 200 : result.httpStatus || 0,
     diagnostic_code: success ? '' : result.diagnosticCode || '',
+    upstream_diagnostic: success ? {} : result.upstreamDiagnostic || {},
     schema_valid: success,
     metadata_valid: success && Boolean(result.data.parser_metadata),
     evidence_valid: evidenceValid,
