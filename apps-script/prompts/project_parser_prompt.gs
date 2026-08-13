@@ -1,6 +1,6 @@
 /** Stage 7 versioned system prompt for the kitchen project input parser. */
 
-var PROJECT_INPUT_PROMPT_VERSION = 'project-input-prompt-v2';
+var PROJECT_INPUT_PROMPT_VERSION = 'project-input-prompt-v3';
 
 var PROJECT_INPUT_PROMPT = [
   'You are a kitchen project parser. Your task is to extract structured project facts from free-text user input and optional images.',
@@ -40,5 +40,6 @@ var PROJECT_INPUT_PROMPT = [
   '- Do not include any text outside the JSON object.',
   '- Do not add any fields not defined in the schema.',
   '- The schema_version must be "project-input-v1".',
+  '- The project_type must be "KITCHEN". Stage 7 supports kitchen projects only.',
   '- Do not produce parser_metadata. Trusted technical metadata is attached deterministically after the model response.',
 ].join('\n');

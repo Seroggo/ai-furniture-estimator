@@ -10,6 +10,11 @@
       "enum": ["project-input-v1"],
       "description": "Canonical schema version specifier."
     },
+    "project_type": {
+      "type": "string",
+      "enum": ["KITCHEN"],
+      "description": "MVP project category. Stage 7 accepts kitchen projects only."
+    },
     "project": {
       "type": "object",
       "description": "Project-wide metadata.",
@@ -173,7 +178,7 @@
       "$ref": "#/$defs/ParserMetadata"
     }
   },
-  "required": ["schema_version", "missing_questions", "evidence", "parser_metadata"],
+  "required": ["schema_version", "project_type", "missing_questions", "evidence", "parser_metadata"],
   "additionalProperties": false,
   "$defs": {
     "FactState": {

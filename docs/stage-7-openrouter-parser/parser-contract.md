@@ -54,6 +54,11 @@ being returned to the caller. Invalid model output is reported as
 project-input-v1
 ```
 
+The required top-level `project_type` is constrained by the canonical schema to
+`KITCHEN`. This pre-live corrective contract patch retains `project-input-v1`: no live
+consumer or accepted serialized Project Input existed before the missing invariant was
+restored, so a version bump would only preserve an erroneous pre-checkpoint shape.
+
 ### 4.2. Fact-state model
 
 Every significant extracted field carries a `fact_state`:

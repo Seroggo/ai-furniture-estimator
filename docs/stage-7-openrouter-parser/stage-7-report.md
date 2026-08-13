@@ -32,7 +32,10 @@ Canonical source:
 docs/stage-7-openrouter-parser/project-input.schema.json
 ```
 
-Schema version is `project-input-v1`, JSON Schema Draft 2020-12. The Python generator
+Schema version is `project-input-v1`, JSON Schema Draft 2020-12. The required top-level
+`project_type` is canonically constrained to `KITCHEN`. The pre-live corrective patch
+keeps v1 because no live output or accepted consumer existed for the incomplete shape;
+bumping the version would preserve an erroneous pre-checkpoint contract. The Python generator
 resolves internal references and produces only
 `apps-script/generated/project_input_schema.gs`; there is no second manually maintained
 schema.
@@ -60,7 +63,7 @@ KNOWN / INFERRED / UNKNOWN / CONFLICT / NOT_APPLICABLE
 
 ## Prompt contract
 
-Prompt version `project-input-prompt-v2` prohibits price/cost calculation, price
+Prompt version `project-input-prompt-v3` requires `project_type = KITCHEN` and prohibits price/cost calculation, price
 selection, layout design/optimisation, BOM/module recipes, defaults, and fields outside
 the schema. It requires explicit fact states, evidence, conflict handling, meaningful
 questions, and JSON-only output.
@@ -114,19 +117,21 @@ and forbidden price/cost/BOM fields.
 Mocked Stage 7 suite:
 
 ```text
-11 / 11 PASS
+12 / 12 PASS
 ```
 
 It covers complete text, incomplete input with `UNKNOWN` and questions, conflict,
 hallucination/default guard, inference evidence, multimodal construction, invalid model
 JSON, additional properties, unsupported/malformed image without HTTP, config errors,
 secret-safe diagnostics, canonical schema generation, and transient-only bounded retry.
+The corrective contract regression proves that `KITCHEN` passes, a missing
+`project_type` fails, and any non-`KITCHEN` value fails.
 
 ## Regressions
 
 ```text
 Stage 6 Node checks:       10 / 10 PASS
-Stage 7 mocked checks:     11 / 11 PASS
+Stage 7 mocked checks:     12 / 12 PASS
 Python regression suite:  74 / 74 PASS
 Human UX regressions:     PASS
 Stage 5/4/3 regressions:  PASS

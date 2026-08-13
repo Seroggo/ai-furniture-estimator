@@ -61,6 +61,7 @@ function unknown(value) {
 function completeModelOutput() {
   return {
     schema_version: 'project-input-v1',
+    project_type: 'KITCHEN',
     project: { name: known('Кухня — тест'), notes: known('Прямая кухня') },
     layout: {
       run_shape: known('straight'),
@@ -147,6 +148,7 @@ test('incomplete input preserves UNKNOWN and returns a meaningful question', () 
   const { context } = createRuntime();
   const output = {
     schema_version: 'project-input-v1',
+    project_type: 'KITCHEN',
     layout: {
       run_shape: unknown('unknown'),
       run_length_mm: unknown(0),
@@ -175,6 +177,7 @@ test('conflicting input remains CONFLICT and does not select a value', () => {
   const { context } = createRuntime();
   const output = {
     schema_version: 'project-input-v1',
+    project_type: 'KITCHEN',
     layout: {
       run_length_mm: {
         value: 0,
@@ -354,9 +357,40 @@ test('retry is bounded and only transient failures are retried', () => {
 test('canonical schema is the only source and generated artifact is current', () => {
   const schema = JSON.parse(readFileSync(resolve(root, 'docs/stage-7-openrouter-parser/project-input.schema.json'), 'utf8'));
   assert.equal(schema.additionalProperties, false);
+  assert.deepEqual(schema.properties.project_type.enum, ['KITCHEN']);
+  assert.ok(schema.required.includes('project_type'));
   assert.equal(JSON.stringify(schema).includes('enum_values'), false);
   assert.deepEqual(schema.$defs.LayoutShapeFact.properties.value.enum, ['straight', 'L-shaped', 'U-shaped', 'galley', 'unknown']);
   assert.equal(schema.$defs.IntegerFact.properties.value.minimum, 0);
   const generated = spawnSync('python', ['tools/generate_project_input_schema.py', '--check'], { cwd: root, encoding: 'utf8' });
   assert.equal(generated.status, 0, generated.stdout + generated.stderr);
+});
+
+test('project_type canonical constraint accepts only required KITCHEN', () => {
+  const { context } = createRuntime();
+  let output = completeModelOutput();
+  let result = context.parseProjectInput(
+    { text: 'Тест кухни.' },
+    { transport: successTransport(output), sleeper: () => {} },
+  );
+  assert.equal(result.status, 'SUCCESS');
+  assert.equal(result.data.project_type, 'KITCHEN');
+
+  output = completeModelOutput();
+  delete output.project_type;
+  result = context.parseProjectInput(
+    { text: 'Тест без типа проекта.' },
+    { transport: successTransport(output), sleeper: () => {} },
+  );
+  assert.equal(result.category, 'PARSER_OUTPUT_INVALID');
+  assert.match(result.errors.join('\n'), /missing required property: project_type/);
+
+  output = completeModelOutput();
+  output.project_type = 'WARDROBE';
+  result = context.parseProjectInput(
+    { text: 'Тест неверного типа.' },
+    { transport: successTransport(output), sleeper: () => {} },
+  );
+  assert.equal(result.category, 'PARSER_OUTPUT_INVALID');
+  assert.match(result.errors.join('\n'), /project_type must be one of the allowed enum values/);
 });

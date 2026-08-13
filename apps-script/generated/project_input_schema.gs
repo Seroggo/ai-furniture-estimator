@@ -14,6 +14,13 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
       ],
       "description": "Canonical schema version specifier."
     },
+    "project_type": {
+      "type": "string",
+      "enum": [
+        "KITCHEN"
+      ],
+      "description": "MVP project category. Stage 7 accepts kitchen projects only."
+    },
     "project": {
       "type": "object",
       "description": "Project-wide metadata.",
@@ -1701,6 +1708,7 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
   },
   "required": [
     "schema_version",
+    "project_type",
     "missing_questions",
     "evidence",
     "parser_metadata"
