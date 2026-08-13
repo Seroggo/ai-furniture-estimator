@@ -161,10 +161,19 @@ function executeRequest_(transport, requestPayload, apiKey, timeoutMs) {
   } catch (e) {
     var elapsed = new Date().getTime() - requestStart.getTime();
     var errorMessage = String(e && e.message ? e.message : e);
-    if (/timed?\s*out|timeout/i.test(errorMessage) || elapsed >= timeoutMs) {
+    var transportDiagnostic = classifyTransportError_(errorMessage);
+    if (transportDiagnostic !== 'INVALID_TIMEOUT_OPTION' &&
+        (/timed?\s*out|timeout/i.test(errorMessage) || elapsed >= timeoutMs)) {
       return buildErrorResult_('TIMEOUT', 'OpenRouter request timed out.', elapsed, undefined, true);
     }
-    return buildErrorResult_('UPSTREAM_ERROR', 'OpenRouter request failed before an HTTP response.', elapsed, undefined, true);
+    return buildErrorResult_(
+      'UPSTREAM_ERROR',
+      'OpenRouter request failed before an HTTP response.',
+      elapsed,
+      undefined,
+      transportDiagnostic === 'NETWORK_FAILURE',
+      transportDiagnostic
+    );
   }
 }
 
@@ -279,6 +288,16 @@ function classifyOpenRouterError_(body, httpStatus) {
   if (/model|provider|endpoint|route/.test(message)) return 'MODEL_OR_PROVIDER_UNAVAILABLE';
   if (/credit|payment|balance|quota/.test(message) || httpStatus === 402) return 'CREDITS_OR_QUOTA';
   return 'REQUEST_REJECTED';
+}
+
+
+function classifyTransportError_(message) {
+  var normalized = String(message || '').toLowerCase();
+  if (/timeoutseconds|invalid argument.*timeout/.test(normalized)) return 'INVALID_TIMEOUT_OPTION';
+  if (/permission|authorization|not authorized|scope/.test(normalized)) return 'PERMISSION_DENIED';
+  if (/certificate|ssl|tls/.test(normalized)) return 'TLS_FAILURE';
+  if (/network|connection|dns|host|socket|temporar/.test(normalized)) return 'NETWORK_FAILURE';
+  return 'TRANSPORT_FAILURE';
 }
 
 

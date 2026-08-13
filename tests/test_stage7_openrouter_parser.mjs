@@ -373,6 +373,26 @@ test('privacy-safe upstream diagnostics classify schema rejection without raw er
   assert.doesNotMatch(JSON.stringify(result), /PRIVATE CUSTOMER TEXT|response_format JSON schema/);
 });
 
+test('transport configuration errors are classified safely and are not retried', () => {
+  const { context } = createRuntime();
+  let calls = 0;
+  const result = context.parseProjectInput(
+    { text: 'PRIVATE CUSTOMER TEXT' },
+    {
+      transport: () => {
+        calls += 1;
+        throw new Error('Invalid argument: timeoutSeconds PRIVATE CUSTOMER TEXT');
+      },
+      maxRetries: 2,
+      sleeper: () => assert.fail('local transport configuration errors must not sleep'),
+    },
+  );
+  assert.equal(result.category, 'UPSTREAM_ERROR');
+  assert.equal(result.diagnosticCode, 'INVALID_TIMEOUT_OPTION');
+  assert.equal(calls, 1);
+  assert.doesNotMatch(JSON.stringify(result), /PRIVATE CUSTOMER TEXT|timeoutSeconds/);
+});
+
 test('canonical schema is the only source and generated artifact is current', () => {
   const schema = JSON.parse(readFileSync(resolve(root, 'docs/stage-7-openrouter-parser/project-input.schema.json'), 'utf8'));
   assert.equal(schema.additionalProperties, false);
