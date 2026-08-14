@@ -176,10 +176,12 @@ function runStage8DevSmoke() {
   if (result.status !== 'REQUIRES_EXPERT' || !result.layout || result.calculation_items.length || result.cost_results.length) {
     throw new Error('Stage 8 DEV smoke expected honest REQUIRES_EXPERT after a valid layout.');
   }
-  return {status: 'PASS', resultStatus: result.status, layoutStatus: result.layout.status,
+  var summary = {status: 'PASS', resultStatus: result.status, layoutStatus: result.layout.status,
     layoutItems: result.layout.items.length, blockerCode: result.blockers[0].code,
     moduleSizeRulesVersion: firstSync.version, managedRows: firstSync.managedRows,
     syncIdempotent: JSON.stringify(firstSync) === JSON.stringify(secondSync),
     setupStatus: setup.status,
     recipesCreated: 0, pricesCreated: 0, openRouterCalled: false};
+  console.log('STAGE8_DEV_SMOKE ' + JSON.stringify(summary));
+  return summary;
 }
