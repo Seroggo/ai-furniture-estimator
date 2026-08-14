@@ -114,31 +114,40 @@ def build_manifest(
                 }
             )
 
-    module_rule = get_rule("MODULE_TO_PARTS_V1")
-    calculation_rule_seeds = [
-        {
-            "rule_version_id": f"{module_rule.rule_id}:1",
-            "rule_id": module_rule.rule_id,
-            "display_name": module_rule.name,
+    code_bindings = {
+        "QTY_AREA_MM_V1": "stage8QuantityArea_",
+        "QTY_EDGE_LENGTH_V1": "stage8QuantityEdge_",
+        "QTY_BASIS_ORDER_V1": "stage8QuantityExplicit_",
+        "QTY_EXPLICIT_SOURCE_V1": "stage8QuantityExplicit_",
+        "COST_UNIT_PRICE_V1": "stage8CalculateCost_",
+    }
+    seeded_rule_ids = tuple(code_bindings) + ("MODULE_TO_PARTS_V1",)
+    calculation_rule_seeds = []
+    for rule_id in seeded_rule_ids:
+        rule = get_rule(rule_id)
+        is_blocking = rule_id == "MODULE_TO_PARTS_V1"
+        calculation_rule_seeds.append({
+            "rule_version_id": f"{rule.rule_id}:1",
+            "rule_id": rule.rule_id,
+            "display_name": rule.name,
             "version": 1,
-            "scope": module_rule.scope,
-            "rule_status": module_rule.status,
-            "execution_mode": "BLOCKING_STATUS",
+            "scope": rule.scope,
+            "rule_status": rule.status,
+            "execution_mode": "BLOCKING_STATUS" if is_blocking else "CODE_BINDING",
             "inputs_json": json.dumps(
-                module_rule.inputs, ensure_ascii=False, separators=(",", ":")
+                rule.inputs, ensure_ascii=False, separators=(",", ":")
             ),
             "outputs_json": json.dumps(
-                module_rule.outputs, ensure_ascii=False, separators=(",", ":")
+                rule.outputs, ensure_ascii=False, separators=(",", ":")
             ),
-            "implementation_ref": "",
-            "lifecycle_status": "DRAFT",
+            "implementation_ref": "" if is_blocking else code_bindings[rule_id],
+            "lifecycle_status": "DRAFT" if is_blocking else "ACTIVE",
             "effective_to": "",
             "provenance": json.dumps(
-                module_rule.provenance, ensure_ascii=False, separators=(",", ":")
+                rule.provenance, ensure_ascii=False, separators=(",", ":")
             ),
-            "notes": module_rule.notes,
-        }
-    ]
+            "notes": rule.notes,
+        })
 
     return {
         "schemaVersionId": SCHEMA_VERSION_ID,

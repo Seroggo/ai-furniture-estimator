@@ -10,13 +10,23 @@ const appsRoot = resolve(root, 'apps-script');
 const claspEntry = resolve(root, 'node_modules', '@google', 'clasp', 'build', 'src', 'index.js');
 const allowedSource = new Set([
   'appsscript.json',
+  'calculation_orchestrator.gs',
   'custom_price.gs',
+  'decimal_math.gs',
+  'generated/calculation_result_schema.gs',
   'generated/human_ux_manifest.gs',
+  'generated/module_size_rules.gs',
   'generated/project_input_schema.gs',
   'generated/schema_manifest.gs',
+  'layout_runtime.gs',
+  'master_data_loader.gs',
   'openrouter_client.gs',
+  'pricebook_resolver.gs',
+  'project_input_adapter.gs',
   'project_parser.gs',
   'prompts/project_parser_prompt.gs',
+  'quantity_engine.gs',
+  'recipe_resolver.gs',
   'setup_system.gs',
 ]);
 
@@ -56,6 +66,14 @@ test('clasp ignore is an exact deploy whitelist', () => {
     '**/**',
     '!appsscript.json',
     '!custom_price.gs',
+    '!decimal_math.gs',
+    '!project_input_adapter.gs',
+    '!master_data_loader.gs',
+    '!layout_runtime.gs',
+    '!recipe_resolver.gs',
+    '!quantity_engine.gs',
+    '!pricebook_resolver.gs',
+    '!calculation_orchestrator.gs',
     '!setup_system.gs',
     '!openrouter_client.gs',
     '!project_parser.gs',
@@ -63,6 +81,8 @@ test('clasp ignore is an exact deploy whitelist', () => {
     '!generated/human_ux_manifest.gs',
     '!generated/schema_manifest.gs',
     '!generated/project_input_schema.gs',
+    '!generated/calculation_result_schema.gs',
+    '!generated/module_size_rules.gs',
   ]);
   for (const file of walk()) assert.ok(allowedSource.has(file), `unexpected deployable source: ${file}`);
 });
@@ -118,12 +138,21 @@ test('generated project input schema is current', () => {
   assert.equal(result.status, 0, result.stdout + result.stderr);
 });
 
+test('generated Stage 8 artifacts are current', () => {
+  for (const tool of ['generate_calculation_result_schema.py', 'generate_module_size_rules.py', 'generate_stage8_layout_golden.py']) {
+    const result = run('python', [`tools/${tool}`, '--check']);
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+  }
+});
+
 test('checkpoint comparison normalizes clasp pull representation and gates remote removals', () => {
   const checkpoint = readFileSync(resolve(root, 'tools/clasp_checkpoint.mjs'), 'utf8');
   const preflight = readFileSync(resolve(root, 'tools/check_clasp_preflight.mjs'), 'utf8');
   assert.match(checkpoint, /schema_manifest\\\.\(\?:js\|gs\)/);
   assert.match(checkpoint, /setup_system\\\.\(\?:js\|gs\)/);
   assert.match(checkpoint, /generated\/schema_manifest\.gs/);
+  assert.match(checkpoint, /generated\/calculation_result_schema\.gs/);
+  assert.match(checkpoint, /generated\/module_size_rules\.gs/);
   assert.match(preflight, /preflight-approved-removals\.json/);
   assert.match(preflight, /must exactly match unknown remote files/);
   assert.match(preflight, /safe\.directory=/);

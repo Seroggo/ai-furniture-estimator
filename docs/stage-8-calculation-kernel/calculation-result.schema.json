@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ai-furniture-estimator/stage-8/calculation-result.schema.json",
+  "title": "Calculation Result",
+  "description": "Canonical in-memory output of the deterministic Stage 8 calculation kernel.",
+  "type": "object",
+  "properties": {
+    "result_schema_version": {"const": "calculation-result-v1"},
+    "calculation_model_version": {"const": "stage8-kernel-v1"},
+    "status": {
+      "type": "string",
+      "enum": [
+        "SUCCESS",
+        "INPUT_NOT_READY",
+        "NOT_SUPPORTED",
+        "NO_VALID_LAYOUT",
+        "REQUIRES_EXPERT",
+        "PRICEBOOK_NOT_AVAILABLE",
+        "PRICE_NOT_FOUND",
+        "UNIT_MISMATCH",
+        "MASTER_DATA_INVALID"
+      ]
+    },
+    "project_input_ref": {"$ref": "#/$defs/ProjectInputRef"},
+    "blockers": {"type": "array", "items": {"$ref": "#/$defs/Diagnostic"}},
+    "warnings": {"type": "array", "items": {"$ref": "#/$defs/Diagnostic"}},
+    "layout": {"anyOf": [{"$ref": "#/$defs/LayoutSnapshot"}, {"type": "null"}]},
+    "rule_snapshot": {"type": "array", "items": {"$ref": "#/$defs/RuleSnapshot"}},
+    "recipe_snapshot": {"type": "array", "items": {"$ref": "#/$defs/RecipeSnapshot"}},
+    "calculation_items": {"type": "array", "items": {"$ref": "#/$defs/CalculationItem"}},
+    "cost_results": {"type": "array", "items": {"$ref": "#/$defs/CostResult"}},
+    "pricebook_version_id": {"type": ["string", "null"]},
+    "total": {"anyOf": [{"$ref": "#/$defs/DecimalString"}, {"type": "null"}]},
+    "currency": {"type": ["string", "null"]},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "required": [
+    "result_schema_version",
+    "calculation_model_version",
+    "status",
+    "project_input_ref",
+    "blockers",
+    "warnings",
+    "layout",
+    "rule_snapshot",
+    "recipe_snapshot",
+    "calculation_items",
+    "cost_results",
+    "pricebook_version_id",
+    "total",
+    "currency",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "DecimalString": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+      "description": "Canonical non-negative exact decimal without exponent notation or insignificant trailing zeroes."
+    },
+    "ProjectInputRef": {
+      "type": "object",
+      "properties": {
+        "request_id": {"type": "string"},
+        "input_schema_version": {"const": "project-input-v1"},
+        "parser_schema_version": {"type": "string"},
+        "prompt_version": {"type": "string"},
+        "provider": {"type": "string"},
+        "model_returned": {"type": ["string", "null"]},
+        "parsed_at": {"type": "string", "format": "date-time"}
+      },
+      "required": [
+        "request_id",
+        "input_schema_version",
+        "parser_schema_version",
+        "prompt_version",
+        "provider",
+        "model_returned",
+        "parsed_at"
+      ],
+      "additionalProperties": false
+    },
+    "Diagnostic": {
+      "type": "object",
+      "properties": {
+        "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+        "stage": {
+          "type": "string",
+          "enum": ["READINESS", "ADAPTER", "LAYOUT", "MASTER_DATA", "RECIPE", "QUANTITY", "PRICEBOOK", "COST"]
+        },
+        "field_path": {"type": ["string", "null"]},
+        "message": {"type": "string"},
+        "provenance": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["code", "stage", "field_path", "message", "provenance"],
+      "additionalProperties": false
+    },
+    "LayoutItem": {
+      "type": "object",
+      "properties": {
+        "position": {"type": "integer", "minimum": 0},
+        "entity_type": {"type": "string", "enum": ["MODULE", "APPLIANCE_SLOT"]},
+        "module_id": {"type": "string"},
+        "role": {"type": "string"},
+        "module_class": {"type": "string"},
+        "width_mm": {"type": "integer", "minimum": 1},
+        "market_rank": {"type": "string", "enum": ["A", "B", "C", "D", "E"]},
+        "rule_source": {"type": "string"},
+        "required": {"type": "boolean"}
+      },
+      "required": ["position", "entity_type", "module_id", "role", "module_class", "width_mm", "market_rank", "rule_source", "required"],
+      "additionalProperties": false
+    },
+    "Filler": {
+      "type": "object",
+      "properties": {
+        "width_mm": {"type": "integer", "minimum": 1},
+        "location": {"type": "string", "enum": ["start", "end"]},
+        "rule_source": {"const": "explicit_request.filler_policy"}
+      },
+      "required": ["width_mm", "location", "rule_source"],
+      "additionalProperties": false
+    },
+    "LayoutSnapshot": {
+      "type": "object",
+      "properties": {
+        "status": {"const": "VALID"},
+        "items": {"type": "array", "items": {"$ref": "#/$defs/LayoutItem"}},
+        "run_length_mm": {"type": "integer", "minimum": 1},
+        "occupied_length_mm": {"type": "integer", "minimum": 0},
+        "remainder_mm": {"type": "integer", "minimum": 0},
+        "filler": {"anyOf": [{"$ref": "#/$defs/Filler"}, {"type": "null"}]},
+        "covered_length_mm": {"type": "integer", "minimum": 0},
+        "reasons": {"type": "array", "items": {"type": "string"}},
+        "market_source": {"type": "string"},
+        "market_data_version": {"type": "string"}
+      },
+      "required": ["status", "items", "run_length_mm", "occupied_length_mm", "remainder_mm", "filler", "covered_length_mm", "reasons", "market_source", "market_data_version"],
+      "additionalProperties": false
+    },
+    "RuleSnapshot": {
+      "type": "object",
+      "properties": {
+        "rule_id": {"type": "string"},
+        "rule_version_id": {"type": "string"},
+        "version": {"type": "integer", "minimum": 1},
+        "rule_status": {"type": "string", "enum": ["CONFIRMED", "DERIVED", "PROVISIONAL", "REQUIRES_EXPERT", "NOT_SUPPORTED"]},
+        "execution_mode": {"type": "string", "enum": ["CODE_BINDING", "METADATA_ONLY", "BLOCKING_STATUS"]},
+        "implementation_ref": {"type": ["string", "null"]},
+        "provenance": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "required": ["rule_id", "rule_version_id", "version", "rule_status", "execution_mode", "implementation_ref", "provenance"],
+      "additionalProperties": false
+    },
+    "RecipeSnapshot": {
+      "type": "object",
+      "properties": {
+        "recipe_id": {"type": "string"},
+        "version": {"type": "integer", "minimum": 1},
+        "variant_code": {"type": "string"},
+        "rule_status": {"type": "string", "enum": ["CONFIRMED", "DERIVED"]},
+        "provenance": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "required": ["recipe_id", "version", "variant_code", "rule_status", "provenance"],
+      "additionalProperties": false
+    },
+    "CalculationItem": {
+      "type": "object",
+      "properties": {
+        "item_id": {"type": "string"},
+        "layout_module_id": {"type": "string"},
+        "recipe_id": {"type": "string"},
+        "recipe_item_id": {"type": "string"},
+        "catalog_item_code": {"type": "string"},
+        "item_type": {"type": "string"},
+        "quantity": {"$ref": "#/$defs/DecimalString"},
+        "unit": {"type": "string"},
+        "price_code": {"type": "string"},
+        "quantity_rule_id": {"type": "string"},
+        "quantity_rule_version_id": {"type": "string"},
+        "provenance": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "required": ["item_id", "layout_module_id", "recipe_id", "recipe_item_id", "catalog_item_code", "item_type", "quantity", "unit", "price_code", "quantity_rule_id", "quantity_rule_version_id", "provenance"],
+      "additionalProperties": false
+    },
+    "CostResult": {
+      "type": "object",
+      "properties": {
+        "item_id": {"type": "string"},
+        "quantity": {"$ref": "#/$defs/DecimalString"},
+        "unit": {"type": "string"},
+        "price_code": {"type": "string"},
+        "unit_price": {"$ref": "#/$defs/DecimalString"},
+        "cost": {"$ref": "#/$defs/DecimalString"},
+        "currency": {"type": "string"},
+        "price_entry_id": {"type": "string"},
+        "quantity_rule_id": {"type": "string"},
+        "pricing_rule_id": {"const": "COST_UNIT_PRICE_V1"},
+        "quantity_provenance": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "price_provenance": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "required": ["item_id", "quantity", "unit", "price_code", "unit_price", "cost", "currency", "price_entry_id", "quantity_rule_id", "pricing_rule_id", "quantity_provenance", "price_provenance"],
+      "additionalProperties": false
+    }
+  }
+}

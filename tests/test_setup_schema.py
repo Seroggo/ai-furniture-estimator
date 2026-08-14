@@ -86,13 +86,27 @@ class SetupSchemaTests(unittest.TestCase):
         self.assertEqual(expected, actual)
         self.assertEqual(len(actual), len(self.manifest["referenceSeeds"]))
 
-    def test_only_accepted_blocking_recipe_rule_is_seeded(self) -> None:
-        self.assertEqual(1, len(self.manifest["calculationRuleSeeds"]))
-        seed = self.manifest["calculationRuleSeeds"][0]
-        self.assertEqual("MODULE_TO_PARTS_V1", seed["rule_id"])
-        self.assertEqual("REQUIRES_EXPERT", seed["rule_status"])
-        self.assertEqual("BLOCKING_STATUS", seed["execution_mode"])
-        self.assertEqual("DRAFT", seed["lifecycle_status"])
+    def test_accepted_stage3_runtime_rules_are_seeded_from_registry(self) -> None:
+        seeds = self.manifest["calculationRuleSeeds"]
+        self.assertEqual(6, len(seeds))
+        self.assertEqual(
+            {
+                "QTY_AREA_MM_V1",
+                "QTY_EDGE_LENGTH_V1",
+                "QTY_BASIS_ORDER_V1",
+                "QTY_EXPLICIT_SOURCE_V1",
+                "COST_UNIT_PRICE_V1",
+                "MODULE_TO_PARTS_V1",
+            },
+            {seed["rule_id"] for seed in seeds},
+        )
+        module_seed = next(seed for seed in seeds if seed["rule_id"] == "MODULE_TO_PARTS_V1")
+        self.assertEqual("BLOCKING_STATUS", module_seed["execution_mode"])
+        self.assertEqual("DRAFT", module_seed["lifecycle_status"])
+        executable = [seed for seed in seeds if seed["rule_id"] != "MODULE_TO_PARTS_V1"]
+        self.assertTrue(all(seed["execution_mode"] == "CODE_BINDING" for seed in executable))
+        self.assertTrue(all(seed["lifecycle_status"] == "ACTIVE" for seed in executable))
+        self.assertEqual("REQUIRES_EXPERT", module_seed["rule_status"])
 
     def test_production_sheets_have_no_seed_data(self) -> None:
         serialized = json.dumps(self.manifest, ensure_ascii=False)

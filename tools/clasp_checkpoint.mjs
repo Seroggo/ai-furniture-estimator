@@ -9,13 +9,23 @@ const canonicalRoot = resolve(repositoryRoot, 'apps-script');
 const snapshotsRoot = resolve(repositoryRoot, '.clasp-snapshots');
 const expectedFiles = [
   'appsscript.json',
+  'calculation_orchestrator.gs',
   'custom_price.gs',
+  'decimal_math.gs',
+  'generated/calculation_result_schema.gs',
   'generated/human_ux_manifest.gs',
+  'generated/module_size_rules.gs',
   'generated/project_input_schema.gs',
   'generated/schema_manifest.gs',
+  'layout_runtime.gs',
+  'master_data_loader.gs',
   'openrouter_client.gs',
+  'pricebook_resolver.gs',
+  'project_input_adapter.gs',
   'project_parser.gs',
   'prompts/project_parser_prompt.gs',
+  'quantity_engine.gs',
+  'recipe_resolver.gs',
   'setup_system.gs',
 ];
 
@@ -69,10 +79,18 @@ function normalized(path) {
 function canonicalRemoteFile(file) {
   const normalizedFile = file.replaceAll('\\', '/');
   if (normalizedFile === 'appsscript.json') return 'appsscript.json';
+  if (/^(?:.*\/)?calculation_orchestrator\.(?:js|gs)$/.test(normalizedFile)) return 'calculation_orchestrator.gs';
   if (/^(?:.*\/)?custom_price\.(?:js|gs)$/.test(normalizedFile)) return 'custom_price.gs';
+  if (/^(?:.*\/)?decimal_math\.(?:js|gs)$/.test(normalizedFile)) return 'decimal_math.gs';
+  if (/^(?:.*\/)?layout_runtime\.(?:js|gs)$/.test(normalizedFile)) return 'layout_runtime.gs';
+  if (/^(?:.*\/)?master_data_loader\.(?:js|gs)$/.test(normalizedFile)) return 'master_data_loader.gs';
   if (/^(?:.*\/)?setup_system\.(?:js|gs)$/.test(normalizedFile)) return 'setup_system.gs';
   if (/^(?:.*\/)?openrouter_client\.(?:js|gs)$/.test(normalizedFile)) return 'openrouter_client.gs';
+  if (/^(?:.*\/)?pricebook_resolver\.(?:js|gs)$/.test(normalizedFile)) return 'pricebook_resolver.gs';
+  if (/^(?:.*\/)?project_input_adapter\.(?:js|gs)$/.test(normalizedFile)) return 'project_input_adapter.gs';
   if (/^(?:.*\/)?project_parser\.(?:js|gs)$/.test(normalizedFile)) return 'project_parser.gs';
+  if (/^(?:.*\/)?quantity_engine\.(?:js|gs)$/.test(normalizedFile)) return 'quantity_engine.gs';
+  if (/^(?:.*\/)?recipe_resolver\.(?:js|gs)$/.test(normalizedFile)) return 'recipe_resolver.gs';
   if (/^(?:prompts\/)?project_parser_prompt\.(?:js|gs)$/.test(normalizedFile)) {
     return 'prompts/project_parser_prompt.gs';
   }
@@ -84,6 +102,12 @@ function canonicalRemoteFile(file) {
   }
   if (/^(?:generated\/)?project_input_schema\.(?:js|gs)$/.test(normalizedFile)) {
     return 'generated/project_input_schema.gs';
+  }
+  if (/^(?:generated\/)?calculation_result_schema\.(?:js|gs)$/.test(normalizedFile)) {
+    return 'generated/calculation_result_schema.gs';
+  }
+  if (/^(?:generated\/)?module_size_rules\.(?:js|gs)$/.test(normalizedFile)) {
+    return 'generated/module_size_rules.gs';
   }
   return null;
 }

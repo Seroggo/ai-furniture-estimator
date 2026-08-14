@@ -2,6 +2,14 @@
 **/**
 !appsscript.json
 !custom_price.gs
+!decimal_math.gs
+!project_input_adapter.gs
+!master_data_loader.gs
+!layout_runtime.gs
+!recipe_resolver.gs
+!quantity_engine.gs
+!pricebook_resolver.gs
+!calculation_orchestrator.gs
 !setup_system.gs
 !openrouter_client.gs
 !project_parser.gs
@@ -9,3 +17,5 @@
 !generated/human_ux_manifest.gs
 !generated/schema_manifest.gs
 !generated/project_input_schema.gs
+!generated/calculation_result_schema.gs
+!generated/module_size_rules.gs

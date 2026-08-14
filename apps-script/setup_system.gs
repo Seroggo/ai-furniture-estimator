@@ -18,6 +18,11 @@ function setupSystem() {
     'reference_value_id'
   );
   appendCalculationRuleSeeds_(sheetsByName.Calculation_Rules, manifest.calculationRuleSeeds);
+  appendMissingSeedRows_(
+    sheetsByName.Module_Size_Rules,
+    STAGE8_MODULE_SIZE_RULES,
+    'module_rule_id'
+  );
   configureCustomPriceSheet_(sheetsByName.Custom_Price);
   orderCanonicalSheets_(spreadsheet, [HUMAN_UX_MANIFEST.sheetName].concat(manifest.sheetOrder));
   SpreadsheetApp.flush();

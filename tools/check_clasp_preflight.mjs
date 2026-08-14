@@ -7,13 +7,23 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const expected = [
   'appsscript.json',
+  'calculation_orchestrator.gs',
   'custom_price.gs',
+  'decimal_math.gs',
+  'generated/calculation_result_schema.gs',
   'generated/human_ux_manifest.gs',
+  'generated/module_size_rules.gs',
   'generated/project_input_schema.gs',
   'generated/schema_manifest.gs',
+  'layout_runtime.gs',
+  'master_data_loader.gs',
   'openrouter_client.gs',
+  'pricebook_resolver.gs',
+  'project_input_adapter.gs',
   'project_parser.gs',
   'prompts/project_parser_prompt.gs',
+  'quantity_engine.gs',
+  'recipe_resolver.gs',
   'setup_system.gs',
 ];
 const claspEntry = resolve(root, 'node_modules', '@google', 'clasp', 'build', 'src', 'index.js');
@@ -54,6 +64,9 @@ JSON.parse(readFileSync(resolve(root, 'apps-script', 'appsscript.json'), 'utf8')
 run('python', ['tools/generate_setup_schema.py', '--check']);
 run('python', ['tools/generate_human_ux_manifest.py', '--check']);
 run('python', ['tools/generate_project_input_schema.py', '--check']);
+run('python', ['tools/generate_calculation_result_schema.py', '--check']);
+run('python', ['tools/generate_module_size_rules.py', '--check']);
+run('python', ['tools/generate_stage8_layout_golden.py', '--check']);
 if (process.env.npm_execpath) {
   run(process.execPath, [process.env.npm_execpath, 'test']);
 } else if (process.platform === 'win32') {
