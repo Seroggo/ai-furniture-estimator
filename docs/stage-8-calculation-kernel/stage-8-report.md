@@ -3,12 +3,12 @@
 ## Status
 
 ```text
-STAGE 8 — REMOTE CHECKPOINT PENDING
+STAGE 8 — COMPLETE
 ```
 
-The deterministic kernel, canonical result contract, Stage 3 parity fixtures, and
-local full-path in-memory proof are complete. This report becomes `COMPLETE` only
-after the accepted Stage 6 clasp round-trip and real bound DEV smoke are recorded.
+The deterministic kernel, canonical result contract, Stage 3 parity fixtures, local
+full-path in-memory proof, accepted Stage 6 clasp round-trip, and real bound DEV smoke
+are complete. Stage 9 was not started.
 
 ## Runtime architecture
 
@@ -142,15 +142,48 @@ price separation, exact cost, and total without writing any fixture to DEV.
 
 ## Google DEV verification
 
-Pending controlled checkpoint. Expected real-data result is a valid 600 mm straight
-layout followed by `REQUIRES_EXPERT`, because approved production recipes are absent.
-The smoke must report zero created recipes and prices.
+`runStage8DevSmoke()` was executed in the existing bound DEV Apps Script editor. It
+first ran the idempotent workbook setup, synchronized only canonical module-size rows,
+repeated the sync, and calculated a synthetic non-sensitive validated Project Input.
+The safe execution log reported:
+
+```text
+status:                  PASS
+setupStatus:             PASS
+resultStatus:            REQUIRES_EXPERT
+layoutStatus:            VALID
+layoutItems:             1
+blockerCode:             APPROVED_RECIPE_REQUIRED
+module-size version:     module-size-rules-stage3-linear-v1
+managed module rows:     59
+sync idempotent:         true
+recipes created:         0
+prices created:          0
+OpenRouter called:       false
+```
+
+Execution completed without exception. The real-data blocker is accepted expert debt,
+not a kernel failure. No fake recipe, catalog, or price row was written.
 
 ## Clasp verification
 
-Pending fresh preflight, controlled push, and isolated round-trip under the accepted
-Stage 6 workflow. The existing bound DEV project is the only target; no project or
-deployment will be created.
+The fresh preflight snapshot used the existing bound DEV target suffix `...HvYv52`.
+Unknown remote files were zero and the exact deploy allowlist contained 19 files. The
+first controlled push completed remotely even though its local process did not return;
+an isolated snapshot proved `SAME 19/19`. After adding only a safe smoke-summary log,
+a second fresh preflight passed and normal (non-force) `clasp push` reported 19 files
+pushed. The final isolated round-trip reported:
+
+```text
+SAME:          19 / 19
+REMOTE_ONLY:    0
+LOCAL_ONLY:     0
+DIFFERENT:      0
+unknown files:  0
+```
+
+No force push, new Apps Script project, deployment, Web App, or API Executable was
+used or created.
 
 ## Deferred scope
 
@@ -162,6 +195,9 @@ not implemented.
 
 ```text
 branch: main
+implementation commit: 4fc8f76
+safe smoke summary: bfcffc1
+completion report: this report's final local commit
 Git push: NO
-working tree: pending implementation checkpoint commit
+working tree: clean after final report commit
 ```
