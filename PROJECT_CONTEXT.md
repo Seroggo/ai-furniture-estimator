@@ -7,7 +7,7 @@ AI Мебельщик — MVP-система предварительного р
 Единственная категория MVP:
 
 ```text
-Кухни
+KITCHEN / Кухни
 ```
 
 Базовый принцип:
@@ -15,17 +15,11 @@ AI Мебельщик — MVP-система предварительного р
 ```text
 LLM понимает и структурирует вход.
 Детерминированный код проверяет, конфигурирует и рассчитывает.
-Google Sheets хранит master data, рабочие цены и результаты.
+Google Sheets хранит master data, рабочие цены и опубликованные расчётные данные.
 ```
 
-LLM:
-
-- не является источником цен;
-- не рассчитывает итоговую стоимость;
-- не изобретает production module recipes;
-- не заменяет deterministic validation/calculation.
-
----
+LLM не является источником цен, не рассчитывает стоимость, не выполняет layout,
+не создаёт BOM/module recipes и не заменяет deterministic validation/calculation.
 
 ## 2. Канонический план
 
@@ -48,11 +42,6 @@ Human UX Patch
 14. Ограниченный пилот
 ```
 
-Human UX Patch — accepted corrective baseline между Stage 6 и Stage 7, а не отдельная
-новая продуктовая фаза.
-
----
-
 ## 3. Статус
 
 ```text
@@ -65,33 +54,32 @@ Stage 4 Price Patch — ACCEPTED / CLOSED
 Stage 5 — ACCEPTED / CLOSED
 Stage 6 — ACCEPTED / CLOSED
 Human UX Patch — ACCEPTED / CLOSED
+Stage 7 — ACCEPTED / CLOSED
 
-Текущий этап — Stage 7
+Текущий этап — Stage 8
 ```
 
-Git baseline после Human UX Patch:
+Expected Git baseline:
 
 ```text
 branch: main
-HEAD: fb9b9e0
+HEAD: ff5560a
 working tree: clean
 Git push: NO
 ```
 
-Перед любой работой проверить фактический HEAD и working tree.
-
----
+Всегда проверить фактический Git state перед работой.
 
 ## 4. Accepted calculation baseline
 
-### Layout
+### Layout reference
 
 ```text
 calculation_model/layout_configurator.py
 tests/test_layout_configurator.py
 ```
 
-Принципы:
+Accepted semantics:
 
 ```text
 hard constraints > optimisation
@@ -101,27 +89,26 @@ E → not automatic
 filler → separate entity
 NO_VALID_LAYOUT → explicit
 arbitrary custom widths → forbidden
-L/U/corners → NOT_SUPPORTED without system profile
+STUDIO_STANDARD → not proven
+L/U/corners → NOT_SUPPORTED without system-specific profile
 ```
 
-`STUDIO_STANDARD` не доказан.
-
-### Quantity / cost
+### Quantity / cost reference
 
 ```text
 calculation_model/calculation_engine.py
 tests/test_calculation_engine.py
 ```
 
-Принцип:
+Principle:
 
 ```text
 quantity model × published pricebook = cost
 ```
 
-Historical prices — только fixtures/evidence.
+Historical prices are fixtures/evidence only.
 
-Открытый expert debt:
+Open expert debt:
 
 ```text
 MODULE_TO_PARTS_V1 = REQUIRES_EXPERT
@@ -131,13 +118,11 @@ hidden Medvedev logic = REQUIRES_EXPERT / NOT_SUPPORTED
 legacy J2/K2 semantics = REQUIRES_EXPERT
 ```
 
-Synthetic BOM запрещён.
+Synthetic BOM is forbidden.
 
----
+## 5. Accepted Google Sheets baseline
 
-## 5. Google Sheets baseline
-
-Accepted technical contract:
+Technical contract:
 
 ```text
 11 technical sheets
@@ -161,215 +146,78 @@ Calculation_Rules
 Reference_Values
 ```
 
-Source of truth:
+Canonical structure:
 
 ```text
 docs/stage-4-google-sheets/sheets-columns.csv
 docs/stage-4-google-sheets/sheets-relations.csv
+docs/stage-4-google-sheets/google-sheets-schema.md
 ```
 
-Physical DEV workbook после Human UX Patch:
+Physical DEV workbook:
 
 ```text
-12 sheets total
-= Custom_Price + 11 technical sheets
+Custom_Price + 11 technical sheets = 12 sheets
 ```
 
----
-
-## 6. Accepted Human UX baseline
-
-Human-facing сейчас:
+Accepted real DEV data state before Stage 8:
 
 ```text
-Custom_Price → Актуальный прайс
+Module_Size_Rules      → no runtime rules imported yet
+Module_Recipes         → empty
+Module_Recipe_Items    → empty
+Catalog_Items          → no production catalog
+Pricebook_Versions     → no automatic publication
+Prices                 → no automatic publication
+Calculation_Rules      → MODULE_TO_PARTS_V1 blocking seed exists
 ```
 
-Future Stage 10 contracts:
+Historical fixtures must not become production master data implicitly.
 
-```text
-Calculations → Реестр расчётов
-Offer        → Коммерческое предложение
-```
-
-`Calculations` и `Offer` физически сейчас не существуют.
-
-Pricing flow:
+## 6. Accepted pricing architecture
 
 ```text
 Custom_Price
-        ↓ explicit syncCustomPrice()
-Catalog_Items + spr_price
-        ↓ future explicit publication
-Pricebook_Versions + Prices
-        ↓
-official calculation / quote
+→ explicit sync
+→ Catalog_Items + spr_price
+→ explicit future publication
+→ Pricebook_Versions + Prices
+→ official calculation
 ```
 
-`Custom_Price` не публикует immutable prices автоматически.
+Official calculation MUST NOT read `Custom_Price`, `spr_price` or `GOOGLEFINANCE`
+directly.
 
-Accepted pricing modes:
+`CURRENT_REPRICE` remains Stage 10+ behavior and is not Stage 8 scope.
+
+## 7. Accepted Stage 7 parser baseline
+
+Stage 7 is COMPLETE.
 
 ```text
-MANUAL_RUB
-FX_AUTO
-FX_MANUAL
+free text + optional images
+→ OpenRouter
+→ strict generated transport schema
+→ canonical deterministic validator
+→ Project Input JSON
 ```
 
-`GOOGLEFINANCE`:
+Canonical files:
 
 ```text
-working preview only
+docs/stage-7-openrouter-parser/project-input.schema.json
+docs/stage-7-openrouter-parser/parser-contract.md
+docs/stage-7-openrouter-parser/stage-7-report.md
 ```
 
-Official calculation, ORIGINAL и CURRENT_REPRICE не читают volatile FX cache.
-
-Accepted UX docs:
+Accepted schema:
 
 ```text
-docs/human-ux-patch/human-ux-contract.md
-docs/human-ux-patch/calculations-ux-contract.md
-docs/human-ux-patch/offer-ux-contract.md
-docs/human-ux-patch/human-ux-patch-report.md
+project-input-v1
+project_type = KITCHEN
 ```
 
----
-
-## 7. Apps Script / clasp baseline
-
-Local Git repository = canonical Apps Script source.
-
-```text
-apps-script/
-├── appsscript.json
-├── setup_system.gs
-├── custom_price.gs
-├── generated/
-│   ├── schema_manifest.gs
-│   └── [Human UX generated manifest]
-└── [Stage 7 files will be added here]
-```
-
-Фактические имена generated Human UX files проверить в repo; не создавать duplicate
-только из-за примера выше.
-
-Target:
-
-```text
-existing bound DEV Apps Script project
-→ AI Furniture Calculation Base — DEV
-```
-
-Clasp:
-
-```text
-@google/clasp 3.3.0 pinned
-```
-
-Remote workflow:
-
-```text
-local changes
-→ tests
-→ clean preflight
-→ isolated remote snapshot/diff
-→ controlled clasp push
-→ round-trip verification
-```
-
-Новый Apps Script project не создавать.
-
-Secrets / `.clasp.json` / `.clasprc.json` не коммитить.
-
----
-
-## 8. Stage 7 — OpenRouter parser
-
-Stage 7 создаёт слой понимания пользовательского входа:
-
-```text
-text
-+ optional images / sketches / renders
-        ↓
-OpenRouter
-        ↓
-strict structured parser output
-        ↓
-deterministic local validation
-        ↓
-Project Input JSON
-```
-
-Это parser, а не calculation engine.
-
-Stage 7 должен уметь:
-
-- принять свободный русский текст;
-- принять optional image input;
-- извлечь только явно поддерживаемые project facts;
-- отличить explicit fact от inference;
-- сохранить неизвестное как unknown/missing;
-- вернуть список вопросов/нехватающих данных;
-- вернуть structured Project Input JSON;
-- записать parser metadata/provenance для воспроизводимости;
-- не рассчитывать цену;
-- не создавать layout;
-- не создавать BOM;
-- не публиковать pricebook.
-
-Detailed contract:
-
-```text
-docs/stage-7-openrouter-parser/stage-7-context.md
-```
-
----
-
-## 9. OpenRouter integration boundary
-
-OpenRouter используется через стандартный HTTP API из Apps Script.
-
-Security:
-
-```text
-OPENROUTER_API_KEY
-→ Script Properties / secure runtime property
-→ NEVER Google Sheet
-→ NEVER Git
-→ NEVER logs
-```
-
-Model slug — operational config, не secret.
-
-Parser result должен фиксировать:
-
-```text
-provider = openrouter
-model_requested
-model_returned, если доступно
-parser_schema_version
-prompt_version
-parsed_at
-```
-
-Выбор модели не должен быть зашит в business schema как вечный стандарт.
-
----
-
-## 10. Project Input principle
-
-Project Input JSON — контракт между probabilistic parser и deterministic Stage 8.
-
-Главный принцип:
-
-```text
-LLM may interpret
-but deterministic code decides whether data is usable
-```
-
-Parser не должен silently default неизвестные бизнес-параметры.
-
-Допустимые состояния должны позволять выразить:
+Fact states:
 
 ```text
 KNOWN
@@ -379,36 +227,124 @@ CONFLICT
 NOT_APPLICABLE
 ```
 
-или эквивалентный компактный contract.
+Policy:
 
-Каждое существенное inferred значение должно быть явно отмечено и не превращаться
-в hard calculation input без validation/confirmation policy.
+```text
+UNKNOWN ≠ default
+INFERRED ≠ confirmed
+CONFLICT ≠ silent choice
+```
 
----
+Live Stage 7 verification:
 
-## 11. Контекстная иерархия
+```text
+model: openai/gpt-5.6-luna
+text: HTTP 200 / PASS
+image+text: HTTP 200 / PASS
+schema / metadata / evidence: PASS
+```
+
+Stage 8 consumes already validated Project Input JSON and MUST NOT call OpenRouter again.
+
+## 8. Stage 8 — deterministic calculation kernel
+
+Target:
+
+```text
+validated Project Input JSON
+→ input readiness / confirmation gate
+→ ProjectInput → LayoutRequest adapter
+→ deterministic layout kernel
+→ recipe resolver
+→ quantity engine
+→ published pricebook resolver
+→ cost engine
+→ Calculation Result
+```
+
+Detailed contract:
+
+```text
+docs/stage-8-calculation-kernel/stage-8-context.md
+```
+
+Stage 8 returns a result in runtime memory. Stage 10 owns quote persistence/dashboard.
+
+## 9. Stage 8 critical policies
+
+Hard input policy:
+
+```text
+KNOWN → usable
+INFERRED → not silently confirmed
+UNKNOWN → blocker if required
+CONFLICT → blocker
+NOT_APPLICABLE → only where semantically valid
+```
+
+Python Stage 3 is the reference behavior. Apps Script must prove parity.
+
+Money/quantity arithmetic must avoid uncontrolled binary floating-point drift.
+
+Runtime relations use stable IDs/codes, never display names.
+
+Missing approved module recipe remains:
+
+```text
+REQUIRES_EXPERT
+```
+
+No synthetic BOM.
+
+Official cost uses only immutable published pricebook rows.
+
+## 10. Stage 8 output
+
+Stage 8 creates one versioned Calculation Result contract suitable for future Stage 10
+snapshotting. It must preserve versions/provenance, blockers/warnings, layout snapshot,
+calculation items, cost results, pricebook version and total/currency when calculable.
+
+No physical `Calculations` or `Offer` sheet is created on Stage 8.
+
+## 11. Apps Script / clasp
+
+Local Git remains source of truth.
+
+Target:
+
+```text
+existing bound DEV Apps Script project
+AI Furniture Calculation Base — DEV
+```
+
+Workflow:
+
+```text
+local implementation
+→ tests
+→ clean Git
+→ fresh remote preflight
+→ controlled clasp push
+→ round-trip verification
+→ manual/controlled DEV smoke if needed
+```
+
+No new Apps Script project or deployment.
+
+## 12. Context hierarchy
 
 ```text
 AI_FURNITURE_EXECUTION.md
 → HOW Codex works
 
 PROJECT_CONTEXT.md
-→ accepted baseline
+→ accepted project baseline
 
-stage-X-context.md
-→ current task contract
+docs/stage-8-calculation-kernel/stage-8-context.md
+→ current Stage 8 contract
 
-accepted reports/docs
-→ factual outcomes
-
-code / JSON schema / CSV / tests
-→ canonical technical source
+accepted reports/schema/code/tests
+→ factual technical source
 ```
 
-Режим по умолчанию:
-
-```text
-NORMAL
-```
-
-Git push не выполнять без отдельного разрешения.
+Git push remains forbidden unless separately authorized.
