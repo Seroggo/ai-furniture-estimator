@@ -51,11 +51,33 @@
     "currency",
     "created_at"
   ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {"status": {"const": "SUCCESS"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "blockers": {"maxItems": 0},
+          "layout": {"$ref": "#/$defs/LayoutSnapshot"},
+          "pricebook_version_id": {"type": "string", "minLength": 1},
+          "total": {"$ref": "#/$defs/DecimalString"},
+          "currency": {"type": "string", "minLength": 1}
+        }
+      },
+      "else": {
+        "properties": {
+          "blockers": {"minItems": 1}
+        }
+      }
+    }
+  ],
   "additionalProperties": false,
   "$defs": {
     "DecimalString": {
       "type": "string",
-      "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+      "pattern": "^(?:0|[1-9][0-9]*|(?:0|[1-9][0-9]*)\\.[0-9]*[1-9])$",
       "description": "Canonical non-negative exact decimal without exponent notation or insignificant trailing zeroes."
     },
     "ProjectInputRef": {

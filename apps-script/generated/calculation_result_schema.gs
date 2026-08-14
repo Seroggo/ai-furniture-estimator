@@ -128,7 +128,7 @@ var CALCULATION_RESULT_SCHEMA = {
     },
     "DecimalString": {
       "description": "Canonical non-negative exact decimal without exponent notation or insignificant trailing zeroes.",
-      "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+      "pattern": "^(?:0|[1-9][0-9]*|(?:0|[1-9][0-9]*)\\.[0-9]*[1-9])$",
       "type": "string"
     },
     "Diagnostic": {
@@ -460,6 +460,48 @@ var CALCULATION_RESULT_SCHEMA = {
   "$id": "https://github.com/ai-furniture-estimator/stage-8/calculation-result.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
+  "allOf": [
+    {
+      "else": {
+        "properties": {
+          "blockers": {
+            "minItems": 1
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "status": {
+            "const": "SUCCESS"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "blockers": {
+            "maxItems": 0
+          },
+          "currency": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "layout": {
+            "$ref": "#/$defs/LayoutSnapshot"
+          },
+          "pricebook_version_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "total": {
+            "$ref": "#/$defs/DecimalString"
+          }
+        }
+      }
+    }
+  ],
   "description": "Canonical in-memory output of the deterministic Stage 8 calculation kernel.",
   "properties": {
     "blockers": {

@@ -134,7 +134,8 @@ function validateCalculationResult(result) {
   } else if (!result.blockers.length) errors.push('blocked result requires a blocker');
   ['total'].forEach(function (field) {
     if (result[field] !== null) {
-      try { decimalNormalize_(result[field]); } catch (error) { errors.push(field + ' is not an exact decimal'); }
+      try { if (decimalNormalize_(result[field]) !== result[field]) errors.push('non-canonical ' + field); }
+      catch (error) { errors.push(field + ' is not an exact decimal'); }
     }
   });
   (result.calculation_items || []).forEach(function (item) {

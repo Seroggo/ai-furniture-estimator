@@ -21,6 +21,10 @@ Stage 8 does not persist a calculation, create a quote database, or produce an o
 calculation, published price resolution, and exact cost aggregation all complete.
 Every business stop is a typed status and at least one blocker, not an exception:
 
+The canonical schema enforces this boundary: `SUCCESS` has no blockers and has a
+non-null layout, pricebook version, total, and currency; every non-`SUCCESS` status
+has at least one blocker.
+
 | Status | Boundary |
 |---|---|
 | `INPUT_NOT_READY` | required fact is unknown, conflicting, inferred but unconfirmed, or not exactly mappable |
@@ -56,6 +60,11 @@ strings. Exponent notation, `NaN`, infinity, binary-float arithmetic, and implic
 rounding are forbidden. Stage 8 performs exact base-10 addition, multiplication, and
 the already-confirmed millimetre-to-metre scale shifts. It does not invent currency
 rounding, waste, sheet rounding, or manufacturing rules.
+
+Canonical zero is `"0"`. A value with no fractional remainder is an integer without
+a decimal point; otherwise its fractional part ends in a non-zero digit. Therefore
+`"1.0"`, `"1.00"`, and `"0.10"` are not valid `DecimalString` values. Canonicalization
+removes insignificant zeroes without rounding.
 
 ## Null and empty semantics
 

@@ -155,6 +155,17 @@ test('canonical Calculation Result schema is Draft 2020-12 valid', () => {
   assert.doesNotThrow(() => ajv.compile(schema));
 });
 
+test('DecimalString accepts only canonical non-negative exact decimal forms', () => {
+  const schema = JSON.parse(readFileSync(resolve(root, 'docs/stage-8-calculation-kernel/calculation-result.schema.json'), 'utf8'));
+  const validate = new Ajv2020({strict: false}).compile(schema.$defs.DecimalString);
+  for (const value of ['0', '1', '10', '0.1', '0.01', '1.01', '100.0001']) {
+    assert.equal(validate(value), true, `${value}: ${JSON.stringify(validate.errors)}`);
+  }
+  for (const value of ['0.0', '1.0', '1.00', '0.10', '00', '01', '.1', '1.', '-1', '1e2']) {
+    assert.equal(validate(value), false, `${value} must not be canonical`);
+  }
+});
+
 test('readiness gate accepts only KNOWN straight hard facts', () => {
   assert.equal(call('adaptProjectInputToLayoutRequest', projectInput()).status, 'READY');
   for (const state of ['UNKNOWN', 'CONFLICT', 'INFERRED']) {
@@ -233,17 +244,40 @@ test('published pricebook resolver reports none, overlap, missing price and unit
   assert.equal(run(projectInput(), mismatch).status, 'UNIT_MISMATCH');
 });
 
-test('SUCCESS and blocker runtime results validate against the canonical schema with no undocumented fields', () => {
+test('canonical schema enforces SUCCESS completeness and blocker status diagnostics', () => {
   const schema = JSON.parse(readFileSync(resolve(root, 'docs/stage-8-calculation-kernel/calculation-result.schema.json'), 'utf8'));
   const validate = new Ajv2020({strict: false, validateFormats: false}).compile(schema);
   const success = run();
   assert.equal(validate(success), true, JSON.stringify(validate.errors));
+
+  for (const [field, value] of [
+    ['blockers', [{code: 'INVALID_SUCCESS', stage: 'COST', field_path: null, message: 'invalid', provenance: []}]],
+    ['layout', null],
+    ['pricebook_version_id', null],
+    ['total', null],
+    ['currency', null],
+  ]) {
+    const invalid = structuredClone(success);
+    invalid[field] = value;
+    assert.equal(validate(invalid), false, `SUCCESS with invalid ${field} must fail`);
+  }
+
   const blockedData = masterData();
   blockedData.moduleRecipes = [];
   blockedData.moduleRecipeItems = [];
   const blocked = run(projectInput(), blockedData);
+  assert.equal(blocked.status, 'REQUIRES_EXPERT');
   assert.equal(validate(blocked), true, JSON.stringify(validate.errors));
+
+  const blockerWithoutDiagnostics = structuredClone(blocked);
+  blockerWithoutDiagnostics.blockers = [];
+  assert.equal(validate(blockerWithoutDiagnostics), false, 'blocker status without blockers must fail');
+
   assert.deepEqual(plain(call('validateCalculationResult', success)), {valid: true, errors: []});
+  const nonCanonicalTotal = structuredClone(success);
+  nonCanonicalTotal.total = '131.550';
+  assert.equal(validate(nonCanonicalTotal), false);
+  assert.equal(plain(call('validateCalculationResult', nonCanonicalTotal)).valid, false);
 });
 
 test('Stage 8 source has no LLM call, fuzzy mapping, working-price read, persistence, or synthetic BOM', () => {
