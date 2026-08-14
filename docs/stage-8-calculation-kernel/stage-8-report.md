@@ -118,12 +118,19 @@ items, immutable pricebook ID, exact item costs/total/currency, and timestamp. S
 and blocker runtime outputs validate against the Draft 2020-12 schema with additional
 properties forbidden. The result remains in runtime memory.
 
+The `calculation-result-v1` version remains unchanged. `DecimalString` now enforces
+the canonical decimal representation: zero is `"0"`, integers have no decimal point,
+and a non-empty fractional part ends in a non-zero digit, without rounding. `SUCCESS`
+requires no blockers and requires completed `layout`, `pricebook_version_id`, `total`,
+and `currency` fields. Every non-`SUCCESS` business status requires at least one
+blocker.
+
 ## Tests / parity
 
 Current local checkpoint:
 
 ```text
-Stage 8 Node:             9 / 9 PASS
+Stage 8 Node:            10 / 10 PASS
 Stage 7 Node:            19 / 19 PASS
 Stage 6 Node:            11 / 11 PASS
 Python regressions:      77 / 77 PASS
@@ -197,7 +204,9 @@ not implemented.
 branch: main
 implementation commit: 4fc8f76
 safe smoke summary: bfcffc1
+corrective contract patch: dd5b5a9
 completion report: this report's final local commit
 Git push: NO
 working tree: clean after final report commit
+Stage 9: not started
 ```
