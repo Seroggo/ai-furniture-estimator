@@ -250,6 +250,22 @@ DIFFERENT:      0
 unknown remote: 0
 ```
 
+Corrective optional-image live patch использовал тот же accepted workflow:
+
+```text
+fresh preflight:  SAME 20 / DIFFERENT 1 (web_app.html only)
+unknown remote:   0
+missing remote:   0
+exact allowlist:  21
+preflight:        PASS
+push:             normal / non-force / PUSHED 21
+round-trip:       SAME 21 / 21
+REMOTE_ONLY:      0
+LOCAL_ONLY:       0
+DIFFERENT:        0
+new deployment:   NO
+```
+
 ## Live DEV Web App verification
 
 ```text
@@ -282,6 +298,7 @@ Drive image storage, PDF/XLSX, CRM, chat/session persistence и public deploymen
 branch: main
 implementation: c3765de feat: add stage 9 manager web app
 Apps Script filename fix: b663093 fix: use distinct Apps Script file names
+corrective optional-image patch: 96b2011 fix: support text-only web app submissions
 report checkpoint: this report's final local commit
 Git push: NO
 working tree: clean after report commit
