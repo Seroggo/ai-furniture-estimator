@@ -16,9 +16,10 @@ KITCHEN / Кухни
 LLM понимает и структурирует вход.
 Детерминированный код проверяет, конфигурирует и рассчитывает.
 Google Sheets хранит master data, рабочие цены и опубликованные расчётные данные.
+Apps Script Web App даёт менеджеру human-first интерфейс к этому контуру.
 ```
 
-LLM не является источником цен, не рассчитывает стоимость, не выполняет layout,
+LLM не является источником цен, не рассчитывает итоговую стоимость, не выполняет layout,
 не создаёт BOM/module recipes и не заменяет deterministic validation/calculation.
 
 ## 2. Канонический план
@@ -55,151 +56,30 @@ Stage 5 — ACCEPTED / CLOSED
 Stage 6 — ACCEPTED / CLOSED
 Human UX Patch — ACCEPTED / CLOSED
 Stage 7 — ACCEPTED / CLOSED
+Stage 8 — ACCEPTED / CLOSED
 
-Текущий этап — Stage 8
+Текущий этап — Stage 9
 ```
 
-Expected Git baseline:
+Expected Git baseline перед Stage 9 context commit:
 
 ```text
 branch: main
-HEAD: ff5560a
+HEAD: 4038225
 working tree: clean
 Git push: NO
 ```
 
-Всегда проверить фактический Git state перед работой.
+Перед любой работой проверить фактический Git state.
 
-## 4. Accepted calculation baseline
-
-### Layout reference
+## 4. Accepted Stage 7 parser baseline
 
 ```text
-calculation_model/layout_configurator.py
-tests/test_layout_configurator.py
-```
-
-Accepted semantics:
-
-```text
-hard constraints > optimisation
-A/B/C → automatic generic candidates
-D → specialized / explicit only
-E → not automatic
-filler → separate entity
-NO_VALID_LAYOUT → explicit
-arbitrary custom widths → forbidden
-STUDIO_STANDARD → not proven
-L/U/corners → NOT_SUPPORTED without system-specific profile
-```
-
-### Quantity / cost reference
-
-```text
-calculation_model/calculation_engine.py
-tests/test_calculation_engine.py
-```
-
-Principle:
-
-```text
-quantity model × published pricebook = cost
-```
-
-Historical prices are fixtures/evidence only.
-
-Open expert debt:
-
-```text
-MODULE_TO_PARTS_V1 = REQUIRES_EXPERT
-Basis alternative selection = REQUIRES_EXPERT
-order coefficients / rounding = REQUIRES_EXPERT
-hidden Medvedev logic = REQUIRES_EXPERT / NOT_SUPPORTED
-legacy J2/K2 semantics = REQUIRES_EXPERT
-```
-
-Synthetic BOM is forbidden.
-
-## 5. Accepted Google Sheets baseline
-
-Technical contract:
-
-```text
-11 technical sheets
-136 technical columns
-9 relations
-```
-
-Technical sheets:
-
-```text
-Schema_Meta
-System_Config
-Module_Size_Rules
-Module_Recipes
-Module_Recipe_Items
-Catalog_Items
-spr_price
-Pricebook_Versions
-Prices
-Calculation_Rules
-Reference_Values
-```
-
-Canonical structure:
-
-```text
-docs/stage-4-google-sheets/sheets-columns.csv
-docs/stage-4-google-sheets/sheets-relations.csv
-docs/stage-4-google-sheets/google-sheets-schema.md
-```
-
-Physical DEV workbook:
-
-```text
-Custom_Price + 11 technical sheets = 12 sheets
-```
-
-Accepted real DEV data state before Stage 8:
-
-```text
-Module_Size_Rules      → no runtime rules imported yet
-Module_Recipes         → empty
-Module_Recipe_Items    → empty
-Catalog_Items          → no production catalog
-Pricebook_Versions     → no automatic publication
-Prices                 → no automatic publication
-Calculation_Rules      → MODULE_TO_PARTS_V1 blocking seed exists
-```
-
-Historical fixtures must not become production master data implicitly.
-
-## 6. Accepted pricing architecture
-
-```text
-Custom_Price
-→ explicit sync
-→ Catalog_Items + spr_price
-→ explicit future publication
-→ Pricebook_Versions + Prices
-→ official calculation
-```
-
-Official calculation MUST NOT read `Custom_Price`, `spr_price` or `GOOGLEFINANCE`
-directly.
-
-`CURRENT_REPRICE` remains Stage 10+ behavior and is not Stage 8 scope.
-
-## 7. Accepted Stage 7 parser baseline
-
-Stage 7 is COMPLETE.
-
-```text
-free text + optional images
+free Russian text + optional images
 → OpenRouter
-→ strict generated transport schema
-→ canonical deterministic validator
-→ Project Input JSON
+→ generated strict transport schema
+→ canonical deterministic validation
+→ project-input-v1
 ```
 
 Canonical files:
@@ -210,11 +90,12 @@ docs/stage-7-openrouter-parser/parser-contract.md
 docs/stage-7-openrouter-parser/stage-7-report.md
 ```
 
-Accepted schema:
+Accepted runtime:
 
 ```text
-project-input-v1
-project_type = KITCHEN
+OPENROUTER_MODEL = openai/gpt-5.6-luna
+text live smoke = HTTP 200 / PASS
+image+text live smoke = HTTP 200 / PASS
 ```
 
 Fact states:
@@ -227,111 +108,237 @@ CONFLICT
 NOT_APPLICABLE
 ```
 
-Policy:
+Secrets remain server-side in Script Properties.
+
+## 5. Accepted Stage 8 calculation baseline
+
+Stage 8 is ACCEPTED / CLOSED.
 
 ```text
-UNKNOWN ≠ default
-INFERRED ≠ confirmed
-CONFLICT ≠ silent choice
+validated project-input-v1
+→ readiness / confirmation gate
+→ exact ProjectInput → LayoutRequest adapter
+→ Module_Size_Rules-backed deterministic layout
+→ approved recipe resolver
+→ exact quantity engine
+→ published Pricebook_Versions + Prices
+→ exact cost engine
+→ calculation-result-v1
 ```
 
-Live Stage 7 verification:
+Canonical files:
 
 ```text
-model: openai/gpt-5.6-luna
-text: HTTP 200 / PASS
-image+text: HTTP 200 / PASS
-schema / metadata / evidence: PASS
+docs/stage-8-calculation-kernel/calculation-result.schema.json
+docs/stage-8-calculation-kernel/calculation-contract.md
+docs/stage-8-calculation-kernel/stage-8-report.md
 ```
 
-Stage 8 consumes already validated Project Input JSON and MUST NOT call OpenRouter again.
-
-## 8. Stage 8 — deterministic calculation kernel
-
-Target:
+Accepted status model:
 
 ```text
-validated Project Input JSON
-→ input readiness / confirmation gate
-→ ProjectInput → LayoutRequest adapter
-→ deterministic layout kernel
-→ recipe resolver
-→ quantity engine
-→ published pricebook resolver
-→ cost engine
-→ Calculation Result
+SUCCESS
+INPUT_NOT_READY
+NOT_SUPPORTED
+NO_VALID_LAYOUT
+REQUIRES_EXPERT
+PRICEBOOK_NOT_AVAILABLE
+PRICE_NOT_FOUND
+UNIT_MISMATCH
+MASTER_DATA_INVALID
+```
+
+Final result-contract rules:
+
+```text
+DecimalString = canonical exact decimal
+SUCCESS = no blockers + completed result fields
+non-SUCCESS business status = at least one blocker
+```
+
+No implicit currency rounding. No IEEE-754 accumulation for business decimals.
+
+## 6. Accepted Stage 8 master-data reality
+
+Accepted live DEV state:
+
+```text
+managed Module_Size_Rules: 59
+sync idempotent: true
+layout: works
+production Module_Recipes: absent
+production price rows created by Stage 8: 0
+synthetic BOM: 0
+OpenRouter calls from Stage 8: 0
+real DEV calculation result: REQUIRES_EXPERT
+```
+
+`REQUIRES_EXPERT` is correct behavior until expert-approved recipes exist.
+
+Do not fabricate production recipes/catalog/prices to make the Web App look successful.
+
+## 7. Accepted pricing architecture
+
+```text
+Custom_Price
+→ explicit sync
+→ Catalog_Items + spr_price
+→ explicit future publication
+→ Pricebook_Versions + Prices
+→ official calculation
+```
+
+Stage 9 UI MUST NOT use `Custom_Price`, `spr_price` or `GOOGLEFINANCE` as calculation truth.
+
+Stage 9 does not implement price publication. `CURRENT_REPRICE` remains Stage 10+.
+
+## 8. Stage 9 — manager Web App
+
+Stage 9 adds the first human-facing runtime interface.
+
+```text
+manager
+→ text + optional images
+→ Web App server boundary
+→ Stage 7 parser
+→ validated Project Input
+→ Stage 8 calculation kernel
+→ human-readable result / questions / blockers
 ```
 
 Detailed contract:
 
 ```text
-docs/stage-8-calculation-kernel/stage-8-context.md
+docs/stage-9-web-app/stage-9-context.md
 ```
 
-Stage 8 returns a result in runtime memory. Stage 10 owns quote persistence/dashboard.
+The Web App is an internal manager tool for MVP, not a public client portal.
 
-## 9. Stage 8 critical policies
+## 9. Stage 9 UX principle
 
-Hard input policy:
+The manager should be able to:
 
 ```text
-KNOWN → usable
-INFERRED → not silently confirmed
-UNKNOWN → blocker if required
-CONFLICT → blocker
-NOT_APPLICABLE → only where semantically valid
+1. describe a kitchen in free Russian text;
+2. optionally attach supported images;
+3. submit;
+4. see what the system understood;
+5. see missing questions / blockers;
+6. see calculation status and human-readable result;
+7. correct/expand the original input and resubmit.
 ```
 
-Python Stage 3 is the reference behavior. Apps Script must prove parity.
+Do not expose technical complexity by default.
 
-Money/quantity arithmetic must avoid uncontrolled binary floating-point drift.
+## 10. Stage 9 session/persistence boundary
 
-Runtime relations use stable IDs/codes, never display names.
-
-Missing approved module recipe remains:
+Stage 9 has no quote database.
 
 ```text
-REQUIRES_EXPERT
+browser form state
+→ submit
+→ server runtime
+→ response
 ```
 
-No synthetic BOM.
+No automatic persistence of client request, images, Project Input JSON, Calculation Result,
+quote or offer. Stage 10 owns durable calculation/quote records.
 
-Official cost uses only immutable published pricebook rows.
+## 11. Stage 9 security boundary
 
-## 10. Stage 8 output
-
-Stage 8 creates one versioned Calculation Result contract suitable for future Stage 10
-snapshotting. It must preserve versions/provenance, blockers/warnings, layout snapshot,
-calculation items, cost results, pricebook version and total/currency when calculable.
-
-No physical `Calculations` or `Offer` sheet is created on Stage 8.
-
-## 11. Apps Script / clasp
-
-Local Git remains source of truth.
-
-Target:
+Secrets remain server-side:
 
 ```text
-existing bound DEV Apps Script project
+OPENROUTER_API_KEY
+OPENROUTER_MODEL
+```
+
+Browser code must never receive API key, Authorization headers, raw provider response,
+base64 after processing, or internal stack traces.
+
+User/model-derived text must be rendered safely. Do not inject untrusted content through
+`innerHTML`.
+
+No third-party frontend framework/CDN is required for MVP.
+
+Deployment must remain restricted for DEV verification; do not publish an anonymous
+public Web App during Stage 9 acceptance.
+
+## 12. Stage 9 error model
+
+Human UI must distinguish:
+
+```text
+input/parser problem
+needs clarification
+not supported
+no layout
+requires expert
+price/master-data problem
+system/internal error
+```
+
+Business blockers must not become generic system errors.
+
+## 13. Stage 9 deployment baseline
+
+Target remains the existing bound DEV Apps Script project:
+
+```text
 AI Furniture Calculation Base — DEV
 ```
 
-Workflow:
+Stage 9 may use an Apps Script Web App test deployment (`/dev`) for acceptance.
+
+Do not create a public anonymous production deployment.
+
+## 14. Apps Script / clasp workflow
+
+Use accepted Stage 6 controlled workflow:
 
 ```text
 local implementation
 → tests
-→ clean Git
+→ generated/static checks
 → fresh remote preflight
-→ controlled clasp push
-→ round-trip verification
-→ manual/controlled DEV smoke if needed
+→ exact allowlist
+→ normal controlled clasp push
+→ isolated round-trip
+→ manual Web App DEV verification
 ```
 
-No new Apps Script project or deployment.
+Unknown remote files remain a stop condition.
 
-## 12. Context hierarchy
+Git push remains forbidden unless separately authorized.
+
+## 15. Stage 9 output principle
+
+Stage 9 introduces UI/orchestration only.
+
+It MUST reuse Stage 7 parser contract and Stage 8 calculation contract.
+
+The browser-facing response may have a small versioned view-model contract, but canonical
+Project Input and Calculation Result remain their existing contracts.
+
+## 16. Deferred scope
+
+Not Stage 9:
+
+```text
+physical Calculations sheet
+physical Offer sheet
+quote registry/database
+manager calculation history
+CURRENT_REPRICE
+PDF
+XLSX
+CRM
+public client portal
+custom authentication system
+Stage 10+
+```
+
+## 17. Context hierarchy
 
 ```text
 AI_FURNITURE_EXECUTION.md
@@ -340,11 +347,11 @@ AI_FURNITURE_EXECUTION.md
 PROJECT_CONTEXT.md
 → accepted project baseline
 
-docs/stage-8-calculation-kernel/stage-8-context.md
-→ current Stage 8 contract
+docs/stage-9-web-app/stage-9-context.md
+→ current Stage 9 contract
 
-accepted reports/schema/code/tests
-→ factual technical source
+accepted Stage 7/8 contracts/reports/code/tests
+→ technical source of truth
 ```
 
-Git push remains forbidden unless separately authorized.
+Stage 10 must not start without HQ acceptance.
