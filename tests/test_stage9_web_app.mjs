@@ -8,6 +8,80 @@ import {fileURLToPath} from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const serverSource = readFileSync(resolve(root, 'apps-script/stage9_server.gs'), 'utf8');
 const htmlSource = readFileSync(resolve(root, 'apps-script/web_app.html'), 'utf8');
+const clientScript = htmlSource.match(/<script>([\s\S]*)<\/script>/)?.[1];
+
+function createClientRuntime({fileReaderMode = 'success'} = {}) {
+  const nodes = new Map();
+  const state = {fileReaderCalls: 0, serverCalls: [], fileReaderMode};
+
+  class FakeNode {
+    constructor() {
+      this.children = [];
+      this.listeners = {};
+      this.textContent = '';
+      this.hidden = false;
+      this.disabled = false;
+      this.value = '';
+      this.files = [];
+      this.className = '';
+      this.classList = {add: (name) => { this.className += ` ${name}`; }};
+    }
+    get firstChild() { return this.children[0] || null; }
+    addEventListener(name, listener) { this.listeners[name] = listener; }
+    append(...children) { this.children.push(...children); }
+    appendChild(child) { this.children.push(child); return child; }
+    removeChild(child) {
+      const index = this.children.indexOf(child);
+      if (index >= 0) this.children.splice(index, 1);
+      return child;
+    }
+    setAttribute() {}
+    focus() {}
+    scrollIntoView() {}
+  }
+
+  class FakeFile {
+    constructor(name, type, size, base64 = 'QUJDRA==') {
+      this.name = name;
+      this.type = type;
+      this.size = size;
+      this.base64 = base64;
+    }
+  }
+
+  class FakeFileReader {
+    constructor() { state.fileReaderCalls += 1; this.result = null; }
+    readAsDataURL(file) {
+      if (state.fileReaderMode === 'error') this.onerror();
+      else {
+        this.result = `data:${file.type};base64,${file.base64}`;
+        this.onload();
+      }
+    }
+  }
+
+  function node(id) {
+    if (!nodes.has(id)) nodes.set(id, new FakeNode());
+    return nodes.get(id);
+  }
+
+  const runner = {
+    withSuccessHandler(listener) { this.successHandler = listener; return this; },
+    withFailureHandler(listener) { this.failureHandler = listener; return this; },
+    submitStage9Project(value) {
+      state.serverCalls.push(JSON.parse(JSON.stringify(value)));
+    },
+  };
+  const context = vm.createContext({
+    document: {getElementById: node, createElement: () => new FakeNode()},
+    google: {script: {run: runner}},
+    File: FakeFile,
+    FileReader: FakeFileReader,
+  });
+  assert.ok(clientScript, 'client script must be present');
+  vm.runInContext(clientScript, context, {filename: 'web_app.html'});
+  return {node, state, FakeFile, runner};
+}
 
 function createRuntime() {
   const logs = [];
@@ -98,6 +172,76 @@ test('doGet serves the single Russian HtmlService page', () => {
   assert.equal(output.file, 'web_app');
   assert.match(output.title, /AI Мебельщик/);
   assert.deepEqual(output.meta, [['viewport', 'width=device-width, initial-scale=1']]);
+});
+
+test('browser text-only submit sends a literal empty image array without FileReader', async () => {
+  const runtime = createClientRuntime();
+  runtime.node('project-text').value = 'Прямая кухня 3000 мм';
+  await runtime.node('submit-button').listeners.click();
+  assert.equal(runtime.state.fileReaderCalls, 0);
+  assert.deepEqual(runtime.state.serverCalls, [{
+    request_version: 'stage9-request-v1',
+    text: 'Прямая кухня 3000 мм',
+    images: [],
+  }]);
+  assert.equal(runtime.node('client-error').hidden, true);
+});
+
+test('browser selecting and removing every image returns to valid text-only submit', async () => {
+  const runtime = createClientRuntime();
+  runtime.node('project-text').value = 'Кухня без изображений';
+  runtime.node('image-picker').files = [new runtime.FakeFile('plan.png', 'image/png', 4)];
+  runtime.node('image-picker').listeners.change();
+  assert.equal(runtime.node('file-list').children.length, 1);
+  const removeButton = runtime.node('file-list').children[0].children[1];
+  removeButton.listeners.click();
+  assert.equal(runtime.node('file-list').children.length, 0);
+  await runtime.node('submit-button').listeners.click();
+  assert.equal(runtime.state.fileReaderCalls, 0);
+  assert.deepEqual(runtime.state.serverCalls[0].images, []);
+});
+
+test('browser reports image-read error only when an actual selected File fails', async () => {
+  const textOnly = createClientRuntime({fileReaderMode: 'error'});
+  textOnly.node('project-text').value = 'Текст без файла';
+  await textOnly.node('submit-button').listeners.click();
+  assert.equal(textOnly.state.fileReaderCalls, 0);
+  assert.equal(textOnly.node('client-error').hidden, true);
+  assert.equal(textOnly.state.serverCalls.length, 1);
+
+  const withImage = createClientRuntime({fileReaderMode: 'error'});
+  withImage.node('project-text').value = 'Текст с повреждённым файлом';
+  withImage.node('image-picker').files = [new withImage.FakeFile('broken.png', 'image/png', 4)];
+  withImage.node('image-picker').listeners.change();
+  await withImage.node('submit-button').listeners.click();
+  assert.equal(withImage.state.fileReaderCalls, 1);
+  assert.equal(withImage.state.serverCalls.length, 0);
+  assert.equal(withImage.node('client-error').hidden, false);
+  assert.match(withImage.node('client-error').textContent, /Не удалось прочитать изображение/);
+});
+
+test('browser valid selected File still uses FileReader and preserves image request shape', async () => {
+  const runtime = createClientRuntime();
+  runtime.node('project-text').value = 'Кухня с планом';
+  runtime.node('image-picker').files = [new runtime.FakeFile('plan.webp', 'image/webp', 4, 'QUJDRA==')];
+  runtime.node('image-picker').listeners.change();
+  await runtime.node('submit-button').listeners.click();
+  assert.equal(runtime.state.fileReaderCalls, 1);
+  assert.deepEqual(runtime.state.serverCalls[0].images, [{
+    client_ref: 'plan.webp', mime_type: 'image/webp', base64: 'QUJDRA==',
+  }]);
+});
+
+test('browser runtime double-submit guard still permits only one server call', async () => {
+  const runtime = createClientRuntime();
+  runtime.node('project-text').value = 'Прямая кухня 3000 мм';
+  await Promise.all([
+    runtime.node('submit-button').listeners.click(),
+    runtime.node('submit-button').listeners.click(),
+  ]);
+  assert.equal(runtime.state.serverCalls.length, 1);
+  assert.equal(runtime.node('submit-button').disabled, true);
+  assert.equal(runtime.node('loading-state').hidden, false);
 });
 
 test('valid text-only request calls Stage 7 then Stage 8 exactly once', () => {

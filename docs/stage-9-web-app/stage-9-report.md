@@ -12,6 +12,31 @@ bound DEV Apps Script project. Stage 9 ещё не `COMPLETE`, потому чт
 нужно открыть и проверить в обычной signed-in Google editor session. Публичный или
 anonymous deployment не создавался.
 
+## Corrective live patch — optional images
+
+Manual `/dev` acceptance обнаружил реальную browser regression: text-only submit с
+нулём выбранных изображений показывал сообщение об ошибке FileReader и не достигал
+`submitStage9Project()`.
+
+Root cause находился только в `web_app.html`: нулевая коллекция изображений всё равно
+проходила через общий async `Promise.all(selectedFiles.map(...))`, а создание request
+и вызов `google.script.run` находились в том же `try/catch`, что и FileReader. Поэтому
+empty-image path не был самостоятельным контрактным путём, а любое исключение внутри
+общей фазы ошибочно классифицировалось как «Не удалось прочитать изображение».
+
+Corrective patch не меняет request/server/Stage 7/Stage 8 contracts:
+
+- `filesToRead` содержит только реальные browser `File` objects;
+- zero files сразу создаёт literal `images: []` и не вызывает FileReader;
+- encode/FileReader имеет отдельный narrow `try/catch`;
+- `google.script.run` dispatch имеет отдельную transport error branch;
+- picker отбрасывает null/undefined pseudo-file entries;
+- remove-all возвращает normal text-only path.
+
+Добавлены исполняемые browser-runtime regressions для text-only request shape, zero
+FileReader calls, select-then-remove-all, actual FileReader failure, valid image flow и
+double-submit/loading guard. Corrective live recheck остаётся manual checkpoint.
+
 ## Web App architecture
 
 ```text
@@ -170,7 +195,7 @@ Unknown Stage 8 status рассматривается как internal contract v
 Stage 6 Node:            11 / 11 PASS
 Stage 7 Node:            19 / 19 PASS
 Stage 8 Node:            10 / 10 PASS
-Stage 9 Node:            14 / 14 PASS
+Stage 9 Node:            19 / 19 PASS
 Python regressions:      77 / 77 PASS
 Stage 5/4/3/Human UX:    PASS in Python suite
 generated artifacts:     CURRENT
@@ -228,9 +253,9 @@ unknown remote: 0
 ## Live DEV Web App verification
 
 ```text
-/dev page load:             PENDING MANUAL GOOGLE CHECKPOINT
-Russian UI:                 PENDING
-text-only Stage 7→8→UI:     PENDING
+/dev page load:             PASS in initial manual check
+Russian UI:                 PASS in initial manual check
+text-only Stage 7→8→UI:     FAILED before corrective patch; recheck PENDING
 image browser→7→8→UI:       PENDING
 clarification rendering:    deterministic test PASS; live PENDING
 REQUIRES_EXPERT rendering:  deterministic test PASS; live PENDING

@@ -246,6 +246,19 @@
         });
       }
 
+      function isActualFile(file) {
+        return typeof File !== 'undefined' && file instanceof File;
+      }
+
+      async function encodeSelectedImages(files) {
+        if (files.length === 0) return [];
+        return Promise.all(files.map(async (file) => ({
+          client_ref: file.name,
+          mime_type: file.type,
+          base64: await readFileAsBase64(file)
+        })));
+      }
+
       function setSubmitting(value) {
         submitting = value;
         submitButton.disabled = value;
@@ -386,6 +399,7 @@
         }
 
         setSubmitting(true);
+        const filesToRead = selectedFiles.filter(isActualFile);
         let encodedImages = [];
         let request = null;
         const clearPayload = () => {
@@ -396,13 +410,19 @@
           picker.value = '';
           renderFiles();
         };
+        if (filesToRead.length > 0) {
+          try {
+            encodedImages = await encodeSelectedImages(filesToRead);
+          } catch (error) {
+            showClientError('Не удалось прочитать изображение. Удалите его или выберите другой файл.');
+            clearPayload();
+            setSubmitting(false);
+            return;
+          }
+        }
+
+        request = {request_version: REQUEST_VERSION, text, images: encodedImages};
         try {
-          encodedImages = await Promise.all(selectedFiles.map(async (file) => ({
-            client_ref: file.name,
-            mime_type: file.type,
-            base64: await readFileAsBase64(file)
-          })));
-          request = {request_version: REQUEST_VERSION, text, images: encodedImages};
           google.script.run
             .withSuccessHandler((view) => {
               renderResponse(view);
@@ -416,7 +436,7 @@
             })
             .submitStage9Project(request);
         } catch (error) {
-          showClientError('Не удалось прочитать изображение. Удалите его или выберите другой файл.');
+          transportFailure();
           clearPayload();
           setSubmitting(false);
         }
@@ -427,7 +447,8 @@
         showClientError('');
       });
       picker.addEventListener('change', () => {
-        const next = selectedFiles.concat(Array.from(picker.files || []));
+        const pickedFiles = Array.from(picker.files || []).filter(isActualFile);
+        const next = selectedFiles.concat(pickedFiles);
         const error = validateFiles(next);
         if (error) showClientError(error);
         else {
