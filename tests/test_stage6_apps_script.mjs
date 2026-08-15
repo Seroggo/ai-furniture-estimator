@@ -28,7 +28,7 @@ const allowedSource = new Set([
   'quantity_engine.gs',
   'recipe_resolver.gs',
   'setup_system.gs',
-  'web_app.gs',
+  'stage9_server.gs',
   'web_app.html',
 ]);
 
@@ -77,7 +77,7 @@ test('clasp ignore is an exact deploy whitelist', () => {
     '!pricebook_resolver.gs',
     '!calculation_orchestrator.gs',
     '!setup_system.gs',
-    '!web_app.gs',
+    '!stage9_server.gs',
     '!web_app.html',
     '!openrouter_client.gs',
     '!project_parser.gs',
@@ -157,7 +157,7 @@ test('checkpoint comparison normalizes clasp pull representation and gates remot
   assert.match(checkpoint, /generated\/schema_manifest\.gs/);
   assert.match(checkpoint, /generated\/calculation_result_schema\.gs/);
   assert.match(checkpoint, /generated\/module_size_rules\.gs/);
-  assert.match(checkpoint, /web_app\\\.\(\?:js\|gs\)/);
+  assert.match(checkpoint, /stage9_server\\\.\(\?:js\|gs\)/);
   assert.match(checkpoint, /web_app\\\.html/);
   assert.match(preflight, /preflight-approved-removals\.json/);
   assert.match(preflight, /must exactly match unknown remote files/);

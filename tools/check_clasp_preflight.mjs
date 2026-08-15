@@ -25,7 +25,7 @@ const expected = [
   'quantity_engine.gs',
   'recipe_resolver.gs',
   'setup_system.gs',
-  'web_app.gs',
+  'stage9_server.gs',
   'web_app.html',
 ];
 const claspEntry = resolve(root, 'node_modules', '@google', 'clasp', 'build', 'src', 'index.js');

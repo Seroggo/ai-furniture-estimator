@@ -27,7 +27,7 @@ const expectedFiles = [
   'quantity_engine.gs',
   'recipe_resolver.gs',
   'setup_system.gs',
-  'web_app.gs',
+  'stage9_server.gs',
   'web_app.html',
 ];
 
@@ -87,7 +87,7 @@ function canonicalRemoteFile(file) {
   if (/^(?:.*\/)?layout_runtime\.(?:js|gs)$/.test(normalizedFile)) return 'layout_runtime.gs';
   if (/^(?:.*\/)?master_data_loader\.(?:js|gs)$/.test(normalizedFile)) return 'master_data_loader.gs';
   if (/^(?:.*\/)?setup_system\.(?:js|gs)$/.test(normalizedFile)) return 'setup_system.gs';
-  if (/^(?:.*\/)?web_app\.(?:js|gs)$/.test(normalizedFile)) return 'web_app.gs';
+  if (/^(?:.*\/)?stage9_server\.(?:js|gs)$/.test(normalizedFile)) return 'stage9_server.gs';
   if (/^(?:.*\/)?web_app\.html$/.test(normalizedFile)) return 'web_app.html';
   if (/^(?:.*\/)?openrouter_client\.(?:js|gs)$/.test(normalizedFile)) return 'openrouter_client.gs';
   if (/^(?:.*\/)?pricebook_resolver\.(?:js|gs)$/.test(normalizedFile)) return 'pricebook_resolver.gs';

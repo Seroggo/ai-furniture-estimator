@@ -6,7 +6,7 @@ import vm from 'node:vm';
 import {fileURLToPath} from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const serverSource = readFileSync(resolve(root, 'apps-script/web_app.gs'), 'utf8');
+const serverSource = readFileSync(resolve(root, 'apps-script/stage9_server.gs'), 'utf8');
 const htmlSource = readFileSync(resolve(root, 'apps-script/web_app.html'), 'utf8');
 
 function createRuntime() {
@@ -22,7 +22,7 @@ function createRuntime() {
     Utilities: {getUuid: () => '11111111-2222-3333-4444-555555555555'},
     HtmlService: {createHtmlOutputFromFile: (name) => { output.file = name; return output; }},
   });
-  vm.runInContext(serverSource, context, {filename: 'web_app.gs'});
+  vm.runInContext(serverSource, context, {filename: 'stage9_server.gs'});
   return {context, logs, output};
 }
 
