@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #64748b;
+      --line: #d9e1ea;
+      --panel: #ffffff;
+      --soft: #f4f7fa;
+      --brand: #255b4b;
+      --brand-dark: #174338;
+      --accent: #e9f5f0;
+      --danger: #9f2d2d;
+      --danger-soft: #fff1f1;
+      --warning: #8a5a0a;
+      --warning-soft: #fff8e7;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--soft); color: var(--ink); }
+    main { width: min(980px, calc(100% - 32px)); margin: 32px auto 64px; }
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 8px; font-size: clamp(1.7rem, 4vw, 2.35rem); letter-spacing: -0.025em; }
+    h2 { margin: 0 0 14px; font-size: 1.15rem; }
+    p { line-height: 1.55; }
+    .lead { margin: 0; color: var(--muted); max-width: 760px; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 22px; box-shadow: 0 8px 28px rgba(23,32,42,.05); }
+    .panel + .panel, #result-region { margin-top: 18px; }
+    label { display: block; font-weight: 650; margin-bottom: 8px; }
+    textarea { width: 100%; min-height: 190px; resize: vertical; border: 1px solid #b9c5d2; border-radius: 10px; padding: 13px 14px; color: var(--ink); font: inherit; line-height: 1.5; }
+    textarea:focus, button:focus-visible, input:focus-visible { outline: 3px solid rgba(37,91,75,.24); outline-offset: 2px; }
+    .hint, .counter, .technical { color: var(--muted); font-size: .9rem; }
+    .field-row { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+    .images { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+    input[type=file] { max-width: 100%; }
+    .file-list { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
+    .file-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 11px; border-radius: 9px; background: var(--soft); }
+    .file-copy { min-width: 0; }
+    .file-name { display: block; overflow-wrap: anywhere; }
+    .file-meta { color: var(--muted); font-size: .82rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 22px; }
+    button { border: 0; border-radius: 9px; padding: 11px 17px; font: inherit; font-weight: 650; cursor: pointer; }
+    button:disabled { opacity: .56; cursor: wait; }
+    .primary { background: var(--brand); color: white; }
+    .primary:hover:not(:disabled) { background: var(--brand-dark); }
+    .secondary { background: #e9eef3; color: var(--ink); }
+    .remove { padding: 7px 10px; background: transparent; color: var(--danger); }
+    .loading { color: var(--brand); font-weight: 650; }
+    .status { border-left: 5px solid var(--brand); }
+    .status.error { border-left-color: var(--danger); background: var(--danger-soft); }
+    .status.blocker { border-left-color: var(--warning); background: var(--warning-soft); }
+    .status h2 { margin-bottom: 6px; }
+    .status p { margin: 0; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+    .summary-list, .question-list, .diagnostic-list, .layout-list, .cost-list { margin: 0; padding-left: 21px; }
+    .summary-list li, .question-list li, .diagnostic-list li, .layout-list li, .cost-list li { margin: 8px 0; line-height: 1.45; }
+    .fact-state, .code { display: inline-block; margin-left: 6px; padding: 2px 6px; border-radius: 999px; background: #e9eef3; color: #475569; font-size: .74rem; font-family: ui-monospace, monospace; }
+    .empty { color: var(--muted); margin: 0; }
+    .total { font-size: 1.45rem; font-weight: 750; margin: 4px 0 14px; }
+    .technical { margin-top: 14px; overflow-wrap: anywhere; }
+    [hidden] { display: none !important; }
+    @media (max-width: 700px) {
+      main { width: min(100% - 20px, 980px); margin-top: 18px; }
+      .panel { padding: 17px; }
+      .grid { grid-template-columns: 1fr; }
+      .field-row { display: block; }
+      .counter { margin: 5px 0 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>AI Мебельщик</h1>
+      <p class="lead">Опишите кухню свободным текстом. Система выделит исходные данные, покажет вопросы и запустит предварительный детерминированный расчёт.</p>
+    </header>
+
+    <section class="panel" aria-labelledby="request-title">
+      <h2 id="request-title">Новый предварительный расчёт</h2>
+      <div class="field-row">
+        <label for="project-text">Описание кухни</label>
+        <p class="counter"><span id="text-count">0</span> / 12 000</p>
+      </div>
+      <textarea id="project-text" maxlength="12000" placeholder="Например: прямая кухня длиной 3000 мм, нижний ряд, нужна мойка 600 мм и посудомоечная машина 600 мм…" required aria-describedby="text-hint"></textarea>
+      <p class="hint" id="text-hint">Не добавляйте секреты и лишние персональные данные. Для уточнения измените этот текст и отправьте весь запрос заново.</p>
+
+      <div class="images">
+        <label for="image-picker">Изображения — необязательно</label>
+        <input id="image-picker" type="file" accept="image/png,image/jpeg,image/webp" multiple>
+        <p class="hint">До 3 файлов PNG, JPEG или WebP; до 4 МБ каждый и до 8 МБ суммарно.</p>
+        <ul id="file-list" class="file-list" aria-live="polite"></ul>
+      </div>
+
+      <div class="actions">
+        <button id="submit-button" class="primary" type="button">Рассчитать</button>
+        <span id="loading-state" class="loading" role="status" aria-live="polite" hidden>Разбираем описание и выполняем расчёт…</span>
+      </div>
+      <p id="client-error" class="hint" role="alert" hidden></p>
+    </section>
+
+    <section id="result-region" aria-live="polite" hidden>
+      <div id="status-card" class="panel status">
+        <h2 id="result-title"></h2>
+        <p id="result-message"></p>
+        <p id="request-reference" class="technical"></p>
+        <div class="actions">
+          <button id="edit-button" class="secondary" type="button">Изменить описание</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <section class="panel" aria-labelledby="understood-title">
+          <h2 id="understood-title">Что система поняла</h2>
+          <ul id="understood-list" class="summary-list"></ul>
+          <p id="understood-empty" class="empty">Подтверждённых или распознанных фактов пока нет.</p>
+        </section>
+        <section class="panel" aria-labelledby="questions-title">
+          <h2 id="questions-title">Что нужно уточнить</h2>
+          <ol id="question-list" class="question-list"></ol>
+          <p id="questions-empty" class="empty">Дополнительных вопросов нет.</p>
+        </section>
+      </div>
+
+      <section class="panel" aria-labelledby="calculation-title">
+        <h2 id="calculation-title">Результат расчёта</h2>
+        <p id="calculation-code" class="technical"></p>
+        <div id="cost-block" hidden>
+          <p id="cost-total" class="total"></p>
+          <ul id="cost-list" class="cost-list"></ul>
+        </div>
+        <div id="layout-block" hidden>
+          <h3>Компоновка</h3>
+          <p id="layout-meta"></p>
+          <ul id="layout-list" class="layout-list"></ul>
+        </div>
+        <div id="blocker-block" hidden>
+          <h3>Ограничения</h3>
+          <ul id="blocker-list" class="diagnostic-list"></ul>
+        </div>
+        <div id="warning-block" hidden>
+          <h3>Предупреждения</h3>
+          <ul id="warning-list" class="diagnostic-list"></ul>
+        </div>
+        <p id="calculation-empty" class="empty">Расчётные данные не сформированы.</p>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+      const REQUEST_VERSION = 'stage9-request-v1';
+      const MAX_TEXT = 12000;
+      const MAX_FILES = 3;
+      const MAX_FILE_BYTES = 4 * 1024 * 1024;
+      const MAX_TOTAL_BYTES = 8 * 1024 * 1024;
+      const ALLOWED_MIMES = new Set(['image/png', 'image/jpeg', 'image/webp']);
+      const byId = (id) => document.getElementById(id);
+      let selectedFiles = [];
+      let submitting = false;
+
+      const textArea = byId('project-text');
+      const picker = byId('image-picker');
+      const submitButton = byId('submit-button');
+      const loadingState = byId('loading-state');
+      const clientError = byId('client-error');
+
+      function setText(node, value) {
+        node.textContent = value == null ? '' : String(value);
+      }
+
+      function clearNode(node) {
+        while (node.firstChild) node.removeChild(node.firstChild);
+      }
+
+      function showClientError(message) {
+        setText(clientError, message);
+        clientError.hidden = !message;
+      }
+
+      function formatBytes(bytes) {
+        return bytes < 1024 * 1024
+          ? `${Math.ceil(bytes / 1024)} КБ`
+          : `${(bytes / (1024 * 1024)).toFixed(1)} МБ`;
+      }
+
+      function validateFiles(files) {
+        if (files.length > MAX_FILES) return 'Можно приложить не более 3 изображений.';
+        let total = 0;
+        for (const file of files) {
+          if (!ALLOWED_MIMES.has(file.type)) return `Файл «${file.name}» не является PNG, JPEG или WebP.`;
+          if (file.size <= 0) return `Файл «${file.name}» пуст.`;
+          if (file.size > MAX_FILE_BYTES) return `Файл «${file.name}» больше 4 МБ.`;
+          total += file.size;
+        }
+        if (total > MAX_TOTAL_BYTES) return 'Общий размер изображений превышает 8 МБ.';
+        return '';
+      }
+
+      function renderFiles() {
+        const list = byId('file-list');
+        clearNode(list);
+        selectedFiles.forEach((file, index) => {
+          const item = document.createElement('li');
+          item.className = 'file-item';
+          const copy = document.createElement('span');
+          copy.className = 'file-copy';
+          const name = document.createElement('span');
+          name.className = 'file-name';
+          setText(name, file.name);
+          const meta = document.createElement('span');
+          meta.className = 'file-meta';
+          setText(meta, `${file.type} · ${formatBytes(file.size)}`);
+          copy.append(name, meta);
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'remove';
+          setText(remove, 'Удалить');
+          remove.setAttribute('aria-label', `Удалить файл ${file.name}`);
+          remove.addEventListener('click', () => {
+            if (submitting) return;
+            selectedFiles.splice(index, 1);
+            renderFiles();
+            showClientError('');
+          });
+          item.append(copy, remove);
+          list.appendChild(item);
+        });
+      }
+
+      function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onerror = () => reject(new Error('FILE_READ'));
+          reader.onload = () => {
+            const value = typeof reader.result === 'string' ? reader.result : '';
+            const marker = ';base64,';
+            const index = value.indexOf(marker);
+            if (index < 0) reject(new Error('FILE_FORMAT'));
+            else resolve(value.slice(index + marker.length));
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function setSubmitting(value) {
+        submitting = value;
+        submitButton.disabled = value;
+        picker.disabled = value;
+        textArea.disabled = value;
+        loadingState.hidden = !value;
+      }
+
+      function appendFact(list, fact) {
+        const item = document.createElement('li');
+        const label = document.createElement('strong');
+        setText(label, `${fact.label}: `);
+        const value = document.createElement('span');
+        setText(value, fact.value);
+        const state = document.createElement('span');
+        state.className = 'fact-state';
+        setText(state, fact.fact_state);
+        item.append(label, value, state);
+        list.appendChild(item);
+      }
+
+      function renderDiagnostics(listId, blockId, values) {
+        const list = byId(listId);
+        clearNode(list);
+        const safeValues = Array.isArray(values) ? values : [];
+        for (const value of safeValues) {
+          const item = document.createElement('li');
+          const message = document.createElement('span');
+          setText(message, value.message || 'Расчёт остановлен.');
+          const code = document.createElement('span');
+          code.className = 'code';
+          setText(code, value.code || value.stage || 'BLOCKER');
+          item.append(message, code);
+          list.appendChild(item);
+        }
+        byId(blockId).hidden = safeValues.length === 0;
+      }
+
+      function renderResponse(view) {
+        const resultRegion = byId('result-region');
+        resultRegion.hidden = false;
+        setText(byId('result-title'), view.title || 'Результат');
+        setText(byId('result-message'), view.message || 'Ответ получен.');
+        setText(byId('request-reference'), `Номер запроса: ${view.request_id || 'не указан'}`);
+        const statusCard = byId('status-card');
+        statusCard.className = 'panel status';
+        if (view.display_status === 'ERROR') statusCard.classList.add('error');
+        else if (view.display_status === 'BUSINESS_BLOCKER' || view.display_status === 'CLARIFICATION_REQUIRED') statusCard.classList.add('blocker');
+
+        const understood = byId('understood-list');
+        clearNode(understood);
+        const facts = Array.isArray(view.understood_summary) ? view.understood_summary : [];
+        facts.forEach((fact) => appendFact(understood, fact));
+        byId('understood-empty').hidden = facts.length > 0;
+
+        const questions = byId('question-list');
+        clearNode(questions);
+        const missing = Array.isArray(view.missing_questions) ? view.missing_questions : [];
+        for (const question of missing) {
+          const item = document.createElement('li');
+          const text = document.createElement('span');
+          setText(text, question.question);
+          const priority = document.createElement('span');
+          priority.className = 'code';
+          setText(priority, question.priority);
+          item.append(text, priority);
+          if (question.reason) {
+            const reason = document.createElement('p');
+            reason.className = 'hint';
+            setText(reason, question.reason);
+            item.appendChild(reason);
+          }
+          questions.appendChild(item);
+        }
+        byId('questions-empty').hidden = missing.length > 0;
+
+        setText(byId('calculation-code'), view.calculation_status ? `Технический статус: ${view.calculation_status}` : 'Расчёт не запускался.');
+        renderDiagnostics('blocker-list', 'blocker-block', view.blockers);
+        renderDiagnostics('warning-list', 'warning-block', view.warnings);
+
+        const layout = view.layout_summary;
+        const layoutList = byId('layout-list');
+        clearNode(layoutList);
+        byId('layout-block').hidden = !layout;
+        if (layout) {
+          setText(byId('layout-meta'), `Длина: ${layout.run_length_mm ?? '—'} мм; занято: ${layout.occupied_length_mm ?? '—'} мм; остаток: ${layout.remainder_mm ?? '—'} мм.`);
+          for (const module of (Array.isArray(layout.items) ? layout.items : [])) {
+            const item = document.createElement('li');
+            setText(item, `${module.position ?? '—'}. ${module.role || 'модуль'} — ${module.width_mm ?? '—'} мм (${module.module_class || 'класс не указан'})`);
+            layoutList.appendChild(item);
+          }
+        }
+
+        const cost = view.cost_summary;
+        const costList = byId('cost-list');
+        clearNode(costList);
+        byId('cost-block').hidden = !cost;
+        if (cost) {
+          setText(byId('cost-total'), `Итого: ${cost.total} ${cost.currency}`);
+          for (const line of (Array.isArray(cost.items) ? cost.items : [])) {
+            const item = document.createElement('li');
+            setText(item, `${line.item_id}: ${line.quantity} ${line.unit} × ${line.unit_price} = ${line.cost} ${line.currency}`);
+            costList.appendChild(item);
+          }
+        }
+        const hasCalculationContent = Boolean(layout || cost || (view.blockers && view.blockers.length) || (view.warnings && view.warnings.length));
+        byId('calculation-empty').hidden = hasCalculationContent;
+        resultRegion.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+
+      function transportFailure() {
+        renderResponse({
+          request_id: 'не получен',
+          display_status: 'ERROR',
+          title: 'Ошибка соединения',
+          message: 'Сервер не вернул безопасный ответ. Повторите попытку позже.',
+          understood_summary: [], missing_questions: [], blockers: [], warnings: []
+        });
+      }
+
+      async function submit() {
+        if (submitting) return;
+        showClientError('');
+        const text = textArea.value.trim();
+        if (!text) {
+          showClientError('Добавьте текстовое описание кухни.');
+          textArea.focus();
+          return;
+        }
+        if (text.length > MAX_TEXT) {
+          showClientError('Описание превышает 12 000 символов.');
+          return;
+        }
+        const fileError = validateFiles(selectedFiles);
+        if (fileError) {
+          showClientError(fileError);
+          return;
+        }
+
+        setSubmitting(true);
+        let encodedImages = [];
+        let request = null;
+        const clearPayload = () => {
+          encodedImages.forEach((image) => { image.base64 = ''; });
+          if (request) request.images = [];
+          encodedImages = [];
+          selectedFiles = [];
+          picker.value = '';
+          renderFiles();
+        };
+        try {
+          encodedImages = await Promise.all(selectedFiles.map(async (file) => ({
+            client_ref: file.name,
+            mime_type: file.type,
+            base64: await readFileAsBase64(file)
+          })));
+          request = {request_version: REQUEST_VERSION, text, images: encodedImages};
+          google.script.run
+            .withSuccessHandler((view) => {
+              renderResponse(view);
+              clearPayload();
+              setSubmitting(false);
+            })
+            .withFailureHandler(() => {
+              transportFailure();
+              clearPayload();
+              setSubmitting(false);
+            })
+            .submitStage9Project(request);
+        } catch (error) {
+          showClientError('Не удалось прочитать изображение. Удалите его или выберите другой файл.');
+          clearPayload();
+          setSubmitting(false);
+        }
+      }
+
+      textArea.addEventListener('input', () => {
+        setText(byId('text-count'), textArea.value.length);
+        showClientError('');
+      });
+      picker.addEventListener('change', () => {
+        const next = selectedFiles.concat(Array.from(picker.files || []));
+        const error = validateFiles(next);
+        if (error) showClientError(error);
+        else {
+          selectedFiles = next;
+          showClientError('');
+          renderFiles();
+        }
+        picker.value = '';
+      });
+      submitButton.addEventListener('click', submit);
+      byId('edit-button').addEventListener('click', () => {
+        textArea.disabled = false;
+        textArea.focus();
+        textArea.scrollIntoView({behavior: 'smooth', block: 'center'});
+      });
+    })();
+  </script>
+</body>
+</html>

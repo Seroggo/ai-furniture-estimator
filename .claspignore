@@ -11,6 +11,8 @@
 !pricebook_resolver.gs
 !calculation_orchestrator.gs
 !setup_system.gs
+!web_app.gs
+!web_app.html
 !openrouter_client.gs
 !project_parser.gs
 !prompts/project_parser_prompt.gs
