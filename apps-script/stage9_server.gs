@@ -265,7 +265,8 @@ function stage9UnderstoodSummary_(input) {
   for (var i = 0; i < modules.length && items.length < 30; i++) {
     var module = modules[i];
     addFact('Модуль ' + (i + 1) + ': название', module.name, '');
-    addFact('Модуль ' + (i + 1) + ': роль', module.role, '');
+    addFact('Модуль ' + (i + 1) + ': тип', module.entity_type, '');
+    addFact('Модуль ' + (i + 1) + ': роль', module.role_code || module.role, '');
     addFact('Модуль ' + (i + 1) + ': класс', module.module_class, '');
     addFact('Модуль ' + (i + 1) + ': ширина', module.width_mm, ' мм');
     addFact('Модуль ' + (i + 1) + ': количество', module.quantity, ' шт.');
@@ -291,14 +292,38 @@ function stage9MissingQuestions_(questions) {
 function stage9Diagnostics_(diagnostics) {
   if (!Array.isArray(diagnostics)) return [];
   return diagnostics.slice(0, 20).map(function (diagnostic) {
+    var code = stage9SafeText_(diagnostic && diagnostic.code, 120);
     return {
-      code: stage9SafeText_(diagnostic && diagnostic.code, 120),
+      code: code,
       stage: stage9SafeText_(diagnostic && diagnostic.stage, 80),
       field_path: diagnostic && diagnostic.field_path !== null
         ? stage9SafeText_(diagnostic.field_path, 180) : null,
-      message: stage9SafeText_(diagnostic && diagnostic.message, 500)
+      message: stage9ManagerDiagnosticMessage_(code)
     };
   });
+}
+
+
+function stage9ManagerDiagnosticMessage_(code) {
+  var messages = {
+    REQUIRED_FACT_MISSING: 'Не хватает обязательного параметра проекта.',
+    REQUIRED_FACT_UNKNOWN: 'Нужно уточнить один из обязательных параметров проекта.',
+    NEEDS_CONFIRMATION: 'Нужно подтвердить один из распознанных параметров.',
+    FACT_CONFLICT: 'Во входных данных обнаружены противоречащие значения.',
+    UNKNOWN_ROLE_ALIAS: 'Не удалось однозначно определить тип одного из модулей.',
+    UNSUPPORTED_ROLE_CODE: 'Этот тип модуля пока не поддерживается автоматическим расчётом.',
+    ENTITY_ROLE_MISMATCH: 'Тип элемента не соответствует его назначению.',
+    MODULE_ZONE_MISMATCH: 'Один из модулей не относится к выбранной зоне кухни.',
+    INVALID_REQUIRED_MODULE: 'Проверьте размеры и количество обязательного модуля.',
+    UNMAPPABLE_CONSTRAINT: 'Одно из ограничений пока нельзя применить автоматически.',
+    UNSUPPORTED_GEOMETRY: 'Такая форма кухни пока не поддерживается автоматическим расчётом.',
+    NO_VALID_LAYOUT: 'При указанных ограничениях допустимая компоновка не найдена.',
+    APPROVED_RECIPE_REQUIRED: 'Для продолжения нужен подтверждённый экспертный рецепт.',
+    PRICEBOOK_NOT_AVAILABLE: 'Для расчёта нет подходящего опубликованного прайса.',
+    PRICE_NOT_FOUND: 'В опубликованном прайсе отсутствует требуемая цена.',
+    UNIT_MISMATCH: 'Единица цены не совпадает с единицей рассчитанного количества.'
+  };
+  return messages[code] || 'Расчёт остановлен: требуется проверить исходные данные.';
 }
 
 

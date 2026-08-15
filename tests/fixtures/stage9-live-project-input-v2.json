@@ -1,0 +1,220 @@
+{
+  "schema_version": "project-input-v2",
+  "project_type": "KITCHEN",
+  "layout": {
+    "run_shape": {
+      "value": "straight",
+      "fact_state": "KNOWN",
+      "evidence": {
+        "source_type": "TEXT",
+        "source_ref": "live-stage9:sentence-1",
+        "evidence_note": "Пользователь явно указал прямую кухню."
+      }
+    },
+    "run_length_mm": {
+      "value": 2400,
+      "fact_state": "KNOWN",
+      "evidence": {
+        "source_type": "TEXT",
+        "source_ref": "live-stage9:sentence-1",
+        "evidence_note": "Пользователь явно указал длину 2400 мм."
+      }
+    },
+    "zone": {
+      "value": "base",
+      "fact_state": "KNOWN",
+      "evidence": {
+        "source_type": "TEXT",
+        "source_ref": "live-stage9:sentence-2",
+        "evidence_note": "Пользователь запросил нижние модули."
+      }
+    },
+    "wall_height_mm": {
+      "value": 0,
+      "fact_state": "UNKNOWN"
+    }
+  },
+  "modules": {
+    "required_modules": [
+      {
+        "name": {
+          "value": "Место под встроенную ПММ 600 мм",
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentence-3",
+            "evidence_note": "Пользователь явно запросил место под встроенную ПММ 600 мм."
+          }
+        },
+        "entity_type": {
+          "value": "APPLIANCE_SLOT",
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentence-3",
+            "evidence_note": "Запрошено место под встраиваемый прибор, а не мебельная тумба."
+          }
+        },
+        "role_code": {
+          "value": "dishwasher_slot",
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentence-3",
+            "evidence_note": "Встроенная ПММ однозначно классифицирована как dishwasher_slot."
+          }
+        },
+        "module_class": {
+          "value": "base",
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentences-2-3",
+            "evidence_note": "ПММ относится к явно указанному нижнему ряду."
+          }
+        },
+        "width_mm": {
+          "value": 600,
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentence-3",
+            "evidence_note": "Ширина 600 мм указана явно."
+          }
+        },
+        "quantity": {
+          "value": 1,
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentence-3",
+            "evidence_note": "Запрошено одно место под ПММ."
+          }
+        }
+      },
+      {
+        "name": {
+          "value": "Отдельная тумба под мойку",
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentence-4",
+            "evidence_note": "Пользователь явно запросил отдельную тумбу под мойку."
+          }
+        },
+        "entity_type": {
+          "value": "MODULE",
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentence-4",
+            "evidence_note": "Тумба под мойку является мебельным модулем."
+          }
+        },
+        "role_code": {
+          "value": "sink",
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentence-4",
+            "evidence_note": "Назначение тумбы однозначно соответствует canonical role_code sink."
+          }
+        },
+        "module_class": {
+          "value": "base",
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentences-2-4",
+            "evidence_note": "Тумба относится к явно указанному нижнему ряду."
+          }
+        },
+        "width_mm": {
+          "value": 0,
+          "fact_state": "UNKNOWN"
+        },
+        "quantity": {
+          "value": 1,
+          "fact_state": "KNOWN",
+          "evidence": {
+            "source_type": "TEXT",
+            "source_ref": "live-stage9:sentence-4",
+            "evidence_note": "Запрошена одна отдельная тумба под мойку."
+          }
+        }
+      }
+    ],
+    "forbidden_roles": [],
+    "preferred_module_order": []
+  },
+  "materials": {
+    "countertop_material": {
+      "value": "",
+      "fact_state": "UNKNOWN"
+    },
+    "facade_material": {
+      "value": "",
+      "fact_state": "UNKNOWN"
+    },
+    "facade_color": {
+      "value": "",
+      "fact_state": "UNKNOWN"
+    },
+    "body_material": {
+      "value": "",
+      "fact_state": "UNKNOWN"
+    },
+    "edge_material": {
+      "value": "",
+      "fact_state": "UNKNOWN"
+    },
+    "hardware_preferences": []
+  },
+  "constraints": {
+    "budget_rub": {
+      "value": 0,
+      "fact_state": "UNKNOWN"
+    },
+    "budget_notes": {
+      "value": "",
+      "fact_state": "UNKNOWN"
+    },
+    "deadline": {
+      "value": "",
+      "fact_state": "UNKNOWN"
+    },
+    "special_requirements": []
+  },
+  "missing_questions": [
+    {
+      "question_id": "ASK_SINK_CABINET_WIDTH",
+      "field_path": "modules.required_modules[1].width_mm",
+      "question": "Какой ширины должна быть тумба под мойку?",
+      "priority": "BLOCKING",
+      "reason": "Без явной ширины обязательную тумбу нельзя включить в детерминированную компоновку."
+    }
+  ],
+  "evidence": [
+    {
+      "source_type": "TEXT",
+      "source_ref": "live-stage9:full-input",
+      "observation": "Прямая кухня 2400 мм, нижние модули, столешница, ПММ 600 мм и отдельная тумба под мойку; холодильник исключён из расчёта.",
+      "relevant_fields": [
+        "layout.run_shape",
+        "layout.run_length_mm",
+        "layout.zone",
+        "modules.required_modules",
+        "materials.countertop_material"
+      ]
+    }
+  ],
+  "parser_metadata": {
+    "request_id": "stage9-live-regression-v2",
+    "parser_schema_version": "project-input-v2",
+    "prompt_version": "project-input-prompt-v4",
+    "provider": "openrouter",
+    "model_requested": "fixture-no-call",
+    "parsed_at": "2026-08-15T08:00:00.000Z",
+    "input_modalities": ["text"]
+  }
+}

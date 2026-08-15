@@ -1,6 +1,7 @@
-/** Deterministic project-input-v1 readiness gate and LayoutRequest adapter. */
+/** Deterministic versioned Project Input readiness gate and LayoutRequest adapter. */
 
 var STAGE8_ROLE_MAP_VERSION = 'project-input-role-map-v1';
+var STAGE8_V2_ADAPTER_VERSION = 'project-input-v2-adapter-v1';
 var STAGE8_ROLE_MAP = {
   generic_storage: {base: 'base_general', wall: 'wall_general', tall: 'tall_universal'},
   drawer: {base: 'base_drawer'},
@@ -13,6 +14,19 @@ var STAGE8_ROLE_MAP = {
   hood: {wall: 'wall_hood'},
   pantry: {tall: 'tall_pantry'},
   fridge: {tall: 'tall_fridge'}
+};
+var STAGE8_ROLE_ENTITY_TYPE = {
+  generic_storage: 'MODULE',
+  drawer: 'MODULE',
+  sink: 'MODULE',
+  dishwasher_slot: 'APPLIANCE_SLOT',
+  oven: 'MODULE',
+  hob: 'MODULE',
+  narrow_cargo: 'MODULE',
+  dish_dryer: 'MODULE',
+  hood: 'MODULE',
+  pantry: 'MODULE',
+  fridge: 'MODULE'
 };
 
 
@@ -50,18 +64,23 @@ function requireKnownFact_(fact, path, blockers) {
 }
 
 
-function adaptProjectInputToLayoutRequest(projectInput) {
+function adaptProjectInputToLayoutRequest(projectInput, options) {
+  options = options || {};
   var blockers = [];
-  if (!projectInput || projectInput.schema_version !== 'project-input-v1' ||
+  if (!projectInput || ['project-input-v1', 'project-input-v2'].indexOf(projectInput.schema_version) === -1 ||
       projectInput.project_type !== 'KITCHEN') {
     blockers.push(stage8Diagnostic_('PROJECT_INPUT_INVALID', 'READINESS', null,
-      'Stage 8 accepts only validated project-input-v1 KITCHEN input.', []));
+      'Stage 8 accepts only validated project-input-v1 or project-input-v2 KITCHEN input.', []));
     return {status: 'INPUT_NOT_READY', blockers: blockers, layoutRequest: null};
   }
+  var isV2 = projectInput.schema_version === 'project-input-v2';
   var layout = projectInput.layout || {};
   var shapeReady = requireKnownFact_(layout.run_shape, 'layout.run_shape', blockers);
   var lengthReady = requireKnownFact_(layout.run_length_mm, 'layout.run_length_mm', blockers);
   var zoneReady = requireKnownFact_(layout.zone, 'layout.zone', blockers);
+  if (options.operationRequiresWallHeight === true) {
+    requireKnownFact_(layout.wall_height_mm, 'layout.wall_height_mm', blockers);
+  }
   if (shapeReady && layout.run_shape.value !== 'straight') {
     return {
       status: 'NOT_SUPPORTED',
@@ -83,17 +102,28 @@ function adaptProjectInputToLayoutRequest(projectInput) {
   var modules = (projectInput.modules && projectInput.modules.required_modules) || [];
   modules.forEach(function (module, index) {
     var prefix = 'modules.required_modules[' + index + ']';
-    var roleReady = requireKnownFact_(module.role, prefix + '.role', blockers);
+    var roleFact = isV2 ? module.role_code : module.role;
+    var rolePath = prefix + (isV2 ? '.role_code' : '.role');
+    var roleReady = requireKnownFact_(roleFact, rolePath, blockers);
+    var entityReady = isV2
+      ? requireKnownFact_(module.entity_type, prefix + '.entity_type', blockers) : true;
     var classReady = requireKnownFact_(module.module_class, prefix + '.module_class', blockers);
     var widthReady = requireKnownFact_(module.width_mm, prefix + '.width_mm', blockers);
     var quantityReady = requireKnownFact_(module.quantity, prefix + '.quantity', blockers);
-    if (!roleReady || !classReady || !widthReady || !quantityReady) return;
-    var role = module.role.value;
+    if (!roleReady || !entityReady || !classReady || !widthReady || !quantityReady) return;
+    var role = roleFact.value;
     var family = module.module_class.value;
     var mapping = STAGE8_ROLE_MAP[role];
     if (!mapping || !mapping[family]) {
-      blockers.push(stage8Diagnostic_('UNKNOWN_ROLE_ALIAS', 'ADAPTER', prefix + '.role',
-        'Role alias has no exact mapping for module class ' + family + '.', factProvenance_(module.role)));
+      blockers.push(stage8Diagnostic_(isV2 ? 'UNSUPPORTED_ROLE_CODE' : 'UNKNOWN_ROLE_ALIAS', 'ADAPTER', rolePath,
+        (isV2 ? 'Canonical role code' : 'Role alias') +
+        ' has no exact mapping for module class ' + family + '.', factProvenance_(roleFact)));
+      return;
+    }
+    if (isV2 && STAGE8_ROLE_ENTITY_TYPE[role] !== module.entity_type.value) {
+      blockers.push(stage8Diagnostic_('ENTITY_ROLE_MISMATCH', 'ADAPTER', prefix + '.entity_type',
+        'Canonical entity type is incompatible with role code ' + role + '.',
+        factProvenance_(module.entity_type).concat(factProvenance_(roleFact))));
       return;
     }
     if (family !== layout.zone.value) {
@@ -123,7 +153,7 @@ function adaptProjectInputToLayoutRequest(projectInput) {
     var facts = (projectInput.modules && projectInput.modules[field]) || [];
     if (facts.length) {
       blockers.push(stage8Diagnostic_('UNMAPPABLE_CONSTRAINT', 'ADAPTER', 'modules.' + field,
-        'project-input-v1 constraint cannot be represented by the accepted LayoutRequest contract.',
+        projectInput.schema_version + ' constraint cannot be represented by the accepted LayoutRequest contract.',
         facts.reduce(function (all, fact) { return all.concat(factProvenance_(fact)); }, [])));
     }
   });
@@ -142,7 +172,7 @@ function adaptProjectInputToLayoutRequest(projectInput) {
       explicit_generic_widths_mm: [],
       min_module_count: null,
       max_module_count: null,
-      adapter_version: STAGE8_ROLE_MAP_VERSION
+      adapter_version: isV2 ? STAGE8_V2_ADAPTER_VERSION : STAGE8_ROLE_MAP_VERSION
     }
   };
 }

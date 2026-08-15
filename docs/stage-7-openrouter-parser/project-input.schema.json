@@ -7,7 +7,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["project-input-v1"],
+      "enum": ["project-input-v2"],
       "description": "Canonical schema version specifier."
     },
     "project_type": {
@@ -78,9 +78,9 @@
       "properties": {
         "required_modules": {
           "type": "array",
-          "description": "Explicitly requested modules or equipment.",
+          "description": "Explicitly requested layout furniture modules or appliance slots. Non-layout surfaces such as countertops are excluded.",
           "items": {
-            "$ref": "#/$defs/RequiredModule"
+            "$ref": "#/$defs/RequiredLayoutEntity"
           }
         },
         "forbidden_roles": {
@@ -286,17 +286,62 @@
       "required": ["value", "fact_state"],
       "additionalProperties": false
     },
-    "RequiredModule": {
+    "LayoutEntityTypeFact": {
       "type": "object",
-      "description": "A single required module, appliance, or equipment slot.",
+      "description": "Canonical Stage 3 layout entity classification with certainty and provenance.",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": ["MODULE", "APPLIANCE_SLOT", "unknown"]
+        },
+        "fact_state": {"$ref": "#/$defs/FactState"},
+        "evidence": {"$ref": "#/$defs/Evidence"}
+      },
+      "required": ["value", "fact_state"],
+      "additionalProperties": false
+    },
+    "RoleCodeFact": {
+      "type": "object",
+      "description": "Canonical role code accepted by the deterministic Stage 8 adapter.",
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "generic_storage",
+            "drawer",
+            "sink",
+            "dishwasher_slot",
+            "oven",
+            "hob",
+            "narrow_cargo",
+            "dish_dryer",
+            "hood",
+            "pantry",
+            "fridge",
+            "unknown"
+          ]
+        },
+        "fact_state": {"$ref": "#/$defs/FactState"},
+        "evidence": {"$ref": "#/$defs/Evidence"}
+      },
+      "required": ["value", "fact_state"],
+      "additionalProperties": false
+    },
+    "RequiredLayoutEntity": {
+      "type": "object",
+      "description": "A single required furniture module or appliance slot supported by the linear layout contract.",
       "properties": {
         "name": {
           "$ref": "#/$defs/TextFact",
-          "description": "Module or appliance name."
+          "description": "Human-readable module or appliance-slot name."
         },
-        "role": {
-          "$ref": "#/$defs/TextFact",
-          "description": "Functional role (e.g. cooking, washing, storage)."
+        "entity_type": {
+          "$ref": "#/$defs/LayoutEntityTypeFact",
+          "description": "Canonical machine entity type; never a translated free-text label."
+        },
+        "role_code": {
+          "$ref": "#/$defs/RoleCodeFact",
+          "description": "Canonical machine role code; unknown classification uses the unknown sentinel."
         },
         "module_class": {
           "$ref": "#/$defs/ModuleClassFact",
@@ -311,7 +356,7 @@
           "description": "Number of units required."
         }
       },
-      "required": ["name", "role"],
+      "required": ["name", "entity_type", "role_code", "module_class", "width_mm", "quantity"],
       "additionalProperties": false
     },
     "MissingQuestion": {

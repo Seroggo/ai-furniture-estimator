@@ -21,6 +21,19 @@ var DIMENSION_FIELD_NAMES = Object.freeze({
   run_length_mm: true,
   wall_height_mm: true,
 });
+var PROJECT_INPUT_V2_ROLE_ENTITY_TYPE = Object.freeze({
+  generic_storage: 'MODULE',
+  drawer: 'MODULE',
+  sink: 'MODULE',
+  dishwasher_slot: 'APPLIANCE_SLOT',
+  oven: 'MODULE',
+  hob: 'MODULE',
+  narrow_cargo: 'MODULE',
+  dish_dryer: 'MODULE',
+  hood: 'MODULE',
+  pantry: 'MODULE',
+  fridge: 'MODULE',
+});
 
 
 function parseProjectInput(input, options) {
@@ -352,6 +365,8 @@ function checkSemanticInvariants_(data, errors) {
     }
   });
 
+  checkProjectInputV2LayoutEntities_(data, errors);
+
   if (data.missing_questions && Array.isArray(data.missing_questions)) {
     var questionIds = {};
     for (var q = 0; q < data.missing_questions.length; q++) {
@@ -367,6 +382,9 @@ function checkSemanticInvariants_(data, errors) {
       var normalizedPath = normalizeQuestionPath_(question.field_path);
       if (schemaPaths.indexOf(normalizedPath) === -1) {
         errors.push('missing_questions[' + q + '] references an unknown field_path.');
+      }
+      if (data.schema_version === 'project-input-v2' && normalizedPath === 'layout.wall_height_mm') {
+        errors.push('missing_questions[' + q + '] asks for wall_height_mm, which is not required by preliminary linear layout.');
       }
     }
   }
@@ -388,6 +406,23 @@ function checkSemanticInvariants_(data, errors) {
       errors.push('parser_metadata.input_modalities must be a non-empty array.');
     }
   }
+}
+
+
+function checkProjectInputV2LayoutEntities_(data, errors) {
+  if (!data || data.schema_version !== 'project-input-v2') return;
+  var modules = data.modules && Array.isArray(data.modules.required_modules)
+    ? data.modules.required_modules : [];
+  modules.forEach(function (module, index) {
+    var role = module && module.role_code;
+    var entityType = module && module.entity_type;
+    if (!role || role.fact_state !== 'KNOWN' || !entityType || entityType.fact_state !== 'KNOWN') return;
+    var expected = PROJECT_INPUT_V2_ROLE_ENTITY_TYPE[role.value];
+    if (expected && entityType.value !== expected) {
+      errors.push('modules.required_modules[' + index + '].entity_type must be ' + expected +
+        ' for canonical role_code ' + role.value + '.');
+    }
+  });
 }
 
 

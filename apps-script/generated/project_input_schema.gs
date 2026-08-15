@@ -1,7 +1,7 @@
 // GENERATED FILE. DO NOT EDIT.
 // Source: docs/stage-7-openrouter-parser/project-input.schema.json.
 // Regenerate: python tools/generate_project_input_schema.py
-var PROJECT_INPUT_SCHEMA_VERSION = "project-input-v1";
+var PROJECT_INPUT_SCHEMA_VERSION = "project-input-v2";
 // Canonical business/local validation contract.
 var PROJECT_INPUT_SCHEMA = Object.freeze({
   "title": "Project Input Schema",
@@ -11,7 +11,7 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
     "schema_version": {
       "type": "string",
       "enum": [
-        "project-input-v1"
+        "project-input-v2"
       ],
       "description": "Canonical schema version specifier."
     },
@@ -557,14 +557,14 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
       "properties": {
         "required_modules": {
           "type": "array",
-          "description": "Explicitly requested modules or equipment.",
+          "description": "Explicitly requested layout furniture modules or appliance slots. Non-layout surfaces such as countertops are excluded.",
           "items": {
             "type": "object",
-            "description": "A single required module, appliance, or equipment slot.",
+            "description": "A single required furniture module or appliance slot supported by the linear layout contract.",
             "properties": {
               "name": {
                 "type": "object",
-                "description": "Module or appliance name.",
+                "description": "Human-readable module or appliance-slot name.",
                 "properties": {
                   "value": {
                     "type": "string",
@@ -617,13 +617,85 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
                 ],
                 "additionalProperties": false
               },
-              "role": {
+              "entity_type": {
                 "type": "object",
-                "description": "Functional role (e.g. cooking, washing, storage).",
+                "description": "Canonical machine entity type; never a translated free-text label.",
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Extracted value or empty string when UNKNOWN."
+                    "enum": [
+                      "MODULE",
+                      "APPLIANCE_SLOT",
+                      "unknown"
+                    ]
+                  },
+                  "fact_state": {
+                    "type": "string",
+                    "enum": [
+                      "KNOWN",
+                      "INFERRED",
+                      "UNKNOWN",
+                      "CONFLICT",
+                      "NOT_APPLICABLE"
+                    ],
+                    "description": "Certainty level of a parsed fact. KNOWN = explicitly stated; INFERRED = limited evidence-based deduction; UNKNOWN = no data; CONFLICT = contradictory sources; NOT_APPLICABLE = consciously irrelevant."
+                  },
+                  "evidence": {
+                    "type": "object",
+                    "description": "Provenance for a single fact value.",
+                    "properties": {
+                      "source_type": {
+                        "type": "string",
+                        "enum": [
+                          "TEXT",
+                          "IMAGE",
+                          "MULTI_SOURCE"
+                        ],
+                        "description": "Origin modality of the evidence."
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "description": "Text span label, image index, or attachment identifier."
+                      },
+                      "evidence_note": {
+                        "type": "string",
+                        "description": "Brief human-readable observation that supports this fact."
+                      }
+                    },
+                    "required": [
+                      "source_type",
+                      "source_ref",
+                      "evidence_note"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "value",
+                  "fact_state"
+                ],
+                "additionalProperties": false
+              },
+              "role_code": {
+                "type": "object",
+                "description": "Canonical machine role code; unknown classification uses the unknown sentinel.",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "generic_storage",
+                      "drawer",
+                      "sink",
+                      "dishwasher_slot",
+                      "oven",
+                      "hob",
+                      "narrow_cargo",
+                      "dish_dryer",
+                      "hood",
+                      "pantry",
+                      "fridge",
+                      "unknown"
+                    ]
                   },
                   "fact_state": {
                     "type": "string",
@@ -847,7 +919,11 @@ var PROJECT_INPUT_SCHEMA = Object.freeze({
             },
             "required": [
               "name",
-              "role"
+              "entity_type",
+              "role_code",
+              "module_class",
+              "width_mm",
+              "quantity"
             ],
             "additionalProperties": false
           }
@@ -1738,7 +1814,7 @@ var PROJECT_INPUT_OPENROUTER_SCHEMA = Object.freeze({
     "schema_version": {
       "type": "string",
       "enum": [
-        "project-input-v1"
+        "project-input-v2"
       ],
       "description": "Canonical schema version specifier."
     },
@@ -2376,13 +2452,14 @@ var PROJECT_INPUT_OPENROUTER_SCHEMA = Object.freeze({
             "array",
             "null"
           ],
-          "description": "Explicitly requested modules or equipment.",
+          "description": "Explicitly requested layout furniture modules or appliance slots. Non-layout surfaces such as countertops are excluded.",
           "items": {
             "type": "object",
-            "description": "A single required module, appliance, or equipment slot.",
+            "description": "A single required furniture module or appliance slot supported by the linear layout contract.",
             "required": [
               "name",
-              "role",
+              "entity_type",
+              "role_code",
               "module_class",
               "width_mm",
               "quantity"
@@ -2391,7 +2468,7 @@ var PROJECT_INPUT_OPENROUTER_SCHEMA = Object.freeze({
             "properties": {
               "name": {
                 "type": "object",
-                "description": "Module or appliance name.",
+                "description": "Human-readable module or appliance-slot name.",
                 "required": [
                   "value",
                   "fact_state",
@@ -2448,9 +2525,9 @@ var PROJECT_INPUT_OPENROUTER_SCHEMA = Object.freeze({
                   }
                 }
               },
-              "role": {
+              "entity_type": {
                 "type": "object",
-                "description": "Functional role (e.g. cooking, washing, storage).",
+                "description": "Canonical machine entity type; never a translated free-text label.",
                 "required": [
                   "value",
                   "fact_state",
@@ -2460,7 +2537,83 @@ var PROJECT_INPUT_OPENROUTER_SCHEMA = Object.freeze({
                 "properties": {
                   "value": {
                     "type": "string",
-                    "description": "Extracted value or empty string when UNKNOWN."
+                    "enum": [
+                      "MODULE",
+                      "APPLIANCE_SLOT",
+                      "unknown"
+                    ]
+                  },
+                  "fact_state": {
+                    "type": "string",
+                    "enum": [
+                      "KNOWN",
+                      "INFERRED",
+                      "UNKNOWN",
+                      "CONFLICT",
+                      "NOT_APPLICABLE"
+                    ],
+                    "description": "Certainty level of a parsed fact. KNOWN = explicitly stated; INFERRED = limited evidence-based deduction; UNKNOWN = no data; CONFLICT = contradictory sources; NOT_APPLICABLE = consciously irrelevant."
+                  },
+                  "evidence": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Provenance for a single fact value.",
+                    "required": [
+                      "source_type",
+                      "source_ref",
+                      "evidence_note"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "source_type": {
+                        "type": "string",
+                        "enum": [
+                          "TEXT",
+                          "IMAGE",
+                          "MULTI_SOURCE"
+                        ],
+                        "description": "Origin modality of the evidence."
+                      },
+                      "source_ref": {
+                        "type": "string",
+                        "description": "Text span label, image index, or attachment identifier."
+                      },
+                      "evidence_note": {
+                        "type": "string",
+                        "description": "Brief human-readable observation that supports this fact."
+                      }
+                    }
+                  }
+                }
+              },
+              "role_code": {
+                "type": "object",
+                "description": "Canonical machine role code; unknown classification uses the unknown sentinel.",
+                "required": [
+                  "value",
+                  "fact_state",
+                  "evidence"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "enum": [
+                      "generic_storage",
+                      "drawer",
+                      "sink",
+                      "dishwasher_slot",
+                      "oven",
+                      "hob",
+                      "narrow_cargo",
+                      "dish_dryer",
+                      "hood",
+                      "pantry",
+                      "fridge",
+                      "unknown"
+                    ]
                   },
                   "fact_state": {
                     "type": "string",
@@ -2508,10 +2661,7 @@ var PROJECT_INPUT_OPENROUTER_SCHEMA = Object.freeze({
                 }
               },
               "module_class": {
-                "type": [
-                  "object",
-                  "null"
-                ],
+                "type": "object",
                 "description": "User-requested class of module (base, wall, tall) or unknown.",
                 "required": [
                   "value",
@@ -2575,10 +2725,7 @@ var PROJECT_INPUT_OPENROUTER_SCHEMA = Object.freeze({
                 }
               },
               "width_mm": {
-                "type": [
-                  "object",
-                  "null"
-                ],
+                "type": "object",
                 "description": "Module width in millimetres.",
                 "required": [
                   "value",
@@ -2637,10 +2784,7 @@ var PROJECT_INPUT_OPENROUTER_SCHEMA = Object.freeze({
                 }
               },
               "quantity": {
-                "type": [
-                  "object",
-                  "null"
-                ],
+                "type": "object",
                 "description": "Number of units required.",
                 "required": [
                   "value",

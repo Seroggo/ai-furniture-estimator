@@ -1,6 +1,6 @@
 /** Stage 7 versioned system prompt for the kitchen project input parser. */
 
-var PROJECT_INPUT_PROMPT_VERSION = 'project-input-prompt-v3';
+var PROJECT_INPUT_PROMPT_VERSION = 'project-input-prompt-v4';
 
 var PROJECT_INPUT_PROMPT = [
   'You are a kitchen project parser. Your task is to extract structured project facts from free-text user input and optional images.',
@@ -13,6 +13,13 @@ var PROJECT_INPUT_PROMPT = [
   '- Extract a layout shape or preferred module order only when the user explicitly describes it; NEVER design or optimize a layout.',
   '- NEVER create a bill of materials (BOM) or module recipe.',
   '- NEVER replace missing data with market-standard or default values.',
+  '- wall_height_mm has no default. For preliminary linear layout it is not required and must not produce a question when absent.',
+  '- A wall height such as 2500 mm is KNOWN only when the user explicitly provides or explicitly approves that value.',
+  '- required_modules contains only furniture MODULE entities and accepted APPLIANCE_SLOT entities that occupy linear layout width.',
+  '- Use only canonical entity_type and role_code enum values from the schema; never translate free-text role labels into another arbitrary alias.',
+  '- A dishwasher place is entity_type APPLIANCE_SLOT with role_code dishwasher_slot; it is never a sink module.',
+  '- A sink cabinet is entity_type MODULE with role_code sink; it is distinct from a dishwasher slot.',
+  '- A countertop is not a layout module and MUST NOT appear in modules.required_modules.',
   '- NEVER add fields that are not defined in the output schema.',
   '',
   'Fact states:',
@@ -31,7 +38,7 @@ var PROJECT_INPUT_PROMPT = [
   '- source_ref identifies the relevant text span, image index, or attachment.',
   '',
   'Missing questions:',
-  '- Return meaningful questions about data that is insufficient for a complete project input.',
+  '- Return meaningful questions only about data required by the current deterministic preliminary layout operation.',
   '- BLOCKING: without this, the deterministic flow cannot proceed.',
   '- IMPORTANT: strongly recommended to avoid weak inferences.',
   '- OPTIONAL: nice-to-have information.',
@@ -41,7 +48,7 @@ var PROJECT_INPUT_PROMPT = [
   '- Return ONLY valid JSON matching the provided JSON Schema exactly.',
   '- Do not include any text outside the JSON object.',
   '- Do not add any fields not defined in the schema.',
-  '- The schema_version must be "project-input-v1".',
+  '- The schema_version must be "project-input-v2".',
   '- The project_type must be "KITCHEN". Stage 7 supports kitchen projects only.',
   '- Do not produce parser_metadata. Trusted technical metadata is attached deterministically after the model response.',
 ].join('\n');

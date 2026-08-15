@@ -362,6 +362,27 @@ test('INPUT_NOT_READY exposes canonical missing questions as clarification UX', 
   assert.equal(response.calculation_status, 'INPUT_NOT_READY');
 });
 
+test('Stage 9 maps technical adapter blockers to deterministic Russian manager text for v2', () => {
+  const {context} = createRuntime();
+  const input = projectInput({
+    schema_version: 'project-input-v2',
+    modules: {required_modules: [{
+      name: fact('Неясный модуль'), entity_type: fact('unknown', 'UNKNOWN'),
+      role_code: fact('unknown', 'UNKNOWN'), module_class: fact('base'), width_mm: fact(600), quantity: fact(1),
+    }], forbidden_roles: [], preferred_module_order: []},
+  });
+  const result = calculation('INPUT_NOT_READY', {blockers: [{
+    code: 'UNKNOWN_ROLE_ALIAS', stage: 'ADAPTER', field_path: 'modules.required_modules[0].role_code',
+    message: 'Role alias has no exact mapping for module class base.', provenance: [],
+  }]});
+  installSuccessPipeline(context, input, result);
+  const response = context.submitStage9Project(request());
+  assert.equal(response.blockers[0].message, 'Не удалось однозначно определить тип одного из модулей.');
+  assert.doesNotMatch(response.blockers[0].message, /Role alias|exact mapping/);
+  assert.ok(response.understood_summary.some((item) => item.label.endsWith(': тип')));
+  assert.ok(response.understood_summary.some((item) => item.label.endsWith(': роль')));
+});
+
 test('unexpected exception returns a generic correlation-safe system error', () => {
   const {context} = createRuntime();
   context.parseProjectInput = () => { throw new Error('INTERNAL_SECRET STACK_TRACE_SENTINEL'); };

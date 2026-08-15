@@ -185,6 +185,89 @@ test('unsupported geometry and unknown exact role aliases remain explicit', () =
   assert.equal(unknown.blockers.at(-1).code, 'UNKNOWN_ROLE_ALIAS');
 });
 
+test('project-input-v2 live regression keeps dishwasher and sink distinct and excludes countertop', () => {
+  const fixture = JSON.parse(readFileSync(resolve(root, 'tests/fixtures/stage9-live-project-input-v2.json'), 'utf8'));
+  const schema = JSON.parse(readFileSync(resolve(root, 'docs/stage-7-openrouter-parser/project-input.schema.json'), 'utf8'));
+  assert.deepEqual(schema.$defs.RoleCodeFact.properties.value.enum.filter((value) => value !== 'unknown').sort(),
+    Object.keys(plain(context.STAGE8_ROLE_MAP)).sort());
+  assert.deepEqual([...new Set(Object.values(plain(context.STAGE8_ROLE_ENTITY_TYPE)))].sort(), ['APPLIANCE_SLOT', 'MODULE']);
+  assert.equal(fixture.project_type, 'KITCHEN');
+  assert.equal(fixture.schema_version, 'project-input-v2');
+  assert.equal(fixture.layout.run_shape.value, 'straight');
+  assert.equal(fixture.layout.run_length_mm.value, 2400);
+  assert.equal(fixture.layout.run_length_mm.fact_state, 'KNOWN');
+  assert.equal(fixture.layout.wall_height_mm.fact_state, 'UNKNOWN');
+  assert.equal(fixture.layout.wall_height_mm.value, 0);
+  assert.equal(fixture.materials.facade_material.fact_state, 'UNKNOWN');
+  assert.equal(fixture.materials.facade_color.fact_state, 'UNKNOWN');
+  assert.equal(fixture.constraints.budget_rub.fact_state, 'UNKNOWN');
+  assert.equal(fixture.missing_questions.some((question) => question.field_path === 'layout.wall_height_mm'), false);
+
+  const [dishwasher, sink] = fixture.modules.required_modules;
+  assert.deepEqual([dishwasher.entity_type.value, dishwasher.role_code.value], ['APPLIANCE_SLOT', 'dishwasher_slot']);
+  assert.deepEqual([sink.entity_type.value, sink.role_code.value], ['MODULE', 'sink']);
+  assert.equal(fixture.modules.required_modules.some((module) => /столешниц/i.test(module.name.value)), false);
+
+  const blocked = plain(call('adaptProjectInputToLayoutRequest', fixture));
+  assert.equal(blocked.status, 'INPUT_NOT_READY');
+  assert.equal(blocked.blockers.some((blocker) => blocker.code === 'UNKNOWN_ROLE_ALIAS'), false);
+  assert.ok(blocked.blockers.some((blocker) => blocker.field_path === 'modules.required_modules[1].width_mm'));
+
+  const complete = structuredClone(fixture);
+  complete.modules.required_modules[1].width_mm = known(600, 'Explicitly confirmed sink width.');
+  complete.missing_questions = [];
+  const adapted = plain(call('adaptProjectInputToLayoutRequest', complete));
+  assert.equal(adapted.status, 'READY', JSON.stringify(adapted));
+  assert.equal(adapted.layoutRequest.adapter_version, 'project-input-v2-adapter-v1');
+  assert.deepEqual(adapted.layoutRequest.required_modules.map((module) => [module.role, module.module_class]), [
+    ['dishwasher_slot', 'base_dishwasher_slot'],
+    ['sink', 'base_sink'],
+  ]);
+  const result = run(complete);
+  assert.equal(result.status, 'REQUIRES_EXPERT');
+  assert.equal(result.blockers.some((blocker) => blocker.code === 'UNKNOWN_ROLE_ALIAS'), false);
+});
+
+test('wall height is operation-dependent with no implicit 2500 default', () => {
+  const input = {
+    schema_version: 'project-input-v2', project_type: 'KITCHEN',
+    layout: {run_shape: known('straight'), run_length_mm: known(2400), zone: known('base'), wall_height_mm: fact(0, 'UNKNOWN')},
+    modules: {required_modules: [], forbidden_roles: [], preferred_module_order: []},
+    missing_questions: [], evidence: [],
+    parser_metadata: {request_id: 'height-policy', parser_schema_version: 'project-input-v2', prompt_version: 'project-input-prompt-v4',
+      provider: 'openrouter', model_requested: 'fixture', parsed_at: createdAt, input_modalities: ['text']},
+  };
+  const preliminary = plain(call('adaptProjectInputToLayoutRequest', input));
+  assert.equal(preliminary.status, 'READY');
+  assert.equal('wall_height_mm' in preliminary.layoutRequest, false);
+  assert.equal(JSON.stringify(preliminary).includes('2500'), false);
+
+  const heightDependent = plain(call('adaptProjectInputToLayoutRequest', input, {operationRequiresWallHeight: true}));
+  assert.equal(heightDependent.status, 'INPUT_NOT_READY');
+  assert.ok(heightDependent.blockers.some((blocker) => blocker.field_path === 'layout.wall_height_mm'));
+
+  const approved = structuredClone(input);
+  approved.layout.wall_height_mm = known(2500, 'User explicitly approved 2500 mm for preliminary calculation.');
+  assert.equal(call('adaptProjectInputToLayoutRequest', approved, {operationRequiresWallHeight: true}).status, 'READY');
+});
+
+test('project-input-v2 adapter uses canonical codes only and never fuzzy maps unknown roles', () => {
+  const input = {
+    schema_version: 'project-input-v2', project_type: 'KITCHEN',
+    layout: {run_shape: known('straight'), run_length_mm: known(600), zone: known('base'), wall_height_mm: fact(0, 'UNKNOWN')},
+    modules: {required_modules: [{name: known('Неясный элемент'), entity_type: fact('unknown', 'UNKNOWN'),
+      role_code: fact('unknown', 'UNKNOWN'), module_class: known('base'), width_mm: known(600), quantity: known(1)}],
+      forbidden_roles: [], preferred_module_order: []},
+    missing_questions: [], evidence: [],
+    parser_metadata: {request_id: 'no-fuzzy', parser_schema_version: 'project-input-v2', prompt_version: 'project-input-prompt-v4',
+      provider: 'openrouter', model_requested: 'fixture', parsed_at: createdAt, input_modalities: ['text']},
+  };
+  const adapted = plain(call('adaptProjectInputToLayoutRequest', input));
+  assert.equal(adapted.status, 'INPUT_NOT_READY');
+  assert.ok(adapted.blockers.some((blocker) => blocker.field_path.endsWith('.role_code') && blocker.code === 'REQUIRED_FACT_UNKNOWN'));
+  assert.equal(adapted.blockers.some((blocker) => blocker.code === 'UNKNOWN_ROLE_ALIAS'), false);
+});
+
 test('Apps Script layout matches shared Python Stage 3 golden fixtures and is deterministic', () => {
   const fixture = JSON.parse(readFileSync(resolve(root, 'tests/fixtures/stage8-layout-golden.json'), 'utf8'));
   for (const scenario of fixture.scenarios) {

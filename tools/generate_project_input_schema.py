@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = ROOT / "docs" / "stage-7-openrouter-parser" / "project-input.schema.json"
 DEFAULT_OUTPUT = ROOT / "apps-script" / "generated" / "project_input_schema.gs"
 
-SCHEMA_VERSION_ENUM = ("project-input-v1",)
+SCHEMA_VERSION_ENUM = ("project-input-v2",)
 ANNOTATION_KEYWORDS = {
     "$schema",
     "$id",
@@ -105,7 +105,9 @@ def build_schema(source: Path = DEFAULT_SOURCE) -> dict[str, Any]:
         "LayoutShapeFact",
         "ZoneFact",
         "ModuleClassFact",
-        "RequiredModule",
+        "LayoutEntityTypeFact",
+        "RoleCodeFact",
+        "RequiredLayoutEntity",
         "MissingQuestion",
         "EvidenceItem",
         "ParserMetadata",

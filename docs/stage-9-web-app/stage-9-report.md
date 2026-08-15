@@ -37,6 +37,65 @@ Corrective patch не меняет request/server/Stage 7/Stage 8 contracts:
 FileReader calls, select-then-remove-all, actual FileReader failure, valid image flow и
 double-submit/loading guard. Corrective live recheck остаётся manual checkpoint.
 
+## Corrective local patch — Stage 7 → Stage 8 semantic contract
+
+Следующий manual live request выявил versioned contract gap: `project-input-v1`
+передавал human free-text `role`, а Stage 8 мог продолжить только после exact machine
+mapping. В результате ПММ и тумба под мойку получили одинаковую human role, столешница
+попала в layout modules, adapter вернул `UNKNOWN_ROLE_ALIAS`, а UI показал английский
+technical message.
+
+Локально создан `project-input-v2`; семантика принятого v1 не менялась. V2 layout
+entity содержит:
+
+```text
+name         human-readable TextFact
+entity_type  MODULE | APPLIANCE_SLOT | unknown
+role_code    exact Stage 8 role code | unknown
+module_class base | wall | tall | unknown
+width_mm     IntegerFact
+quantity     IntegerFact
+```
+
+`entity_type` взят только из accepted Stage 3 layout output. `role_code` enum равен
+ключам существующего Stage 8 exact role map. Dishwasher slot фиксируется как
+`APPLIANCE_SLOT / dishwasher_slot / base`; sink cabinet — как `MODULE / sink / base`.
+Countertop не имеет layout role code и не входит в `required_modules`. Unknown
+classification остаётся enum sentinel с fact state и блокируется readiness; fuzzy или
+русский alias dictionary не добавлялись.
+
+Canonical schema, generator, generated canonical/transport schema и prompt обновлены
+штатным путём:
+
+```text
+schema: project-input-v2
+prompt: project-input-prompt-v4
+adapter: project-input-v2-adapter-v1
+legacy adapter boundary: project-input-v1 remains explicit
+```
+
+Height policy не содержит default. Preliminary linear layout не требует
+`wall_height_mm`; v2 output с unnecessary height question отклоняется canonical
+validation. Явно height-dependent caller включает `operationRequiresWallHeight`, и
+тогда UNKNOWN блокирует. Значение 2500 допустимо только как KNOWN с explicit user
+provenance; в LayoutRequest оно скрыто не добавляется.
+
+Live regression fixture сохранён в
+`tests/fixtures/stage9-live-project-input-v2.json`. Для исходного текста он получает
+`KITCHEN / straight / 2400 KNOWN / base`, разные dishwasher/sink codes, UNKNOWN
+height/material/color/budget и не содержит countertop module. Поскольку ширина тумбы
+под мойку не была указана, честный результат — `INPUT_NOT_READY` по её `width_mm`, без
+`UNKNOWN_ROLE_ALIAS`. После explicit width confirmation тот же fixture достигает
+accepted Stage 8 layout и честного `REQUIRES_EXPERT` recipe boundary.
+
+Stage 9 v2 summary показывает entity type и role code. Blocker primary text теперь
+формируется deterministic Russian map; technical code остаётся вторичным. Например,
+`UNKNOWN_ROLE_ALIAS` отображается как «Не удалось однозначно определить тип одного из
+модулей.», без показа английского adapter message как manager text.
+
+Этот semantic corrective patch остаётся local-only: clasp push и новый deployment на
+этом проходе не выполнялись.
+
 ## Web App architecture
 
 ```text
@@ -193,9 +252,9 @@ Unknown Stage 8 status рассматривается как internal contract v
 
 ```text
 Stage 6 Node:            11 / 11 PASS
-Stage 7 Node:            19 / 19 PASS
-Stage 8 Node:            10 / 10 PASS
-Stage 9 Node:            19 / 19 PASS
+Stage 7 Node:            22 / 22 PASS
+Stage 8 Node:            13 / 13 PASS
+Stage 9 Node:            20 / 20 PASS
 Python regressions:      77 / 77 PASS
 Stage 5/4/3/Human UX:    PASS in Python suite
 generated artifacts:     CURRENT
@@ -299,6 +358,7 @@ branch: main
 implementation: c3765de feat: add stage 9 manager web app
 Apps Script filename fix: b663093 fix: use distinct Apps Script file names
 corrective optional-image patch: 96b2011 fix: support text-only web app submissions
+semantic Stage 7→8 patch: this corrective local commit
 report checkpoint: this report's final local commit
 Git push: NO
 working tree: clean after report commit

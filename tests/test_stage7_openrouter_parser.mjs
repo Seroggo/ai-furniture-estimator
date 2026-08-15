@@ -5,6 +5,7 @@ import { dirname, resolve } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
+import Ajv2020 from 'ajv/dist/2020.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const appsRoot = resolve(root, 'apps-script');
@@ -67,7 +68,7 @@ function unknown(value) {
 
 function completeModelOutput() {
   return {
-    schema_version: 'project-input-v1',
+    schema_version: 'project-input-v2',
     project_type: 'KITCHEN',
     project: { name: known('Кухня — тест'), notes: known('Прямая кухня') },
     layout: {
@@ -80,14 +81,16 @@ function completeModelOutput() {
       required_modules: [
         {
           name: known('Посудомоечная машина'),
-          role: known('washing'),
+          entity_type: known('APPLIANCE_SLOT'),
+          role_code: known('dishwasher_slot'),
           module_class: known('base'),
           width_mm: known(600),
           quantity: known(1),
         },
         {
           name: known('Духовой шкаф'),
-          role: known('cooking'),
+          entity_type: known('MODULE'),
+          role_code: known('oven'),
           module_class: known('base'),
           width_mm: known(600),
           quantity: known(1),
@@ -152,7 +155,7 @@ function unknownTransportOutput() {
   const unknownText = () => ({ value: '', fact_state: 'UNKNOWN', evidence: null });
   const unknownInteger = () => ({ value: 0, fact_state: 'UNKNOWN', evidence: null });
   return {
-    schema_version: 'project-input-v1',
+    schema_version: 'project-input-v2',
     project_type: 'KITCHEN',
     project: { name: unknownText(), notes: unknownText() },
     client: { name: unknownText(), address: unknownText(), phone: unknownText() },
@@ -206,7 +209,7 @@ test('complete text input produces validated facts and deterministic metadata', 
 test('incomplete input preserves UNKNOWN and returns a meaningful question', () => {
   const { context } = createRuntime();
   const output = {
-    schema_version: 'project-input-v1',
+    schema_version: 'project-input-v2',
     project_type: 'KITCHEN',
     layout: {
       run_shape: unknown('unknown'),
@@ -235,7 +238,7 @@ test('incomplete input preserves UNKNOWN and returns a meaningful question', () 
 test('conflicting input remains CONFLICT and does not select a value', () => {
   const { context } = createRuntime();
   const output = {
-    schema_version: 'project-input-v1',
+    schema_version: 'project-input-v2',
     project_type: 'KITCHEN',
     layout: {
       run_length_mm: {
@@ -492,11 +495,18 @@ test('transport configuration errors are classified safely and are not retried',
 
 test('canonical schema is the only source and generated artifact is current', () => {
   const schema = JSON.parse(readFileSync(resolve(root, 'docs/stage-7-openrouter-parser/project-input.schema.json'), 'utf8'));
+  assert.doesNotThrow(() => new Ajv2020({strict: false, validateFormats: false}).compile(schema));
   assert.equal(schema.additionalProperties, false);
+  assert.deepEqual(schema.properties.schema_version.enum, ['project-input-v2']);
   assert.deepEqual(schema.properties.project_type.enum, ['KITCHEN']);
   assert.ok(schema.required.includes('project_type'));
   assert.equal(JSON.stringify(schema).includes('enum_values'), false);
   assert.deepEqual(schema.$defs.LayoutShapeFact.properties.value.enum, ['straight', 'L-shaped', 'U-shaped', 'galley', 'unknown']);
+  assert.deepEqual(schema.$defs.LayoutEntityTypeFact.properties.value.enum, ['MODULE', 'APPLIANCE_SLOT', 'unknown']);
+  assert.deepEqual(schema.$defs.RoleCodeFact.properties.value.enum, [
+    'generic_storage', 'drawer', 'sink', 'dishwasher_slot', 'oven', 'hob', 'narrow_cargo',
+    'dish_dryer', 'hood', 'pantry', 'fridge', 'unknown',
+  ]);
   assert.equal(schema.$defs.IntegerFact.properties.value.minimum, 0);
   assert.equal(schema.$defs.ParserMetadata.properties.parsed_at.format, 'date-time');
   const generated = spawnSync('python', ['tools/generate_project_input_schema.py', '--check'], { cwd: root, encoding: 'utf8' });
@@ -504,6 +514,55 @@ test('canonical schema is the only source and generated artifact is current', ()
   const clientSource = readFileSync(resolve(appsRoot, 'openrouter_client.gs'), 'utf8');
   assert.match(clientSource, /PROJECT_INPUT_OPENROUTER_SCHEMA/);
   assert.doesNotMatch(clientSource, /delete schema\.properties\.parser_metadata/);
+});
+
+test('project-input-v2 rejects free-text machine roles and entity-role mismatches', () => {
+  const { context } = createRuntime();
+  const freeTextRole = completeModelOutput();
+  freeTextRole.modules.required_modules[0].role_code.value = 'посудомоечная машина';
+  let result = context.parseProjectInput(
+    {text: 'ПММ 600 мм.'},
+    {transport: successTransport(freeTextRole), sleeper: () => {}},
+  );
+  assert.equal(result.category, 'PARSER_OUTPUT_INVALID');
+  assert.match(result.errors.join('\n'), /role_code\.value must be one of the allowed enum values/);
+
+  const mismatched = completeModelOutput();
+  mismatched.modules.required_modules[0].entity_type.value = 'MODULE';
+  result = context.parseProjectInput(
+    {text: 'Место под встроенную ПММ 600 мм.'},
+    {transport: successTransport(mismatched), sleeper: () => {}},
+  );
+  assert.equal(result.category, 'PARSER_OUTPUT_INVALID');
+  assert.match(result.errors.join('\n'), /entity_type must be APPLIANCE_SLOT.*dishwasher_slot/);
+});
+
+test('Stage 9 live regression fixture is valid canonical project-input-v2', () => {
+  const {context} = createRuntime();
+  const fixture = JSON.parse(readFileSync(resolve(root, 'tests/fixtures/stage9-live-project-input-v2.json'), 'utf8'));
+  assert.deepEqual(plain(context.validateProjectInput(fixture)), {valid: true, errors: []});
+  assert.equal(fixture.modules.required_modules[0].role_code.value, 'dishwasher_slot');
+  assert.equal(fixture.modules.required_modules[1].role_code.value, 'sink');
+});
+
+test('project-input-v2 preliminary layout rejects unnecessary wall-height questions and defaults', () => {
+  const {context} = createRuntime();
+  const output = unknownTransportOutput();
+  output.layout.run_shape = {value: 'straight', fact_state: 'KNOWN', evidence: evidence()};
+  output.layout.run_length_mm = {value: 2400, fact_state: 'KNOWN', evidence: evidence()};
+  output.layout.zone = {value: 'base', fact_state: 'KNOWN', evidence: evidence()};
+  output.missing_questions = [{
+    question_id: 'ASK_WALL_HEIGHT', field_path: 'layout.wall_height_mm',
+    question: 'Какова высота стены?', priority: 'BLOCKING', reason: 'Synthetic unnecessary question.',
+  }];
+  const result = context.parseProjectInput(
+    {text: 'Прямая нижняя кухня 2400 мм; высота не задана.'},
+    {transport: successTransport(output), sleeper: () => {}},
+  );
+  assert.equal(result.category, 'PARSER_OUTPUT_INVALID');
+  assert.match(result.errors.join('\n'), /wall_height_mm.*not required by preliminary linear layout/);
+  assert.equal(output.layout.wall_height_mm.value, 0);
+  assert.equal(JSON.stringify(output).includes('2500'), false);
 });
 
 test('generated transport schema is strict-compatible while canonical constraints remain richer', () => {
