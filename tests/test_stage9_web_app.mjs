@@ -133,6 +133,7 @@ test('request boundary rejects empty, oversized, unsupported and non-strict inpu
     request({text: 'x'.repeat(12001)}),
     request({unexpected: true}),
     request({images: [{client_ref: 'x.gif', mime_type: 'image/gif', base64: 'QUJDRA=='}]}),
+    request({images: [{client_ref: 'x.png', mime_type: 'image/png', base64: 'not-base64!'}]}),
     request({images: [{client_ref: 'x.png', mime_type: 'image/png', base64: 'QUJDRA==', extra: true}]}),
     request({images: Array.from({length: 4}, (_, index) => ({client_ref: `${index}.png`, mime_type: 'image/png', base64: 'QUJDRA=='}))}),
     request({images: [{client_ref: 'large.png', mime_type: 'image/png', base64: 'A'.repeat(5592408)}]}),
