@@ -1,0 +1,1690 @@
+{
+  "Project": {
+    "project_id": "golden-kitchen-2025-04-01",
+    "schema_version": "confirmed-configuration-v1",
+    "construction_profile_id": "alpha-basis-v1",
+    "status": "CONFIRMED_FOR_ALPHA",
+    "units": "mm"
+  },
+  "Parts": [
+    {
+      "Module_id": "MW_TALL_L",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 2500,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 1.4,
+      "Edge_length_m": 2.5,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_TALL_L",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 2500,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 1.4,
+      "Edge_length_m": 2.5,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_TALL_L",
+      "Part_type": "BOTTOM",
+      "Qty": 1,
+      "Length_mm": 568,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.31808,
+      "Edge_length_m": 0.568,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_TALL_L",
+      "Part_type": "TOP",
+      "Qty": 1,
+      "Length_mm": 568,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.31808,
+      "Edge_length_m": 0.568,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_TALL_L",
+      "Part_type": "BACK",
+      "Qty": 1,
+      "Length_mm": 2390,
+      "Width_mm": 568,
+      "Thickness_mm": 3,
+      "Material_code": "LHDF_3_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 1.35752,
+      "Edge_length_m": 0,
+      "Edge_sides": [],
+      "Source_rule": {
+        "rule_id": "BACK_PANEL_TALL_ONLY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Back panel is generated only for tall carcasses in this alpha profile."
+      },
+      "Holes": [],
+      "Grooves": [
+        {
+          "type": "BACK_PANEL_RECESS",
+          "depth_mm": 3,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_BASE_01",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_BASE_01",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_BASE_01",
+      "Part_type": "BOTTOM",
+      "Qty": 1,
+      "Length_mm": 568,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.31808,
+      "Edge_length_m": 0.568,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_BASE_02",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_BASE_02",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_BASE_02",
+      "Part_type": "BOTTOM",
+      "Qty": 1,
+      "Length_mm": 868,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.48608,
+      "Edge_length_m": 0.868,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_BASE_03",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_BASE_03",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_BASE_03",
+      "Part_type": "BOTTOM",
+      "Qty": 1,
+      "Length_mm": 568,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.31808,
+      "Edge_length_m": 0.568,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_TALL_R",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 2500,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 1.4,
+      "Edge_length_m": 2.5,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_TALL_R",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 2500,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 1.4,
+      "Edge_length_m": 2.5,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_TALL_R",
+      "Part_type": "BOTTOM",
+      "Qty": 1,
+      "Length_mm": 573,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.32088,
+      "Edge_length_m": 0.573,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_TALL_R",
+      "Part_type": "TOP",
+      "Qty": 1,
+      "Length_mm": 573,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.32088,
+      "Edge_length_m": 0.573,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_TALL_R",
+      "Part_type": "BACK",
+      "Qty": 1,
+      "Length_mm": 2390,
+      "Width_mm": 573,
+      "Thickness_mm": 3,
+      "Material_code": "LHDF_3_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 1.36947,
+      "Edge_length_m": 0,
+      "Edge_sides": [],
+      "Source_rule": {
+        "rule_id": "BACK_PANEL_TALL_ONLY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Back panel is generated only for tall carcasses in this alpha profile."
+      },
+      "Holes": [],
+      "Grooves": [
+        {
+          "type": "BACK_PANEL_RECESS",
+          "depth_mm": 3,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_UPPER_L",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 400,
+      "Width_mm": 280,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "WALL_CABINET_COMPONENT",
+      "Area_m2": 0.112,
+      "Edge_length_m": 0.4,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_UPPER_L",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 400,
+      "Width_mm": 280,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "WALL_CABINET_COMPONENT",
+      "Area_m2": 0.112,
+      "Edge_length_m": 0.4,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_UPPER_R",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 400,
+      "Width_mm": 280,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "WALL_CABINET_COMPONENT",
+      "Area_m2": 0.112,
+      "Edge_length_m": 0.4,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "MW_UPPER_R",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 400,
+      "Width_mm": 280,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "WALL_CABINET_COMPONENT",
+      "Area_m2": 0.112,
+      "Edge_length_m": 0.4,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_01",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_01",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_01",
+      "Part_type": "BOTTOM",
+      "Qty": 1,
+      "Length_mm": 568,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.31808,
+      "Edge_length_m": 0.568,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_02",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_02",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_02",
+      "Part_type": "BOTTOM",
+      "Qty": 1,
+      "Length_mm": 568,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.31808,
+      "Edge_length_m": 0.568,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_02",
+      "Part_type": "DRAWER_SIDE",
+      "Qty": 2,
+      "Length_mm": 530,
+      "Width_mm": 335,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "DRAWER_COMPONENT",
+      "Area_m2": 0.3551,
+      "Edge_length_m": 0,
+      "Edge_sides": [],
+      "Source_rule": {
+        "rule_id": "DRAWER_BOX_ALPHA_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Compact base drawer model; vendor clearances remain provisional."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_02",
+      "Part_type": "DRAWER_FRONT_BOX",
+      "Qty": 1,
+      "Length_mm": 574,
+      "Width_mm": 335,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "DRAWER_COMPONENT",
+      "Area_m2": 0.19229,
+      "Edge_length_m": 0,
+      "Edge_sides": [],
+      "Source_rule": {
+        "rule_id": "DRAWER_BOX_ALPHA_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Compact base drawer model; vendor clearances remain provisional."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_02",
+      "Part_type": "DRAWER_BACK_BOX",
+      "Qty": 1,
+      "Length_mm": 574,
+      "Width_mm": 335,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "DRAWER_COMPONENT",
+      "Area_m2": 0.19229,
+      "Edge_length_m": 0,
+      "Edge_sides": [],
+      "Source_rule": {
+        "rule_id": "DRAWER_BOX_ALPHA_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Compact base drawer model; vendor clearances remain provisional."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_BASE_02",
+      "Part_type": "DRAWER_BOTTOM",
+      "Qty": 1,
+      "Length_mm": 528,
+      "Width_mm": 572,
+      "Thickness_mm": 3,
+      "Material_code": "LHDF_3_ALPHA",
+      "Component": "DRAWER_COMPONENT",
+      "Area_m2": 0.302016,
+      "Edge_length_m": 0,
+      "Edge_sides": [],
+      "Source_rule": {
+        "rule_id": "DRAWER_BOX_ALPHA_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Compact base drawer model; vendor clearances remain provisional."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_SINK_01",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_SINK_01",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_SINK_01",
+      "Part_type": "BOTTOM",
+      "Qty": 1,
+      "Length_mm": 868,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.48608,
+      "Edge_length_m": 0.868,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_DW_01",
+      "Part_type": "LEFT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_DW_01",
+      "Part_type": "RIGHT_SIDE",
+      "Qty": 1,
+      "Length_mm": 770,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.4312,
+      "Edge_length_m": 0.77,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Two side panels use the explicit module height and depth."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [
+        {
+          "type": "TOE_KICK_CLEARANCE",
+          "height_mm": 100,
+          "status": "PROVISIONAL_ALPHA"
+        }
+      ],
+      "Joinery": []
+    },
+    {
+      "Module_id": "IS_DW_01",
+      "Part_type": "BOTTOM",
+      "Qty": 1,
+      "Length_mm": 568,
+      "Width_mm": 560,
+      "Thickness_mm": 16,
+      "Material_code": "LDSP_16_ALPHA",
+      "Component": "CARCASS",
+      "Area_m2": 0.31808,
+      "Edge_length_m": 0.568,
+      "Edge_sides": [
+        "front"
+      ],
+      "Source_rule": {
+        "rule_id": "HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Horizontal width is module width minus the profile inset; panel count is construction-profile data."
+      },
+      "Holes": [],
+      "Grooves": [],
+      "Notches": [],
+      "Joinery": []
+    }
+  ],
+  "Materials": [
+    {
+      "material_code": "LDSP_16_ALPHA",
+      "area_m2": 16.66496,
+      "part_qty": 37
+    },
+    {
+      "material_code": "LHDF_3_ALPHA",
+      "area_m2": 3.029006,
+      "part_qty": 3
+    }
+  ],
+  "Materials_by_component": [
+    {
+      "Component": "CARCASS",
+      "items": [
+        {
+          "material_code": "LDSP_16_ALPHA",
+          "area_m2": 15.47728,
+          "part_qty": 29
+        },
+        {
+          "material_code": "LHDF_3_ALPHA",
+          "area_m2": 2.72699,
+          "part_qty": 2
+        }
+      ]
+    },
+    {
+      "Component": "DRAWER_COMPONENT",
+      "items": [
+        {
+          "material_code": "LDSP_16_ALPHA",
+          "area_m2": 0.73968,
+          "part_qty": 4
+        },
+        {
+          "material_code": "LHDF_3_ALPHA",
+          "area_m2": 0.302016,
+          "part_qty": 1
+        }
+      ]
+    },
+    {
+      "Component": "WALL_CABINET_COMPONENT",
+      "items": [
+        {
+          "material_code": "LDSP_16_ALPHA",
+          "area_m2": 0.448,
+          "part_qty": 4
+        }
+      ]
+    }
+  ],
+  "Edge": [
+    {
+      "material_code": "EDGE_19x1_ALPHA",
+      "length_m": 29.238,
+      "edge_count": 33
+    }
+  ],
+  "Edge_by_component": [
+    {
+      "Component": "CARCASS",
+      "items": [
+        {
+          "material_code": "EDGE_19x1_ALPHA",
+          "length_m": 27.638,
+          "edge_count": 29
+        }
+      ]
+    },
+    {
+      "Component": "DRAWER_COMPONENT",
+      "items": []
+    },
+    {
+      "Component": "WALL_CABINET_COMPONENT",
+      "items": [
+        {
+          "material_code": "EDGE_19x1_ALPHA",
+          "length_m": 1.6,
+          "edge_count": 4
+        }
+      ]
+    }
+  ],
+  "Part_count_by_component": [
+    {
+      "Component": "CARCASS",
+      "part_qty": 31
+    },
+    {
+      "Component": "DRAWER_COMPONENT",
+      "part_qty": 5
+    },
+    {
+      "Component": "WALL_CABINET_COMPONENT",
+      "part_qty": 4
+    }
+  ],
+  "Hardware": [
+    {
+      "item": "HINGES",
+      "quantity": 3,
+      "unit": "pcs",
+      "status": "PROVISIONAL_ALPHA",
+      "source_rule": {
+        "rule_id": "HINGE_COUNT_ALPHA_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/hinge-bore.ts",
+          "Source_function_or_logic": "hingeCount threshold rule",
+          "Adaptation": "Used only as a provisional diagnostic rule for visible hinged fronts; no input front dimensions are invented."
+        },
+        "note": "Height threshold copied as a reference; front dimensions are required."
+      },
+      "note": "Hinge threshold rule is not alpha-authoritative."
+    },
+    {
+      "item": "MOUNTING_PLATES",
+      "quantity": 3,
+      "unit": "pcs",
+      "status": "PROVISIONAL_ALPHA",
+      "source_rule": {
+        "rule_id": "MOUNTING_PLATE_PER_HINGE_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/hinge-bore.ts",
+          "Source_function_or_logic": "hingeCount threshold rule",
+          "Adaptation": "Used only as a provisional diagnostic rule for visible hinged fronts; no input front dimensions are invented."
+        },
+        "note": "One mounting plate per hinge."
+      },
+      "note": null
+    },
+    {
+      "item": "LEGS",
+      "quantity": 28,
+      "unit": "pcs",
+      "status": "PROVISIONAL_ALPHA",
+      "source_rule": {
+        "rule_id": "BASE_MODULE_HARDWARE_ALPHA_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Fixed quantities are alpha structural assumptions, not Basis calibration."
+      },
+      "note": "Four legs per base-like module."
+    },
+    {
+      "item": "PLINTH_CLIPS",
+      "quantity": 14,
+      "unit": "pcs",
+      "status": "PROVISIONAL_ALPHA",
+      "source_rule": {
+        "rule_id": "BASE_MODULE_HARDWARE_ALPHA_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Fixed quantities are alpha structural assumptions, not Basis calibration."
+      },
+      "note": "Two plinth clips per base-like module."
+    },
+    {
+      "item": "DOWELS_8x30",
+      "quantity": 44,
+      "unit": "pcs",
+      "status": "PROVISIONAL_ALPHA",
+      "source_rule": {
+        "rule_id": "DOWEL_COUNT_ALPHA_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/dowel-joint.ts",
+          "Source_function_or_logic": "selectDowelDiameter boardThickness / standard dowel sizing",
+          "Adaptation": "Used for a compact fixed dowel count rule only where the input has a physical carcass module."
+        },
+        "note": "One fixed alignment set per physical carcass module."
+      },
+      "note": "Count is structural alpha baseline, not a vendor drilling plan."
+    },
+    {
+      "item": "CONFIRMATS_7x50",
+      "quantity": 88,
+      "unit": "pcs",
+      "status": "PROVISIONAL_ALPHA",
+      "source_rule": {
+        "rule_id": "CONFIRMAT_COUNT_ALPHA_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Eight fasteners per physical carcass module."
+      },
+      "note": "Count is structural alpha baseline."
+    },
+    {
+      "item": "DRAWER_MECHANISMS",
+      "quantity": null,
+      "unit": "sets",
+      "status": "NOT_IMPLEMENTED",
+      "source_rule": {
+        "rule_id": "DRAWER_VENDOR_RULE_REQUIRED_V1",
+        "status": "NOT_IMPLEMENTED",
+        "provenance": {
+          "Repository": "WoodworkingShop",
+          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
+          "Source_path": "src/engine/parts.ts",
+          "Source_function_or_logic": "generateParts carcass panel geometry",
+          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+        },
+        "note": "Vendor drawer system and clearances are not present in the contract."
+      },
+      "note": "Drawer fronts without vendor data do not receive a guessed mechanism count."
+    }
+  ],
+  "Manufacturing_features": {
+    "Holes": 0,
+    "Grooves": 2,
+    "Notches": 14,
+    "Joinery": 0
+  },
+  "Issues": [
+    {
+      "code": "FACADE_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Facade width and height are required; this front was not synthesized.",
+      "path": "assemblies[].modules[MW_BASE_01].fronts[0]",
+      "source_rule": null
+    },
+    {
+      "code": "DRAWER_BOX_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Drawer front heights are required before generating drawer boxes.",
+      "path": "assemblies[].modules[MW_BASE_01].fronts",
+      "source_rule": null
+    },
+    {
+      "code": "FACADE_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Facade width and height are required; this front was not synthesized.",
+      "path": "assemblies[].modules[MW_BASE_02].fronts[0]",
+      "source_rule": null
+    },
+    {
+      "code": "DRAWER_BOX_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Drawer front heights are required before generating drawer boxes.",
+      "path": "assemblies[].modules[MW_BASE_02].fronts",
+      "source_rule": null
+    },
+    {
+      "code": "FACADE_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Facade width and height are required; this front was not synthesized.",
+      "path": "assemblies[].modules[MW_BASE_03].fronts[0]",
+      "source_rule": null
+    },
+    {
+      "code": "DRAWER_BOX_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Drawer front heights are required before generating drawer boxes.",
+      "path": "assemblies[].modules[MW_BASE_03].fronts",
+      "source_rule": null
+    },
+    {
+      "code": "SHELF_COUNT_INPUT_GAP",
+      "status": "INPUT_GAP",
+      "message": "The confirmed contract has no shelf count or shelf dimensions; no shelves were synthesized.",
+      "path": "assemblies[].modules[MW_UPPER_L]",
+      "source_rule": null
+    },
+    {
+      "code": "FACADE_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Facade width and height are required; this front was not synthesized.",
+      "path": "assemblies[].modules[MW_UPPER_L].fronts[0]",
+      "source_rule": null
+    },
+    {
+      "code": "SHELF_COUNT_INPUT_GAP",
+      "status": "INPUT_GAP",
+      "message": "The confirmed contract has no shelf count or shelf dimensions; no shelves were synthesized.",
+      "path": "assemblies[].modules[MW_UPPER_R]",
+      "source_rule": null
+    },
+    {
+      "code": "FACADE_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Facade width and height are required; this front was not synthesized.",
+      "path": "assemblies[].modules[MW_UPPER_R].fronts[0]",
+      "source_rule": null
+    },
+    {
+      "code": "SHELF_COUNT_INPUT_GAP",
+      "status": "INPUT_GAP",
+      "message": "The confirmed contract has no shelf count or shelf dimensions; no shelves were synthesized.",
+      "path": "assemblies[].modules[IS_BASE_01]",
+      "source_rule": null
+    },
+    {
+      "code": "FACADE_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Facade width and height are required; this front was not synthesized.",
+      "path": "assemblies[].modules[IS_BASE_01].fronts[0]",
+      "source_rule": null
+    },
+    {
+      "code": "FACADE_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Facade width and height are required; this front was not synthesized.",
+      "path": "assemblies[].modules[IS_BASE_02].fronts[0]",
+      "source_rule": null
+    },
+    {
+      "code": "FACADE_DIMENSIONS_MISSING",
+      "status": "INPUT_GAP",
+      "message": "Facade width and height are required; this front was not synthesized.",
+      "path": "assemblies[].modules[IS_DW_01].fronts[0]",
+      "source_rule": null
+    }
+  ],
+  "Benchmark": {
+    "aggregates": [
+      {
+        "metric": "LDSP_16_ALPHA_area_m2",
+        "golden": 15.93,
+        "generated": 15.92528,
+        "absolute_delta": -0.00472,
+        "relative_delta_pct": -0.02963,
+        "classification": "UNIVERSAL_GEOMETRY",
+        "explanation": "Generated from explicit module dimensions and profile panel-count rules; no hidden coefficient is used."
+      },
+      {
+        "metric": "LHDF_3_ALPHA_area_m2",
+        "golden": 2.73,
+        "generated": 2.72699,
+        "absolute_delta": -0.00301,
+        "relative_delta_pct": -0.110256,
+        "classification": "PROVISIONAL_ALPHA_RULE",
+        "explanation": "Back construction mode is not authoritative in the input; generated back panels are limited to the alpha tall-cabinet rule."
+      },
+      {
+        "metric": "EDGE_19x1_ALPHA_length_m",
+        "golden": 105.23,
+        "generated": 29.238000000000003,
+        "absolute_delta": -75.992,
+        "relative_delta_pct": -72.215148,
+        "classification": "PROVISIONAL_ALPHA_RULE",
+        "explanation": "Edge policy is excluded from alpha authority; only emitted per-part visible sides are aggregated."
+      },
+      {
+        "metric": "FACADE_area_m2_reference",
+        "golden": 14.8,
+        "generated": 0,
+        "absolute_delta": -14.8,
+        "relative_delta_pct": -100,
+        "classification": "INPUT_GAP",
+        "explanation": "Front widths/heights are null in the contract, so no facade dimensions are invented."
+      }
+    ],
+    "notes": [
+      "Basis facade 14.80 m2 is a reference variant and is not a target for synthetic dimensions.",
+      "Basis hardware quantities are not used as calibration coefficients."
+    ]
+  }
+}
