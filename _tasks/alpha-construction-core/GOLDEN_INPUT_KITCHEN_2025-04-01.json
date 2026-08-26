@@ -1,0 +1,564 @@
+{
+  "schema_version": "confirmed-configuration-v1",
+  "project_id": "golden-kitchen-2025-04-01",
+  "status": "CONFIRMED_FOR_ALPHA",
+  "units": "mm",
+  "construction_profile_id": "alpha-basis-v1",
+  "source_refs": [
+    {
+      "id": "PDF_P2",
+      "type": "PDF",
+      "file": "Кухня_01.04.25.pdf",
+      "note": "Page 2 plan. File title inside PDF shows 01.05.25."
+    },
+    {
+      "id": "PDF_P3",
+      "type": "PDF",
+      "file": "Кухня_01.04.25.pdf",
+      "note": "Page 3 main wall elevation / dimensions."
+    },
+    {
+      "id": "PDF_P4",
+      "type": "PDF",
+      "file": "Кухня_01.04.25.pdf",
+      "note": "Page 4 island elevations / dimensions."
+    },
+    {
+      "id": "MANUAL_ALPHA",
+      "type": "MANUAL_CONFIRMATION",
+      "file": "GOLDEN_INPUT_KITCHEN_2025-04-01.json",
+      "note": "Manual transcription/interpretation for the first engine benchmark. Uncertain fields are marked by evidence state or notes."
+    }
+  ],
+  "global_dimensions": {
+    "finished_worktop_height_mm": 910,
+    "toe_kick_height_mm": 100,
+    "countertop_thickness_mm": 40
+  },
+  "assemblies": [
+    {
+      "id": "MAIN_WALL",
+      "kind": "LINEAR_RUN",
+      "overall_width_mm": 3305,
+      "overall_depth_mm": null,
+      "finished_height_mm": 2500,
+      "modules": [
+        {
+          "id": "MW_TALL_L",
+          "module_type": "TALL_CABINET",
+          "role": "REFRIGERATOR_HOUSING",
+          "x_mm": 0,
+          "y_mm": 0,
+          "width_mm": 600,
+          "height_mm": 2500,
+          "depth_mm": 560,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P3",
+              "state": "EXPLICIT",
+              "note": "Top dimension chain starts with 600."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "PDF_P3",
+              "state": "VISUAL_INFERRED",
+              "note": "2500 vertical project dimension is used for ALPHA tower height; verify later."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 tall depth."
+            }
+          ],
+          "fronts": [],
+          "appliance_slots": [
+            {
+              "type": "REFRIGERATOR",
+              "width_mm": null,
+              "height_mm": null
+            }
+          ],
+          "notes": [
+            "Role is inferred from drawing/render plus refrigerator-specific hardware in Basis; treat as ALPHA interpretation."
+          ]
+        },
+        {
+          "id": "MW_BASE_01",
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "x_mm": 600,
+          "y_mm": 100,
+          "width_mm": 600,
+          "height_mm": 770,
+          "depth_mm": 560,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P3",
+              "state": "EXPLICIT",
+              "note": "Bottom chain: 600."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "DERIVED",
+              "note": "910 finished height - 100 toe kick - 40 countertop = 770 front/carcass zone."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 base depth."
+            }
+          ],
+          "fronts": [
+            {
+              "kind": "DRAWER_FRONT",
+              "count": 2,
+              "width_mm": null,
+              "height_mm": null,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": []
+        },
+        {
+          "id": "MW_BASE_02",
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "x_mm": 1200,
+          "y_mm": 100,
+          "width_mm": 900,
+          "height_mm": 770,
+          "depth_mm": 560,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P3",
+              "state": "EXPLICIT",
+              "note": "Bottom chain: 900."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "DERIVED",
+              "note": "910 - 100 - 40 = 770."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 base depth."
+            }
+          ],
+          "fronts": [
+            {
+              "kind": "DRAWER_FRONT",
+              "count": 3,
+              "width_mm": null,
+              "height_mm": null,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": []
+        },
+        {
+          "id": "MW_BASE_03",
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "x_mm": 2100,
+          "y_mm": 100,
+          "width_mm": 600,
+          "height_mm": 770,
+          "depth_mm": 560,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P3",
+              "state": "EXPLICIT",
+              "note": "Bottom chain: 600."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "DERIVED",
+              "note": "910 - 100 - 40 = 770."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 base depth."
+            }
+          ],
+          "fronts": [
+            {
+              "kind": "DRAWER_FRONT",
+              "count": 2,
+              "width_mm": null,
+              "height_mm": null,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": []
+        },
+        {
+          "id": "MW_TALL_R",
+          "module_type": "TALL_CABINET",
+          "role": "APPLIANCE_TOWER",
+          "x_mm": 2700,
+          "y_mm": 0,
+          "width_mm": 605,
+          "height_mm": 2500,
+          "depth_mm": 560,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P3",
+              "state": "EXPLICIT",
+              "note": "Top dimension chain ends with 605."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "PDF_P3",
+              "state": "VISUAL_INFERRED",
+              "note": "2500 vertical project dimension used for ALPHA tower height; verify later."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 tall depth."
+            }
+          ],
+          "fronts": [],
+          "appliance_slots": [
+            {
+              "type": "MICROWAVE",
+              "width_mm": 600,
+              "height_mm": 400
+            },
+            {
+              "type": "OVEN",
+              "width_mm": 600,
+              "height_mm": 600
+            }
+          ],
+          "notes": [
+            "Appliance opening heights are taken from visible 400/600 dimension blocks on the drawing and remain ALPHA interpretation."
+          ]
+        },
+        {
+          "id": "MW_UPPER_L",
+          "module_type": "WALL_CABINET",
+          "role": "WALL_STORAGE",
+          "x_mm": 600,
+          "y_mm": 2100,
+          "width_mm": 450,
+          "height_mm": 400,
+          "depth_mm": 320,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P3",
+              "state": "EXPLICIT",
+              "note": "Top chain between left tower and central opening: 450."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "PDF_P3",
+              "state": "VISUAL_INFERRED",
+              "note": "400 mm visible upper block dimension used for ALPHA."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 wall depth."
+            }
+          ],
+          "fronts": [
+            {
+              "kind": "HINGED_DOOR",
+              "count": 1,
+              "width_mm": null,
+              "height_mm": null,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": []
+        },
+        {
+          "id": "MW_UPPER_R",
+          "module_type": "WALL_CABINET",
+          "role": "WALL_STORAGE",
+          "x_mm": 2255,
+          "y_mm": 2100,
+          "width_mm": 445,
+          "height_mm": 400,
+          "depth_mm": 320,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P3",
+              "state": "EXPLICIT",
+              "note": "Top chain between central opening and right tower: 445."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "PDF_P3",
+              "state": "VISUAL_INFERRED",
+              "note": "400 mm visible upper block dimension used for ALPHA."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 wall depth."
+            }
+          ],
+          "fronts": [
+            {
+              "kind": "HINGED_DOOR",
+              "count": 1,
+              "width_mm": null,
+              "height_mm": null,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": []
+        }
+      ],
+      "openings": [
+        {
+          "id": "MW_CENTER_OPENING",
+          "type": "WINDOW",
+          "x_mm": 1050,
+          "width_mm": 1205,
+          "height_mm": null
+        }
+      ],
+      "non_carcass_surfaces": []
+    },
+    {
+      "id": "ISLAND",
+      "kind": "ISLAND",
+      "overall_width_mm": 2780,
+      "overall_depth_mm": 1200,
+      "finished_height_mm": 910,
+      "modules": [
+        {
+          "id": "IS_BASE_01",
+          "module_type": "BASE_CABINET",
+          "role": "GENERAL_STORAGE",
+          "x_mm": 40,
+          "y_mm": 100,
+          "width_mm": 600,
+          "height_mm": 770,
+          "depth_mm": 560,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P4",
+              "state": "EXPLICIT",
+              "note": "Island kitchen-side chain: 600."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "DERIVED",
+              "note": "910 - 100 - 40 = 770."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 base depth."
+            }
+          ],
+          "fronts": [
+            {
+              "kind": "HINGED_DOOR",
+              "count": 1,
+              "width_mm": null,
+              "height_mm": 730,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": [
+            "Front construction is visually interpreted and may be revised during benchmark calibration."
+          ]
+        },
+        {
+          "id": "IS_BASE_02",
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "x_mm": 640,
+          "y_mm": 100,
+          "width_mm": 600,
+          "height_mm": 770,
+          "depth_mm": 560,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P4",
+              "state": "EXPLICIT",
+              "note": "Island kitchen-side chain: second 600."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "DERIVED",
+              "note": "910 - 100 - 40 = 770."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 base depth."
+            }
+          ],
+          "fronts": [
+            {
+              "kind": "DRAWER_FRONT",
+              "count": 2,
+              "width_mm": null,
+              "height_mm": 365,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": []
+        },
+        {
+          "id": "IS_SINK_01",
+          "module_type": "BASE_CABINET",
+          "role": "SINK_BASE",
+          "x_mm": 1240,
+          "y_mm": 100,
+          "width_mm": 900,
+          "height_mm": 770,
+          "depth_mm": 560,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P4",
+              "state": "EXPLICIT",
+              "note": "Island kitchen-side chain: 900 under sink."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "DERIVED",
+              "note": "910 - 100 - 40 = 770."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 base depth."
+            }
+          ],
+          "fronts": [],
+          "appliance_slots": [],
+          "notes": [
+            "Sink and plumbing are explicit on drawing. Internal front/mechanism details are intentionally not forced into the input."
+          ]
+        },
+        {
+          "id": "IS_DW_01",
+          "module_type": "APPLIANCE_SLOT",
+          "role": "DISHWASHER_SLOT",
+          "x_mm": 2140,
+          "y_mm": 100,
+          "width_mm": 600,
+          "height_mm": 770,
+          "depth_mm": 560,
+          "quantity": 1,
+          "dimension_evidence": [
+            {
+              "field": "width_mm",
+              "source_ref": "PDF_P4",
+              "state": "EXPLICIT",
+              "note": "Rightmost island module is labeled ПММ and chain width is 600."
+            },
+            {
+              "field": "height_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "DERIVED",
+              "note": "910 - 100 - 40 = 770."
+            },
+            {
+              "field": "depth_mm",
+              "source_ref": "MANUAL_ALPHA",
+              "state": "ALPHA_DEFAULT",
+              "note": "Uses alpha-basis-v1 base depth."
+            }
+          ],
+          "fronts": [
+            {
+              "kind": "APPLIANCE_FRONT",
+              "count": 1,
+              "width_mm": 600,
+              "height_mm": null,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [
+            {
+              "type": "DISHWASHER",
+              "width_mm": 600,
+              "height_mm": null
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "openings": [],
+      "non_carcass_surfaces": [
+        {
+          "id": "IS_COUNTERTOP",
+          "type": "COUNTERTOP",
+          "width_mm": 2780,
+          "depth_mm": 1200,
+          "thickness_mm": 40,
+          "note": "Explicit overall island size; countertop component is outside carcass benchmark."
+        },
+        {
+          "id": "IS_END_L",
+          "type": "END_PANEL",
+          "width_mm": 40,
+          "depth_mm": 1200,
+          "thickness_mm": null,
+          "note": "40 mm left end zone from page 4; material is not assumed to be carcass LDSP."
+        },
+        {
+          "id": "IS_END_R",
+          "type": "END_PANEL",
+          "width_mm": 40,
+          "depth_mm": 1200,
+          "thickness_mm": null,
+          "note": "40 mm right end zone from page 4; material is not assumed to be carcass LDSP."
+        }
+      ]
+    }
+  ]
+}

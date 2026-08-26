@@ -1,0 +1,59 @@
+{
+  "profile_id": "alpha-basis-v1",
+  "status": "PROVISIONAL_ALPHA",
+  "purpose": "Temporary construction profile for the first Basis golden benchmark. Not a studio production standard.",
+  "units": "mm",
+  "materials": {
+    "carcass": {
+      "material_code": "LDSP_16_ALPHA",
+      "thickness_mm": 16,
+      "evidence": "Basis component 'Корпус': ЛДСП 16 мм"
+    },
+    "back": {
+      "material_code": "LHDF_3_ALPHA",
+      "thickness_mm": 3,
+      "evidence": "Basis component 'Корпус': ЛХДФ 3 мм"
+    },
+    "edge_default": {
+      "material_code": "EDGE_19x1_ALPHA",
+      "thickness_mm": 1,
+      "evidence": "Basis component 'Корпус': Кромка 19x1"
+    }
+  },
+  "dimension_defaults": {
+    "base_carcass_depth_mm": {
+      "value": 560,
+      "status": "PROVISIONAL_ALPHA",
+      "note": "Drawing does not unambiguously expose carcass depth. Keep configurable."
+    },
+    "tall_carcass_depth_mm": {
+      "value": 560,
+      "status": "PROVISIONAL_ALPHA",
+      "note": "Keep configurable."
+    },
+    "wall_carcass_depth_mm": {
+      "value": 320,
+      "status": "PROVISIONAL_ALPHA",
+      "note": "Keep configurable."
+    }
+  },
+  "baseline_rule_strategy": {
+    "primary": "WOODWORKINGSHOP",
+    "secondary_reference": "CABINET_STUDIO",
+    "rule_status": "OSS_BASELINE_UNTIL_CALIBRATED",
+    "requirements": [
+      "Every derived part and hardware item must carry source_rule.",
+      "Do not convert an explicit width to a standard width.",
+      "Any changed OSS constant must be recorded as PROVISIONAL_ALPHA calibration."
+    ]
+  },
+  "excluded_from_alpha_authority": [
+    "hinge count thresholds",
+    "dowel spacing",
+    "drawer vendor clearances",
+    "fastener quantities",
+    "back construction mode",
+    "facade gaps",
+    "edge policy"
+  ]
+}
