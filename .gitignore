@@ -29,3 +29,8 @@ service_account*.json
 cookies*.json
 
 Source-materials/Medvedev.Works.Calc/
+
+# Non-runtime alpha construction task materials
+_tasks/alpha-construction-core/PROMPT_KILO_ALPHA_CONSTRUCTION_CORE_v2.md
+_tasks/alpha-construction-core/AI_FURNITURE_ALPHA_CONSTRUCTION_KILO_PACK_v2.zip
+_tasks/alpha-construction-core/golden_sources/
