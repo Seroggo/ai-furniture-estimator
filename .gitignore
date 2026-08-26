@@ -27,3 +27,5 @@ service_account*.json
 *oauth-token*.json
 *refresh-token*.json
 cookies*.json
+
+Source-materials/Medvedev.Works.Calc/
