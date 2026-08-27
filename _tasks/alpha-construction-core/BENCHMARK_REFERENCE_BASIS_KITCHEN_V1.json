@@ -1,0 +1,64 @@
+{
+  "reference_id": "basis-golden-kitchen-v1",
+  "description": "External benchmark basis for the alpha construction core kitchen fixture.",
+  "material_code_mapping": {
+    "LDSP": "LDSP_16_ALPHA",
+    "LHDF": "LHDF_3_ALPHA",
+    "EDGE": "EDGE_19x1_ALPHA",
+    "FACADE": "LDSP_16_ALPHA"
+  },
+  "targets": {
+    "LDSP": 15.93,
+    "LHDF": 2.73,
+    "EDGE": 105.23,
+    "FACADE": 14.8
+  },
+  "metrics": [
+    {
+      "metric": "LDSP_16_ALPHA_area_m2",
+      "target_key": "LDSP",
+      "material_key": "LDSP",
+      "dataset": "materials",
+      "field": "area_m2",
+      "components": ["CARCASS", "WALL_CABINET_COMPONENT"],
+      "classification": "MATCH_ON_GOLDEN_CASE",
+      "explanation": "Generated carcass-scope area is compared with the current golden case only; this is not a universal geometry claim."
+    },
+    {
+      "metric": "LHDF_3_ALPHA_area_m2",
+      "target_key": "LHDF",
+      "material_key": "LHDF",
+      "dataset": "materials",
+      "field": "area_m2",
+      "components": ["CARCASS", "WALL_CABINET_COMPONENT"],
+      "classification": "PROVISIONAL_ALPHA_RULE",
+      "explanation": "Back construction mode is provisional and the generated back scope is limited to the alpha tall-cabinet rule."
+    },
+    {
+      "metric": "EDGE_19x1_ALPHA_length_m",
+      "target_key": "EDGE",
+      "material_key": "EDGE",
+      "dataset": "edges",
+      "field": "length_m",
+      "components": ["CARCASS", "WALL_CABINET_COMPONENT"],
+      "classification": "PROVISIONAL_ALPHA_RULE",
+      "explanation": "Only emitted per-part visible sides are aggregated; production edge exposure policy is not represented."
+    },
+    {
+      "metric": "FACADE_area_m2_reference",
+      "target_key": "FACADE",
+      "material_key": "FACADE",
+      "dataset": "materials",
+      "field": "area_m2",
+      "components": ["FACADE_COMPONENT"],
+      "requires_part_type": "FACADE",
+      "classification": "PROVISIONAL_ALPHA_RULE",
+      "classification_when_missing": "INPUT_GAP",
+      "explanation": "Only explicit facade dimensions are included; missing dimensions are not synthesized."
+    }
+  ],
+  "notes": [
+    "Targets are diagnostic reference values and do not calibrate generated geometry.",
+    "The facade target is a reference variant and is not a reason to synthesize missing dimensions."
+  ]
+}

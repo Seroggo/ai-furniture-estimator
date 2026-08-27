@@ -28,12 +28,69 @@ var ALPHA_PROVENANCE = {
     Source_function_or_logic: 'hingeCount threshold rule',
     Adaptation: 'Used only as a provisional diagnostic rule for visible hinged fronts; no input front dimensions are invented.'
   },
-  woodworkingShopDowel: {
-    Repository: 'WoodworkingShop',
-    Commit: '9f6f1ff51b0e50cb54c7df832eac78023c389b31',
-    Source_path: 'src/engine/dowel-joint.ts',
-    Source_function_or_logic: 'selectDowelDiameter boardThickness / standard dowel sizing',
-    Adaptation: 'Used for a compact fixed dowel count rule only where the input has a physical carcass module.'
+  alphaLocalDowelProvision: {
+    Origin: 'OUR',
+    Repository: null,
+    Commit: null,
+    Source_path: null,
+    Source_function_or_logic: 'Provisional alpha assumption: four DOWELS_8x30 positions per physical carcass module',
+    Adaptation: 'WoodworkingShop src/engine/dowel-joint.ts was inspected for terminology only. No OSS dowel selection, joint length, spacing, or drilling layout algorithm is executed.'
+  },
+  alphaLocalFastenerProvision: {
+    Origin: 'OUR',
+    Repository: null,
+    Commit: null,
+    Source_path: null,
+    Source_function_or_logic: 'Provisional alpha assumption: eight CONFIRMATS_7x50 per physical carcass module',
+    Adaptation: 'No OSS confirmat/fastener count algorithm was adapted; this is an alpha calibration constant.'
+  },
+  alphaLocalMountingPlateProvision: {
+    Origin: 'OUR',
+    Repository: null,
+    Commit: null,
+    Source_path: null,
+    Source_function_or_logic: 'Provisional alpha assumption: one mounting plate per calculated hinge',
+    Adaptation: 'The one-to-one plate quantity is a local alpha assumption; no vendor mounting-plate schedule is executed.'
+  },
+  alphaLocalDrawerProvision: {
+    Origin: 'OUR',
+    Repository: null,
+    Commit: null,
+    Source_path: null,
+    Source_function_or_logic: 'Provisional alpha assumption: fixed drawer box clearances and height/depth reductions',
+    Adaptation: 'cabinet-studio drawer sizing was inspected for terminology only. No vendor drawer system model is executed; drawer boxes replicate per front.count of the alpha box geometry.'
+  },
+  alphaLocalBackPolicy: {
+    Origin: 'OUR',
+    Repository: null,
+    Commit: null,
+    Source_path: null,
+    Source_function_or_logic: 'Provisional alpha rule: back panels are generated only for tall cabinet modules',
+    Adaptation: 'Alpha scope decision. OSS back-construction modes for non-tall modules are intentionally not implemented in this stage.'
+  },
+  alphaLocalBaseHardwareProvision: {
+    Origin: 'OUR',
+    Repository: null,
+    Commit: null,
+    Source_path: null,
+    Source_function_or_logic: 'Provisional alpha assumption: fixed legs and plinth clips per physical base cabinet module',
+    Adaptation: 'Alpha calibration constants; not a Basis-derived or OSS-derived hardware rule.'
+  },
+  alphaLocalEdgePolicy: {
+    Origin: 'OUR',
+    Repository: null,
+    Commit: null,
+    Source_path: null,
+    Source_function_or_logic: 'Provisional alpha edge exposure policy for front-facing sides',
+    Adaptation: 'Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data.'
+  },
+  alphaLocalDrawerMechanismGap: {
+    Origin: 'OUR',
+    Repository: null,
+    Commit: null,
+    Source_path: null,
+    Source_function_or_logic: 'No vendor drawer mechanism mapping is implemented in the alpha core',
+    Adaptation: 'No mechanism quantity is guessed while vendor-specific drawer data is outside alpha scope.'
   },
   cabinetStudioReference: {
     Repository: 'cabinet-studio',
@@ -219,12 +276,13 @@ function part(moduleId, partType, qty, length, width, thickness, material, edgeS
   };
 }
 
-function addPart(parts, module, partType, qty, length, width, thickness, material, edgeSides, source, features, component) {
+function addPart(parts, module, partType, qty, length, width, thickness, material, edgeSides, source, features, component, edgeSource) {
   if (!positiveNumber(length) || !positiveNumber(width) || !positiveNumber(thickness) || !positiveNumber(qty)) {
     throw new Error('Derived part has a non-positive dimension: ' + module.id + '/' + partType);
   }
   var item = part(module.id, partType, qty, length, width, thickness, material, edgeSides, source, features);
   item.Component = component || (module.module_type === 'WALL_CABINET' ? 'WALL_CABINET_COMPONENT' : partType.indexOf('DRAWER_') === 0 ? 'DRAWER_COMPONENT' : partType === 'FACADE' ? 'FACADE_COMPONENT' : 'CARCASS');
+  if (edgeSource && edgeSides.length) item.Edge_source_rule = clone(edgeSource);
   parts.push(item);
 }
 
@@ -277,7 +335,8 @@ function generateModuleParts(assembly, module, profile, rules, issues) {
   var panelSource = sourceRule('CARCASS_PANELS_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShop, 'Explicit module width/height/depth drive the panel geometry.');
   var sideSource = sourceRule('SIDE_PANEL_FROM_MODULE_DIMENSIONS_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShop, 'Two side panels use the explicit module height and depth.');
   var horizontalSource = sourceRule('HORIZONTAL_PANEL_FROM_MODULE_DIMENSIONS_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShop, 'Horizontal width is module width minus the profile inset; panel count is construction-profile data.');
-  var backSource = sourceRule('BACK_PANEL_TALL_ONLY_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShop, 'Back panel is generated only for tall carcasses in this alpha profile.');
+  var backSource = sourceRule('BACK_PANEL_TALL_ONLY_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.alphaLocalBackPolicy, 'Back panel is generated only for tall carcasses in this alpha profile.');
+  var edgeSource = sourceRule('ALPHA_EDGE_EXPOSURE_POLICY_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.alphaLocalEdgePolicy, 'Only configured visible edge sides are emitted; production exposure policy remains out of scope.');
 
   if (!positiveNumber(width) || !positiveNumber(height) || !positiveNumber(depth)) {
     issues.push(issue('MODULE_DIMENSIONS_INVALID', 'VALIDATION_ERROR', 'Module dimensions must be positive and resolvable.', 'assemblies[].modules[' + module.id + ']'));
@@ -290,21 +349,21 @@ function generateModuleParts(assembly, module, profile, rules, issues) {
 
   addPart(parts, module, 'LEFT_SIDE', q, height, sideDepth, carcass.thickness_mm, carcass.material_code, rules.edge.carcass_visible_sides, sideSource, {
     Notches: isBaseLike(module) ? [{ type: 'TOE_KICK_CLEARANCE', height_mm: profile.global_dimensions && profile.global_dimensions.toe_kick_height_mm || null, status: 'PROVISIONAL_ALPHA' }] : []
-  });
+  }, undefined, edgeSource);
   addPart(parts, module, 'RIGHT_SIDE', q, height, sideDepth, carcass.thickness_mm, carcass.material_code, rules.edge.carcass_visible_sides, sideSource, {
     Notches: isBaseLike(module) ? [{ type: 'TOE_KICK_CLEARANCE', height_mm: profile.global_dimensions && profile.global_dimensions.toe_kick_height_mm || null, status: 'PROVISIONAL_ALPHA' }] : []
-  });
+  }, undefined, edgeSource);
 
   var horizontalCount = className === 'wall' ? 0 : className === 'tall' ? 2 : 1;
   if (horizontalCount >= 1) {
     addPart(parts, module, 'BOTTOM', q, horizontalWidth, horizontalDepth, carcass.thickness_mm, carcass.material_code, rules.edge.carcass_visible_sides, horizontalSource, {
       Grooves: []
-    });
+    }, undefined, edgeSource);
   }
   if (horizontalCount >= 2) {
     addPart(parts, module, 'TOP', q, horizontalWidth, horizontalDepth, carcass.thickness_mm, carcass.material_code, rules.edge.carcass_visible_sides, horizontalSource, {
       Grooves: []
-    });
+    }, undefined, edgeSource);
   }
 
   if (module.role === 'WALL_STORAGE' || module.role === 'GENERAL_STORAGE' || module.role === 'UNKNOWN') {
@@ -339,7 +398,7 @@ function generateModuleParts(assembly, module, profile, rules, issues) {
       addPart(parts, module, 'FACADE', q * facade.count, facade.width, facade.height, carcass.thickness_mm, carcass.material_code, rules.edge.facade_visible_sides, facadeSource, {
         Holes: front.kind === 'HINGED_DOOR' ? [{ type: 'HINGE_CUP', count: hingeCount(facade.height, rules), status: 'PROVISIONAL_ALPHA' }] : [],
         Joinery: []
-      });
+      }, undefined, edgeSource);
     });
   }
 
@@ -355,11 +414,11 @@ function generateModuleParts(assembly, module, profile, rules, issues) {
         var drawerWidth = positiveNumber(front.width_mm) ? front.width_mm - rules.dimensions.drawer_side_clearance_mm * 2 : width - rules.dimensions.drawer_side_clearance_mm * 2;
         var drawerHeight = front.height_mm - rules.dimensions.drawer_box_height_reduction_mm;
         var drawerDepth = depth - rules.dimensions.drawer_box_depth_reduction_mm;
-        var drawerSource = sourceRule('DRAWER_BOX_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShop, 'Compact base drawer model; vendor clearances remain provisional.');
-        addPart(parts, module, 'DRAWER_SIDE', q * 2, drawerDepth, drawerHeight, carcass.thickness_mm, carcass.material_code, [], drawerSource, {});
-        addPart(parts, module, 'DRAWER_FRONT_BOX', q, drawerWidth, drawerHeight, carcass.thickness_mm, carcass.material_code, [], drawerSource, {});
-        addPart(parts, module, 'DRAWER_BACK_BOX', q, drawerWidth, drawerHeight, carcass.thickness_mm, carcass.material_code, [], drawerSource, {});
-        addPart(parts, module, 'DRAWER_BOTTOM', q, drawerDepth - rules.dimensions.drawer_box_bottom_clearance_mm, drawerWidth - rules.dimensions.drawer_box_bottom_clearance_mm, back.thickness_mm, back.material_code, [], drawerSource, {});
+        var drawerSource = sourceRule('DRAWER_BOX_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.alphaLocalDrawerProvision, 'Compact base drawer model; vendor clearances remain provisional.');
+        addPart(parts, module, 'DRAWER_SIDE', q * 2 * front.count, drawerDepth, drawerHeight, carcass.thickness_mm, carcass.material_code, [], drawerSource, {});
+        addPart(parts, module, 'DRAWER_FRONT_BOX', q * front.count, drawerWidth, drawerHeight, carcass.thickness_mm, carcass.material_code, [], drawerSource, {});
+        addPart(parts, module, 'DRAWER_BACK_BOX', q * front.count, drawerWidth, drawerHeight, carcass.thickness_mm, carcass.material_code, [], drawerSource, {});
+        addPart(parts, module, 'DRAWER_BOTTOM', q * front.count, drawerDepth - rules.dimensions.drawer_box_bottom_clearance_mm, drawerWidth - rules.dimensions.drawer_box_bottom_clearance_mm, back.thickness_mm, back.material_code, [], drawerSource, {});
       });
     }
   }
@@ -387,7 +446,8 @@ function partArea(partItem) {
 }
 
 function edgeLength(partItem, side) {
-  return side === 'front' || side === 'back' ? partItem.Length_mm : partItem.Width_mm;
+  if (side === 'front' || side === 'back' || side === 'top' || side === 'bottom') return partItem.Length_mm;
+  return partItem.Width_mm;
 }
 
 function aggregateMaterials(parts) {
@@ -475,10 +535,10 @@ function hardwareItem(itemCode, quantityValue, unit, status, source, note) {
 function aggregateHardware(input, parts, profile, rules, issues) {
   var hardware = [];
   var hingeSource = sourceRule('HINGE_COUNT_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShopHinge, 'Height threshold copied as a reference; front dimensions are required.');
-  var plateSource = sourceRule('MOUNTING_PLATE_PER_HINGE_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShopHinge, 'One mounting plate per hinge.');
-  var baseSource = sourceRule('BASE_MODULE_HARDWARE_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShop, 'Fixed quantities are alpha structural assumptions, not Basis calibration.');
-  var dowelSource = sourceRule('DOWEL_COUNT_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShopDowel, 'One fixed alignment set per physical carcass module.');
-  var confirmatSource = sourceRule('CONFIRMAT_COUNT_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.woodworkingShop, 'Eight fasteners per physical carcass module.');
+  var plateSource = sourceRule('MOUNTING_PLATE_PER_HINGE_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.alphaLocalMountingPlateProvision, 'One mounting plate per hinge is a local alpha assumption.');
+  var baseSource = sourceRule('BASE_MODULE_HARDWARE_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.alphaLocalBaseHardwareProvision, 'Fixed quantities are alpha structural assumptions, not Basis calibration.');
+  var dowelSource = sourceRule('DOWEL_COUNT_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.alphaLocalDowelProvision, 'One fixed alignment set per physical carcass module.');
+  var confirmatSource = sourceRule('CONFIRMAT_COUNT_ALPHA_V1', 'PROVISIONAL_ALPHA', ALPHA_PROVENANCE.alphaLocalFastenerProvision, 'Eight fasteners per physical carcass module.');
   var physicalModuleCount = 0;
   input.assemblies.forEach(function (assembly) {
     (assembly.modules || []).forEach(function (module) {
@@ -506,7 +566,7 @@ function aggregateHardware(input, parts, profile, rules, issues) {
     hardware.push(hardwareItem('DOWELS_8x30', physicalModuleCount * rules.hardware.dowels_per_carcass_module, 'pcs', 'PROVISIONAL_ALPHA', dowelSource, 'Count is structural alpha baseline, not a vendor drilling plan.'));
     hardware.push(hardwareItem('CONFIRMATS_7x50', physicalModuleCount * rules.hardware.confirmats_per_carcass_module, 'pcs', 'PROVISIONAL_ALPHA', confirmatSource, 'Count is structural alpha baseline.'));
   }
-  hardware.push(hardwareItem('DRAWER_MECHANISMS', null, 'sets', 'NOT_IMPLEMENTED', sourceRule('DRAWER_VENDOR_RULE_REQUIRED_V1', 'NOT_IMPLEMENTED', ALPHA_PROVENANCE.woodworkingShop, 'Vendor drawer system and clearances are not present in the contract.'), 'Drawer fronts without vendor data do not receive a guessed mechanism count.'));
+  hardware.push(hardwareItem('DRAWER_MECHANISMS', null, 'sets', 'NOT_IMPLEMENTED', sourceRule('DRAWER_VENDOR_RULE_REQUIRED_V1', 'NOT_IMPLEMENTED', ALPHA_PROVENANCE.alphaLocalDrawerMechanismGap, 'Vendor drawer system and clearances are not present in the contract.'), 'Drawer fronts without vendor data do not receive a guessed mechanism count.'));
   return hardware;
 }
 
@@ -524,35 +584,52 @@ function benchmarkValue(metric, golden, generated, classification, explanation) 
   };
 }
 
-function benchmark(parts, materials, edges, input) {
-  var componentMaterials = aggregateByComponent(parts, aggregateMaterials);
-  var componentEdges = aggregateByComponent(parts, function (items) { return aggregateEdges(items, { materials: { edge_default: { material_code: 'EDGE_19x1_ALPHA' } } }); });
-  var carcassMaterials = componentMaterials.filter(function (item) {
-    return item.Component === 'CARCASS' || item.Component === 'WALL_CABINET_COMPONENT';
-  }).reduce(function (all, item) { return all.concat(item.items); }, []);
-  var facadeMaterials = (componentMaterials.find(function (item) { return item.Component === 'FACADE_COMPONENT'; }) || { items: [] }).items;
-  var carcassEdges = componentEdges.filter(function (item) {
-    return item.Component === 'CARCASS' || item.Component === 'WALL_CABINET_COMPONENT';
-  }).reduce(function (all, item) { return all.concat(item.items); }, []);
-  function byCode(items, code, field) {
-    return items.filter(function (item) { return item.material_code === code; }).reduce(function (sum, item) { return sum + item[field]; }, 0);
+function benchmark(parts, reference) {
+  if (!reference || typeof reference !== 'object' || Array.isArray(reference)) {
+    throw new Error('Benchmark reference must be an object.');
   }
-  var ldsp = byCode(carcassMaterials, 'LDSP_16_ALPHA', 'area_m2');
-  var lhdf = byCode(carcassMaterials, 'LHDF_3_ALPHA', 'area_m2');
-  var edge = byCode(carcassEdges, 'EDGE_19x1_ALPHA', 'length_m');
-  var facade = facadeMaterials.reduce(function (sum, item) { return sum + item.area_m2; }, 0);
-  var facadeDimensionsPresent = parts.some(function (item) { return item.Part_type === 'FACADE'; });
+  if (!Array.isArray(reference.metrics) || !reference.material_code_mapping || !reference.targets) {
+    throw new Error('Benchmark reference must define metrics, material_code_mapping, and targets.');
+  }
+  var componentMaterials = aggregateByComponent(parts, aggregateMaterials);
+  var edgeCode = reference.material_code_mapping.EDGE;
+  var componentEdges = aggregateByComponent(parts, function (items) {
+    return aggregateEdges(items, { materials: { edge_default: { material_code: edgeCode } } });
+  });
+  function scopedItems(groups, components) {
+    var selected = groups.filter(function (group) {
+      return !Array.isArray(components) || components.indexOf(group.Component) !== -1;
+    });
+    return selected.reduce(function (all, group) { return all.concat(group.items); }, []);
+  }
+  function valueForMetric(metric) {
+    var groups = metric.dataset === 'edges' ? componentEdges : componentMaterials;
+    var items = scopedItems(groups, metric.components);
+    var code = reference.material_code_mapping[metric.material_key];
+    return items.filter(function (item) { return item.material_code === code; }).reduce(function (sum, item) {
+      return sum + item[metric.field];
+    }, 0);
+  }
   return {
-    aggregates: [
-      benchmarkValue('LDSP_16_ALPHA_area_m2', 15.93, ldsp, 'UNIVERSAL_GEOMETRY', 'Generated from explicit module dimensions and profile panel-count rules; no hidden coefficient is used.'),
-      benchmarkValue('LHDF_3_ALPHA_area_m2', 2.73, lhdf, 'PROVISIONAL_ALPHA_RULE', 'Back construction mode is not authoritative in the input; generated back panels are limited to the alpha tall-cabinet rule.'),
-      benchmarkValue('EDGE_19x1_ALPHA_length_m', 105.23, edge, 'PROVISIONAL_ALPHA_RULE', 'Edge policy is excluded from alpha authority; only emitted per-part visible sides are aggregated.'),
-      benchmarkValue('FACADE_area_m2_reference', 14.8, facadeDimensionsPresent ? facade : 0, facadeDimensionsPresent ? 'INPUT_GAP' : 'INPUT_GAP', facadeDimensionsPresent ? 'Only explicit facade dimensions are included.' : 'Front widths/heights are null in the contract, so no facade dimensions are invented.')
-    ],
-    notes: [
-      'Basis facade 14.80 m2 is a reference variant and is not a target for synthetic dimensions.',
-      'Basis hardware quantities are not used as calibration coefficients.'
-    ]
+    reference_id: reference.reference_id || null,
+    aggregates: reference.metrics.map(function (metric) {
+      if (!metric || typeof metric.metric !== 'string' || typeof metric.target_key !== 'string' || typeof metric.material_key !== 'string' || typeof metric.dataset !== 'string' || typeof metric.field !== 'string') {
+        throw new Error('Benchmark reference contains an invalid metric definition.');
+      }
+      var target = reference.targets[metric.target_key];
+      if (typeof target !== 'number' || !Number.isFinite(target)) {
+        throw new Error('Benchmark reference target is missing for ' + metric.target_key + '.');
+      }
+      var requiredPartPresent = !metric.requires_part_type || parts.some(function (item) { return item.Part_type === metric.requires_part_type; });
+      var generated = valueForMetric(metric);
+      var classification = metric.classification || 'PROVISIONAL_ALPHA_RULE';
+      if (!requiredPartPresent) {
+        generated = 0;
+        classification = metric.classification_when_missing || 'INPUT_GAP';
+      }
+      return benchmarkValue(metric.metric, target, generated, classification, metric.explanation || null);
+    }),
+    notes: Array.isArray(reference.notes) ? clone(reference.notes) : []
   };
 }
 
@@ -594,7 +671,7 @@ function calculateConstructionCore(input, profile, benchmarkReference) {
     Issues: issues,
     Benchmark: null
   };
-  result.Benchmark = benchmark(parts, materials, edges, benchmarkReference || input);
+  result.Benchmark = benchmarkReference === undefined || benchmarkReference === null ? null : benchmark(parts, benchmarkReference);
   return result;
 }
 

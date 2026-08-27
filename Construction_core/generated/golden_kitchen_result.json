@@ -36,7 +36,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_TALL_L",
@@ -67,7 +80,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_TALL_L",
@@ -98,7 +124,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_TALL_L",
@@ -129,7 +168,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_TALL_L",
@@ -147,11 +199,12 @@
         "rule_id": "BACK_PANEL_TALL_ONLY_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha rule: back panels are generated only for tall cabinet modules",
+          "Adaptation": "Alpha scope decision. OSS back-construction modes for non-tall modules are intentionally not implemented in this stage."
         },
         "note": "Back panel is generated only for tall carcasses in this alpha profile."
       },
@@ -201,7 +254,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_BASE_01",
@@ -238,7 +304,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_BASE_01",
@@ -269,7 +348,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_BASE_02",
@@ -306,7 +398,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_BASE_02",
@@ -343,7 +448,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_BASE_02",
@@ -374,7 +492,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_BASE_03",
@@ -411,7 +542,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_BASE_03",
@@ -448,7 +592,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_BASE_03",
@@ -479,7 +636,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_TALL_R",
@@ -510,7 +680,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_TALL_R",
@@ -541,7 +724,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_TALL_R",
@@ -572,7 +768,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_TALL_R",
@@ -603,7 +812,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_TALL_R",
@@ -621,11 +843,12 @@
         "rule_id": "BACK_PANEL_TALL_ONLY_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha rule: back panels are generated only for tall cabinet modules",
+          "Adaptation": "Alpha scope decision. OSS back-construction modes for non-tall modules are intentionally not implemented in this stage."
         },
         "note": "Back panel is generated only for tall carcasses in this alpha profile."
       },
@@ -669,7 +892,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_UPPER_L",
@@ -700,7 +936,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_UPPER_R",
@@ -731,7 +980,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "MW_UPPER_R",
@@ -762,7 +1024,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_BASE_01",
@@ -799,7 +1074,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_BASE_01",
@@ -836,7 +1124,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_BASE_01",
@@ -867,7 +1168,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_BASE_02",
@@ -904,7 +1218,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_BASE_02",
@@ -941,7 +1268,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_BASE_02",
@@ -972,29 +1312,43 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_BASE_02",
       "Part_type": "DRAWER_SIDE",
-      "Qty": 2,
+      "Qty": 4,
       "Length_mm": 530,
       "Width_mm": 335,
       "Thickness_mm": 16,
       "Material_code": "LDSP_16_ALPHA",
       "Component": "DRAWER_COMPONENT",
-      "Area_m2": 0.3551,
+      "Area_m2": 0.7102,
       "Edge_length_m": 0,
       "Edge_sides": [],
       "Source_rule": {
         "rule_id": "DRAWER_BOX_ALPHA_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha assumption: fixed drawer box clearances and height/depth reductions",
+          "Adaptation": "cabinet-studio drawer sizing was inspected for terminology only. No vendor drawer system model is executed; drawer boxes replicate per front.count of the alpha box geometry."
         },
         "note": "Compact base drawer model; vendor clearances remain provisional."
       },
@@ -1006,24 +1360,25 @@
     {
       "Module_id": "IS_BASE_02",
       "Part_type": "DRAWER_FRONT_BOX",
-      "Qty": 1,
+      "Qty": 2,
       "Length_mm": 574,
       "Width_mm": 335,
       "Thickness_mm": 16,
       "Material_code": "LDSP_16_ALPHA",
       "Component": "DRAWER_COMPONENT",
-      "Area_m2": 0.19229,
+      "Area_m2": 0.38458,
       "Edge_length_m": 0,
       "Edge_sides": [],
       "Source_rule": {
         "rule_id": "DRAWER_BOX_ALPHA_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha assumption: fixed drawer box clearances and height/depth reductions",
+          "Adaptation": "cabinet-studio drawer sizing was inspected for terminology only. No vendor drawer system model is executed; drawer boxes replicate per front.count of the alpha box geometry."
         },
         "note": "Compact base drawer model; vendor clearances remain provisional."
       },
@@ -1035,24 +1390,25 @@
     {
       "Module_id": "IS_BASE_02",
       "Part_type": "DRAWER_BACK_BOX",
-      "Qty": 1,
+      "Qty": 2,
       "Length_mm": 574,
       "Width_mm": 335,
       "Thickness_mm": 16,
       "Material_code": "LDSP_16_ALPHA",
       "Component": "DRAWER_COMPONENT",
-      "Area_m2": 0.19229,
+      "Area_m2": 0.38458,
       "Edge_length_m": 0,
       "Edge_sides": [],
       "Source_rule": {
         "rule_id": "DRAWER_BOX_ALPHA_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha assumption: fixed drawer box clearances and height/depth reductions",
+          "Adaptation": "cabinet-studio drawer sizing was inspected for terminology only. No vendor drawer system model is executed; drawer boxes replicate per front.count of the alpha box geometry."
         },
         "note": "Compact base drawer model; vendor clearances remain provisional."
       },
@@ -1064,24 +1420,25 @@
     {
       "Module_id": "IS_BASE_02",
       "Part_type": "DRAWER_BOTTOM",
-      "Qty": 1,
+      "Qty": 2,
       "Length_mm": 528,
       "Width_mm": 572,
       "Thickness_mm": 3,
       "Material_code": "LHDF_3_ALPHA",
       "Component": "DRAWER_COMPONENT",
-      "Area_m2": 0.302016,
+      "Area_m2": 0.604032,
       "Edge_length_m": 0,
       "Edge_sides": [],
       "Source_rule": {
         "rule_id": "DRAWER_BOX_ALPHA_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha assumption: fixed drawer box clearances and height/depth reductions",
+          "Adaptation": "cabinet-studio drawer sizing was inspected for terminology only. No vendor drawer system model is executed; drawer boxes replicate per front.count of the alpha box geometry."
         },
         "note": "Compact base drawer model; vendor clearances remain provisional."
       },
@@ -1125,7 +1482,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_SINK_01",
@@ -1162,7 +1532,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_SINK_01",
@@ -1193,7 +1576,20 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_DW_01",
@@ -1230,7 +1626,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_DW_01",
@@ -1267,7 +1676,20 @@
           "status": "PROVISIONAL_ALPHA"
         }
       ],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     },
     {
       "Module_id": "IS_DW_01",
@@ -1298,19 +1720,32 @@
       "Holes": [],
       "Grooves": [],
       "Notches": [],
-      "Joinery": []
+      "Joinery": [],
+      "Edge_source_rule": {
+        "rule_id": "ALPHA_EDGE_EXPOSURE_POLICY_V1",
+        "status": "PROVISIONAL_ALPHA",
+        "provenance": {
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha edge exposure policy for front-facing sides",
+          "Adaptation": "Basis/production edge exposure policy is not restored. The current per-part-type side mapping is an alpha assumption pending part-level reference data."
+        },
+        "note": "Only configured visible edge sides are emitted; production exposure policy remains out of scope."
+      }
     }
   ],
   "Materials": [
     {
       "material_code": "LDSP_16_ALPHA",
-      "area_m2": 16.66496,
-      "part_qty": 37
+      "area_m2": 17.40464,
+      "part_qty": 41
     },
     {
       "material_code": "LHDF_3_ALPHA",
-      "area_m2": 3.029006,
-      "part_qty": 3
+      "area_m2": 3.331022,
+      "part_qty": 4
     }
   ],
   "Materials_by_component": [
@@ -1334,13 +1769,13 @@
       "items": [
         {
           "material_code": "LDSP_16_ALPHA",
-          "area_m2": 0.73968,
-          "part_qty": 4
+          "area_m2": 1.47936,
+          "part_qty": 8
         },
         {
           "material_code": "LHDF_3_ALPHA",
-          "area_m2": 0.302016,
-          "part_qty": 1
+          "area_m2": 0.604032,
+          "part_qty": 2
         }
       ]
     },
@@ -1395,7 +1830,7 @@
     },
     {
       "Component": "DRAWER_COMPONENT",
-      "part_qty": 5
+      "part_qty": 10
     },
     {
       "Component": "WALL_CABINET_COMPONENT",
@@ -1431,13 +1866,14 @@
         "rule_id": "MOUNTING_PLATE_PER_HINGE_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/hinge-bore.ts",
-          "Source_function_or_logic": "hingeCount threshold rule",
-          "Adaptation": "Used only as a provisional diagnostic rule for visible hinged fronts; no input front dimensions are invented."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha assumption: one mounting plate per calculated hinge",
+          "Adaptation": "The one-to-one plate quantity is a local alpha assumption; no vendor mounting-plate schedule is executed."
         },
-        "note": "One mounting plate per hinge."
+        "note": "One mounting plate per hinge is a local alpha assumption."
       },
       "note": null
     },
@@ -1450,11 +1886,12 @@
         "rule_id": "BASE_MODULE_HARDWARE_ALPHA_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha assumption: fixed legs and plinth clips per physical base cabinet module",
+          "Adaptation": "Alpha calibration constants; not a Basis-derived or OSS-derived hardware rule."
         },
         "note": "Fixed quantities are alpha structural assumptions, not Basis calibration."
       },
@@ -1469,11 +1906,12 @@
         "rule_id": "BASE_MODULE_HARDWARE_ALPHA_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha assumption: fixed legs and plinth clips per physical base cabinet module",
+          "Adaptation": "Alpha calibration constants; not a Basis-derived or OSS-derived hardware rule."
         },
         "note": "Fixed quantities are alpha structural assumptions, not Basis calibration."
       },
@@ -1488,11 +1926,12 @@
         "rule_id": "DOWEL_COUNT_ALPHA_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/dowel-joint.ts",
-          "Source_function_or_logic": "selectDowelDiameter boardThickness / standard dowel sizing",
-          "Adaptation": "Used for a compact fixed dowel count rule only where the input has a physical carcass module."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha assumption: four DOWELS_8x30 positions per physical carcass module",
+          "Adaptation": "WoodworkingShop src/engine/dowel-joint.ts was inspected for terminology only. No OSS dowel selection, joint length, spacing, or drilling layout algorithm is executed."
         },
         "note": "One fixed alignment set per physical carcass module."
       },
@@ -1507,11 +1946,12 @@
         "rule_id": "CONFIRMAT_COUNT_ALPHA_V1",
         "status": "PROVISIONAL_ALPHA",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "Provisional alpha assumption: eight CONFIRMATS_7x50 per physical carcass module",
+          "Adaptation": "No OSS confirmat/fastener count algorithm was adapted; this is an alpha calibration constant."
         },
         "note": "Eight fasteners per physical carcass module."
       },
@@ -1526,11 +1966,12 @@
         "rule_id": "DRAWER_VENDOR_RULE_REQUIRED_V1",
         "status": "NOT_IMPLEMENTED",
         "provenance": {
-          "Repository": "WoodworkingShop",
-          "Commit": "9f6f1ff51b0e50cb54c7df832eac78023c389b31",
-          "Source_path": "src/engine/parts.ts",
-          "Source_function_or_logic": "generateParts carcass panel geometry",
-          "Adaptation": "Reimplemented as plain JavaScript for confirmed-configuration-v1; explicit module dimensions remain authoritative."
+          "Origin": "OUR",
+          "Repository": null,
+          "Commit": null,
+          "Source_path": null,
+          "Source_function_or_logic": "No vendor drawer mechanism mapping is implemented in the alpha core",
+          "Adaptation": "No mechanism quantity is guessed while vendor-specific drawer data is outside alpha scope."
         },
         "note": "Vendor drawer system and clearances are not present in the contract."
       },
@@ -1644,6 +2085,7 @@
     }
   ],
   "Benchmark": {
+    "reference_id": "basis-golden-kitchen-v1",
     "aggregates": [
       {
         "metric": "LDSP_16_ALPHA_area_m2",
@@ -1651,8 +2093,8 @@
         "generated": 15.92528,
         "absolute_delta": -0.00472,
         "relative_delta_pct": -0.02963,
-        "classification": "UNIVERSAL_GEOMETRY",
-        "explanation": "Generated from explicit module dimensions and profile panel-count rules; no hidden coefficient is used."
+        "classification": "MATCH_ON_GOLDEN_CASE",
+        "explanation": "Generated carcass-scope area is compared with the current golden case only; this is not a universal geometry claim."
       },
       {
         "metric": "LHDF_3_ALPHA_area_m2",
@@ -1661,7 +2103,7 @@
         "absolute_delta": -0.00301,
         "relative_delta_pct": -0.110256,
         "classification": "PROVISIONAL_ALPHA_RULE",
-        "explanation": "Back construction mode is not authoritative in the input; generated back panels are limited to the alpha tall-cabinet rule."
+        "explanation": "Back construction mode is provisional and the generated back scope is limited to the alpha tall-cabinet rule."
       },
       {
         "metric": "EDGE_19x1_ALPHA_length_m",
@@ -1670,7 +2112,7 @@
         "absolute_delta": -75.992,
         "relative_delta_pct": -72.215148,
         "classification": "PROVISIONAL_ALPHA_RULE",
-        "explanation": "Edge policy is excluded from alpha authority; only emitted per-part visible sides are aggregated."
+        "explanation": "Only emitted per-part visible sides are aggregated; production edge exposure policy is not represented."
       },
       {
         "metric": "FACADE_area_m2_reference",
@@ -1679,12 +2121,12 @@
         "absolute_delta": -14.8,
         "relative_delta_pct": -100,
         "classification": "INPUT_GAP",
-        "explanation": "Front widths/heights are null in the contract, so no facade dimensions are invented."
+        "explanation": "Only explicit facade dimensions are included; missing dimensions are not synthesized."
       }
     ],
     "notes": [
-      "Basis facade 14.80 m2 is a reference variant and is not a target for synthetic dimensions.",
-      "Basis hardware quantities are not used as calibration coefficients."
+      "Targets are diagnostic reference values and do not calibrate generated geometry.",
+      "The facade target is a reference variant and is not a reason to synthesize missing dimensions."
     ]
   }
 }
