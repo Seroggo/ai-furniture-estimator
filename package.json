@@ -1,12 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "test": "npm run test:stage6 && npm run test:stage7 && npm run test:stage8 && npm run test:stage9 && npm run test:core && npm run test:regression",
+    "test": "npm run test:stage6 && npm run test:stage7 && npm run test:stage8 && npm run test:stage9 && npm run test:core && npm run test:stage10 && npm run test:regression",
     "test:stage6": "node --test tests/test_stage6_apps_script.mjs",
     "test:stage7": "node --test tests/test_stage7_openrouter_parser.mjs",
     "test:stage8": "node --test tests/test_stage8_calculation_kernel.mjs",
     "test:stage9": "node --test tests/test_stage9_web_app.mjs",
     "test:core": "node --test Construction_core/tests/construction_core.test.mjs",
+    "test:stage10": "node --test tests/test_stage10_input_understanding.mjs",
     "test:regression": "python -m unittest discover -s tests -p \"test_*.py\"",
     "schema:check": "python tools/generate_setup_schema.py --check && python tools/generate_human_ux_manifest.py --check && python tools/generate_project_input_schema.py --check && python tools/generate_calculation_result_schema.py --check && python tools/generate_module_size_rules.py --check && python tools/generate_stage8_layout_golden.py --check",
     "gas:login": "clasp login",

@@ -1,0 +1,122 @@
+{
+  "schema_version": "draft-configuration-v1",
+  "project_id": "stage10-mini-kitchen",
+  "construction_profile_id": "alpha-construction-profile-v1",
+  "source_refs": [
+    {
+      "id": "NOTE_MINI",
+      "type": "NOTE",
+      "file": "_tasks/stage-10-input-understanding/fixtures/NOTE_MINI_KITCHEN.md",
+      "note": "Mini linear kitchen fixture note for Stage 10.1 mapping tests."
+    }
+  ],
+  "global_dimensions": {
+    "finished_worktop_height_mm": 900,
+    "toe_kick_height_mm": 100,
+    "countertop_thickness_mm": 38
+  },
+  "assemblies": [
+    {
+      "id": "asm-mini",
+      "kind": "LINEAR_RUN",
+      "overall_width_mm": 1533,
+      "overall_depth_mm": 600,
+      "finished_height_mm": 900,
+      "modules": [
+        {
+          "id": "mod-custom-733",
+          "module_type": "CUSTOM_CABINET",
+          "role": "GENERAL_STORAGE",
+          "x_mm": 0,
+          "y_mm": 0,
+          "dimensions": {
+            "width_mm": {
+              "state": "KNOWN",
+              "value": 733,
+              "source_ref": "NOTE_MINI",
+              "source_type": "USER_DIMENSION",
+              "evidence_state": "MANAGER_CONFIRMED",
+              "note": "Custom cabinet width 733 mm confirmed by the user."
+            },
+            "height_mm": {
+              "state": "MISSING"
+            },
+            "depth_mm": {
+              "state": "MISSING"
+            }
+          },
+          "fronts": [
+            {
+              "kind": "HINGED_DOOR",
+              "count": 2,
+              "evidence_state": "MANAGER_CONFIRMED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": [
+            "Custom width module must keep the 733 mm value."
+          ]
+        },
+        {
+          "id": "mod-drawer-800",
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "x_mm": 733,
+          "y_mm": 0,
+          "dimensions": {
+            "width_mm": {
+              "state": "KNOWN",
+              "value": 800,
+              "source_ref": "NOTE_MINI",
+              "source_type": "USER_DIMENSION",
+              "evidence_state": "EXPLICIT",
+              "note": "Explicit width from the mini kitchen note."
+            },
+            "height_mm": {
+              "state": "KNOWN",
+              "value": 715,
+              "source_ref": "NOTE_MINI",
+              "source_type": "DEFAULT_CANDIDATE",
+              "evidence_state": "ALPHA_DEFAULT",
+              "note": "Alpha default base module height."
+            },
+            "depth_mm": {
+              "state": "KNOWN",
+              "value": 560,
+              "source_ref": "NOTE_MINI",
+              "source_type": "DEFAULT_CANDIDATE",
+              "evidence_state": "ALPHA_DEFAULT",
+              "note": "Alpha default base module depth."
+            }
+          },
+          "fronts": [
+            {
+              "kind": "DRAWER_FRONT",
+              "count": 3,
+              "evidence_state": "EXPLICIT"
+            }
+          ],
+          "appliance_slots": []
+        }
+      ],
+      "openings": [
+        {
+          "id": "op-window",
+          "type": "WINDOW",
+          "x_mm": 900,
+          "width_mm": 1200,
+          "height_mm": 1400
+        }
+      ],
+      "non_carcass_surfaces": [
+        {
+          "id": "surf-counter",
+          "type": "COUNTERTOP",
+          "width_mm": 1533,
+          "depth_mm": 600,
+          "thickness_mm": 38
+        }
+      ]
+    }
+  ]
+}

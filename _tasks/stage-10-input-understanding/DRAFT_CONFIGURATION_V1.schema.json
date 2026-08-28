@@ -1,0 +1,476 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "draft-configuration-v1",
+  "title": "AI Furniture Draft Configuration v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "project_id",
+    "construction_profile_id",
+    "source_refs",
+    "assemblies"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "draft-configuration-v1"
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "construction_profile_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sourceRef"
+      }
+    },
+    "global_dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "finished_worktop_height_mm": {
+          "oneOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "toe_kick_height_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "countertop_thickness_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "assemblies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/assembly"
+      }
+    }
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "file",
+        "note"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "PDF",
+            "IMAGE",
+            "NOTE",
+            "MANUAL_CONFIRMATION"
+          ]
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "dimensionCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "KNOWN",
+            "MISSING",
+            "CONFLICT",
+            "NEEDS_CONFIRMATION"
+          ]
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_type": {
+          "enum": [
+            "USER_CONFIRMATION",
+            "USER_DIMENSION",
+            "USER_TEXT",
+            "IMAGE_TEXT",
+            "VISION_ENTITY",
+            "DEFAULT_CANDIDATE"
+          ]
+        },
+        "evidence_state": {
+          "enum": [
+            "EXPLICIT",
+            "DERIVED",
+            "VISUAL_INFERRED",
+            "ALPHA_DEFAULT",
+            "MANAGER_CONFIRMED"
+          ]
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "front": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "count",
+        "evidence_state"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "HINGED_DOOR",
+            "DRAWER_FRONT",
+            "APPLIANCE_FRONT",
+            "FIXED_PANEL",
+            "UNKNOWN"
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "width_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "height_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "evidence_state": {
+          "enum": [
+            "EXPLICIT",
+            "VISUAL_INFERRED",
+            "MANAGER_CONFIRMED"
+          ]
+        }
+      }
+    },
+    "applianceSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "DISHWASHER",
+            "OVEN",
+            "MICROWAVE",
+            "REFRIGERATOR",
+            "OTHER"
+          ]
+        },
+        "width_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "height_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "module_type",
+        "role",
+        "x_mm",
+        "dimensions",
+        "fronts",
+        "appliance_slots"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "module_type": {
+          "enum": [
+            "BASE_CABINET",
+            "WALL_CABINET",
+            "TALL_CABINET",
+            "APPLIANCE_SLOT",
+            "CUSTOM_CABINET"
+          ]
+        },
+        "role": {
+          "enum": [
+            "GENERAL_STORAGE",
+            "DRAWER_CABINET",
+            "SINK_BASE",
+            "DISHWASHER_SLOT",
+            "REFRIGERATOR_HOUSING",
+            "APPLIANCE_TOWER",
+            "WALL_STORAGE",
+            "UNKNOWN"
+          ]
+        },
+        "x_mm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "y_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width_mm"
+          ],
+          "properties": {
+            "width_mm": {
+              "$ref": "#/$defs/dimensionCell"
+            },
+            "height_mm": {
+              "$ref": "#/$defs/dimensionCell"
+            },
+            "depth_mm": {
+              "$ref": "#/$defs/dimensionCell"
+            }
+          }
+        },
+        "fronts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/front"
+          }
+        },
+        "appliance_slots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/applianceSlot"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "opening": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "x_mm",
+        "width_mm"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "WINDOW",
+            "VOID",
+            "OTHER"
+          ]
+        },
+        "x_mm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "width_mm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "width_mm",
+        "depth_mm",
+        "thickness_mm"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "COUNTERTOP",
+            "DECORATIVE_CLADDING",
+            "END_PANEL",
+            "OTHER"
+          ]
+        },
+        "width_mm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "depth_mm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "thickness_mm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "assembly": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "modules"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "LINEAR_RUN",
+            "ISLAND",
+            "OTHER"
+          ]
+        },
+        "overall_width_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "overall_depth_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "finished_height_mm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/module"
+          }
+        },
+        "openings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/opening"
+          }
+        },
+        "non_carcass_surfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/surface"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
