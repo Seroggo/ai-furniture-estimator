@@ -742,6 +742,7 @@ function clarifyDraft(draft) {
 
 var fusion = require('./fusion.js');
 var confirmation = require('./confirmation.js');
+var constructionAdapter = require('./construction_adapter.js');
 
 module.exports = {
   EVIDENCE_STATES: EVIDENCE_STATES,
@@ -761,5 +762,7 @@ module.exports = {
   buildDynamicBrief: confirmation.buildDynamicBrief,
   BuildDynamicBrief: confirmation.BuildDynamicBrief,
   applyConfirmationAnswers: confirmation.applyConfirmationAnswers,
-  ApplyConfirmationAnswers: confirmation.ApplyConfirmationAnswers
+  ApplyConfirmationAnswers: confirmation.ApplyConfirmationAnswers,
+  runConstructionFromDraft: constructionAdapter.runConstructionFromDraft,
+  RunConstructionFromDraft: constructionAdapter.RunConstructionFromDraft
 };
