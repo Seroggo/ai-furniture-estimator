@@ -1,0 +1,32 @@
+{
+  "source_ref": "IMG_KITCHEN_ENTITIES_01",
+  "entities": [
+    {
+      "type": "BASE_CABINET",
+      "confidence": 0.91
+    },
+    {
+      "type": "SINK",
+      "confidence": 0.86
+    },
+    {
+      "type": "DISHWASHER",
+      "confidence": 0.82
+    },
+    {
+      "type": "OVEN",
+      "confidence": 0.78
+    },
+    {
+      "type": "WALL_CABINET",
+      "confidence": 0.88
+    }
+  ],
+  "visible_text": [
+    {
+      "text": "60 cm wide",
+      "target_path": "vision.visible_text[0]",
+      "confidence": 0.7
+    }
+  ]
+}

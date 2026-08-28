@@ -1,0 +1,34 @@
+{
+  "source_ref": "IMG_KITCHEN_DIMENSIONS_01",
+  "entities": [
+    {
+      "type": "DISHWASHER",
+      "confidence": 0.85
+    },
+    {
+      "type": "BASE_CABINET",
+      "confidence": 0.9
+    }
+  ],
+  "visible_dimensions": [
+    {
+      "target_path": "assemblies[0].modules[0].dimensions.width_mm",
+      "value": 600,
+      "unit": "mm",
+      "confidence": 0.95
+    },
+    {
+      "target_path": "assemblies[0].modules[0].dimensions.height_mm",
+      "value": 720,
+      "unit": "mm",
+      "confidence": 0.9
+    }
+  ],
+  "visible_text": [
+    {
+      "text": "600 mm",
+      "target_path": "vision.visible_text[0]",
+      "confidence": 0.9
+    }
+  ]
+}
