@@ -1,0 +1,54 @@
+{
+  "schema_version": "draft-configuration-v1",
+  "project_id": "e2e-scenario-a",
+  "construction_profile_id": "alpha-basis-v1",
+  "source_refs": [
+    {
+      "id": "NOTE_A",
+      "type": "NOTE",
+      "file": "scenario_a_description.md",
+      "note": "Scenario A: linear kitchen with explicit dimensions, description, and vision evidence."
+    }
+  ],
+  "global_dimensions": {
+    "finished_worktop_height_mm": 910,
+    "toe_kick_height_mm": 100,
+    "countertop_thickness_mm": 40
+  },
+  "assemblies": [
+    {
+      "id": "ASM_A",
+      "kind": "LINEAR_RUN",
+      "overall_width_mm": 1200,
+      "overall_depth_mm": 600,
+      "finished_height_mm": 910,
+      "modules": [
+        {
+          "id": "MOD_A_01",
+          "module_type": "BASE_CABINET",
+          "role": "GENERAL_STORAGE",
+          "x_mm": 0,
+          "y_mm": 100,
+          "dimensions": {
+            "width_mm": { "state": "MISSING" },
+            "height_mm": { "state": "MISSING" },
+            "depth_mm": { "state": "MISSING" }
+          },
+          "fronts": [
+            {
+              "kind": "HINGED_DOOR",
+              "count": 1,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": [
+            "Base cabinet under window; vision reads explicit 600x720x560."
+          ]
+        }
+      ],
+      "openings": [],
+      "non_carcass_surfaces": []
+    }
+  ]
+}

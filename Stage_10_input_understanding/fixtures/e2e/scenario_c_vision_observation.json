@@ -1,0 +1,28 @@
+{
+  "source_ref": "IMG_SCENARIO_C_01",
+  "entities": [
+    {
+      "type": "BASE_CABINET",
+      "confidence": 0.9
+    },
+    {
+      "type": "SINK",
+      "confidence": 0.85
+    },
+    {
+      "type": "WALL_CABINET",
+      "confidence": 0.88
+    },
+    {
+      "type": "REFRIGERATOR",
+      "confidence": 0.78
+    }
+  ],
+  "visible_text": [
+    {
+      "text": "kitchen elevation",
+      "target_path": "vision.visible_text[0]",
+      "confidence": 0.7
+    }
+  ]
+}

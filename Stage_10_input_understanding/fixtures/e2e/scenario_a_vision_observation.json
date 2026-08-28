@@ -1,0 +1,49 @@
+{
+  "source_ref": "IMG_SCENARIO_A_01",
+  "entities": [
+    {
+      "type": "BASE_CABINET",
+      "confidence": 0.9
+    },
+    {
+      "type": "SINK",
+      "confidence": 0.85
+    },
+    {
+      "type": "WALL_CABINET",
+      "confidence": 0.88
+    }
+  ],
+  "visible_dimensions": [
+    {
+      "target_path": "assemblies[0].modules[0].dimensions.width_mm",
+      "value": 600,
+      "unit": "mm",
+      "confidence": 0.95
+    },
+    {
+      "target_path": "assemblies[0].modules[0].dimensions.height_mm",
+      "value": 720,
+      "unit": "mm",
+      "confidence": 0.9
+    },
+    {
+      "target_path": "assemblies[0].modules[0].dimensions.depth_mm",
+      "value": 560,
+      "unit": "mm",
+      "confidence": 0.85
+    }
+  ],
+  "visible_text": [
+    {
+      "text": "600 mm base cabinet",
+      "target_path": "vision.visible_text[0]",
+      "confidence": 0.85
+    },
+    {
+      "text": "720 mm height",
+      "target_path": "vision.visible_text[1]",
+      "confidence": 0.8
+    }
+  ]
+}

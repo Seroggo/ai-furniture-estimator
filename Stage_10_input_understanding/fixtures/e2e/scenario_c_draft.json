@@ -1,0 +1,54 @@
+{
+  "schema_version": "draft-configuration-v1",
+  "project_id": "e2e-scenario-c",
+  "construction_profile_id": "alpha-basis-v1",
+  "source_refs": [
+    {
+      "id": "NOTE_C",
+      "type": "NOTE",
+      "file": "scenario_c_description.md",
+      "note": "Scenario C: image only; all dimensions must come from confirmation or remain missing."
+    }
+  ],
+  "global_dimensions": {
+    "finished_worktop_height_mm": 910,
+    "toe_kick_height_mm": 100,
+    "countertop_thickness_mm": 40
+  },
+  "assemblies": [
+    {
+      "id": "ASM_C",
+      "kind": "LINEAR_RUN",
+      "overall_width_mm": 600,
+      "overall_depth_mm": 560,
+      "finished_height_mm": 910,
+      "modules": [
+        {
+          "id": "MOD_C_01",
+          "module_type": "BASE_CABINET",
+          "role": "GENERAL_STORAGE",
+          "x_mm": 0,
+          "y_mm": 100,
+          "dimensions": {
+            "width_mm": { "state": "MISSING" },
+            "height_mm": { "state": "MISSING" },
+            "depth_mm": { "state": "MISSING" }
+          },
+          "fronts": [
+            {
+              "kind": "HINGED_DOOR",
+              "count": 1,
+              "evidence_state": "VISUAL_INFERRED"
+            }
+          ],
+          "appliance_slots": [],
+          "notes": [
+            "Image only; no explicit dimensions yet."
+          ]
+        }
+      ],
+      "openings": [],
+      "non_carcass_surfaces": []
+    }
+  ]
+}
