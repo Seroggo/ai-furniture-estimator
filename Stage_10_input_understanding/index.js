@@ -528,6 +528,218 @@ function buildConfirmedConfiguration(draft) {
   return { ok: true, confirmed: confirmed, issues: issues };
 }
 
+function sanitizePathForId(targetPath) {
+  var raw = String(targetPath || '').replace(/[^A-Za-z0-9]+/g, '_');
+  raw = raw.replace(/^_+|_+$/g, '');
+  return raw.length ? raw : 'root';
+}
+
+function makeQuestionId(targetPath, reason) {
+  return 'q_' + sanitizePathForId(targetPath) + '_' + String(reason || '').toLowerCase();
+}
+
+function isRequiredDimension(targetPath) {
+  return String(targetPath).indexOf('.dimensions.width_mm') !== -1 &&
+    String(targetPath).indexOf('.modules[') !== -1;
+}
+
+function reasonForState(state) {
+  if (state === 'MISSING') {
+    return 'MISSING_REQUIRED_VALUE';
+  }
+  if (state === 'CONFLICT') {
+    return 'UNRESOLVED_CONFLICT';
+  }
+  if (state === 'NEEDS_CONFIRMATION') {
+    return 'CONFIRMATION_REQUIRED';
+  }
+  return null;
+}
+
+function compareTargetPath(a, b) {
+  var pa = String(a.Target_path);
+  var pb = String(b.Target_path);
+  if (pa < pb) {
+    return -1;
+  }
+  if (pa > pb) {
+    return 1;
+  }
+  return 0;
+}
+
+function sortByTargetPath(arr) {
+  return arr.slice().sort(compareTargetPath);
+}
+
+function collectDimensionCells(draft) {
+  var cells = [];
+  if (!isPlainObject(draft) || !Array.isArray(draft.assemblies)) {
+    return cells;
+  }
+  for (var a = 0; a < draft.assemblies.length; a += 1) {
+    var assembly = draft.assemblies[a];
+    if (!isPlainObject(assembly) || !Array.isArray(assembly.modules)) {
+      continue;
+    }
+    for (var m = 0; m < assembly.modules.length; m += 1) {
+      var module_ = assembly.modules[m];
+      if (!isPlainObject(module_) || !isPlainObject(module_.dimensions)) {
+        continue;
+      }
+      var basePath = '$.assemblies[' + a + '].modules[' + m + '].dimensions';
+      var dims = module_.dimensions;
+      var fields = ['width_mm', 'height_mm', 'depth_mm'];
+      for (var f = 0; f < fields.length; f += 1) {
+        var field = fields[f];
+        var cell = dims[field];
+        if (isPlainObject(cell)) {
+          cells.push({
+            target_path: basePath + '.' + field,
+            field: field,
+            cell: cell
+          });
+        }
+      }
+    }
+  }
+  return cells;
+}
+
+function sortedUniqueNumbers(values) {
+  var seen = {};
+  var out = [];
+  for (var i = 0; i < values.length; i += 1) {
+    var v = values[i];
+    if (isNumber(v) && !Object.prototype.hasOwnProperty.call(seen, v)) {
+      seen[v] = true;
+      out.push(v);
+    }
+  }
+  out.sort(function (x, y) { return x - y; });
+  return out;
+}
+
+function clarifyDraft(draft) {
+  var cells = collectDimensionCells(draft);
+
+  var understood = [];
+  var missing = [];
+  var conflicts = [];
+  var defaultCandidates = [];
+  var blockers = [];
+  var questions = [];
+
+  for (var i = 0; i < cells.length; i += 1) {
+    var entry = cells[i];
+    var targetPath = entry.target_path;
+    var cell = entry.cell;
+    var state = cell.state;
+    var required = isRequiredDimension(targetPath);
+
+    if (cell.source_type === 'DEFAULT_CANDIDATE' && cell.value !== undefined && cell.value !== null) {
+      defaultCandidates.push({
+        Target_path: targetPath,
+        Value: cell.value,
+        Evidence_id: cell.source_ref || null
+      });
+    }
+
+    if (state === 'KNOWN') {
+      if (isPositiveNumber(cell.value)) {
+        understood.push({
+          Target_path: targetPath,
+          Value: cell.value,
+          Selected_evidence_id: cell.source_ref || null
+        });
+      }
+      continue;
+    }
+
+    if (state === 'MISSING') {
+      missing.push({ Target_path: targetPath });
+      if (required) {
+        var missingReason = 'MISSING_REQUIRED_VALUE';
+        blockers.push({ Target_path: targetPath, Reason: missingReason });
+        questions.push({
+          Question_id: makeQuestionId(targetPath, missingReason),
+          Target_path: targetPath,
+          Reason: missingReason,
+          Current_state: state,
+          Options: []
+        });
+      }
+      continue;
+    }
+
+    if (state === 'CONFLICT') {
+      var rawOptions = Array.isArray(cell.options) ? cell.options : [];
+      var conflictOptions = sortedUniqueNumbers(rawOptions);
+      var conflictEvidence = [];
+      for (var c = 0; c < conflictOptions.length; c += 1) {
+        conflictEvidence.push({ Value: conflictOptions[c] });
+      }
+      var conflictRecord = {
+        Target_path: targetPath,
+        Options: conflictOptions,
+        Evidence: conflictEvidence
+      };
+      if (isNonEmptyString(cell.source_ref)) {
+        conflictRecord.Source_ref = cell.source_ref;
+      }
+      if (isNonEmptyString(cell.source_type)) {
+        conflictRecord.Source_type = cell.source_type;
+      }
+      if (isNonEmptyString(cell.evidence_state)) {
+        conflictRecord.Evidence_state = cell.evidence_state;
+      }
+      if (isNonEmptyString(cell.note)) {
+        conflictRecord.Note = cell.note;
+      }
+      conflicts.push(conflictRecord);
+
+      var conflictReason = 'UNRESOLVED_CONFLICT';
+      blockers.push({ Target_path: targetPath, Reason: conflictReason });
+      questions.push({
+        Question_id: makeQuestionId(targetPath, conflictReason),
+        Target_path: targetPath,
+        Reason: conflictReason,
+        Current_state: state,
+        Options: conflictOptions
+      });
+      continue;
+    }
+
+    if (state === 'NEEDS_CONFIRMATION') {
+      var confirmReason = 'CONFIRMATION_REQUIRED';
+      var confirmOptions = [];
+      if (cell.source_type === 'DEFAULT_CANDIDATE' && cell.value !== undefined && cell.value !== null) {
+        confirmOptions = [cell.value];
+      }
+      questions.push({
+        Question_id: makeQuestionId(targetPath, confirmReason),
+        Target_path: targetPath,
+        Reason: confirmReason,
+        Current_state: state,
+        Options: confirmOptions
+      });
+      if (required) {
+        blockers.push({ Target_path: targetPath, Reason: confirmReason });
+      }
+      continue;
+    }
+  }
+
+  return {
+    Understood: sortByTargetPath(understood),
+    Missing: sortByTargetPath(missing),
+    Conflicts: sortByTargetPath(conflicts),
+    Default_candidates: sortByTargetPath(defaultCandidates),
+    Blockers: sortByTargetPath(blockers),
+    Questions: sortByTargetPath(questions)
+  };
+}
+
 module.exports = {
   EVIDENCE_STATES: EVIDENCE_STATES,
   EVIDENCE_SOURCE_TYPES: EVIDENCE_SOURCE_TYPES,
@@ -538,5 +750,7 @@ module.exports = {
   CONFIRMED_STATUS: CONFIRMED_STATUS,
   validateEvidence: validateEvidence,
   validateDraft: validateDraft,
-  buildConfirmedConfiguration: buildConfirmedConfiguration
+  buildConfirmedConfiguration: buildConfirmedConfiguration,
+  clarifyDraft: clarifyDraft,
+  ClarifyDraft: clarifyDraft
 };
