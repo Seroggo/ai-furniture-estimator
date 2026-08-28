@@ -740,6 +740,8 @@ function clarifyDraft(draft) {
   };
 }
 
+var fusion = require('./fusion.js');
+
 module.exports = {
   EVIDENCE_STATES: EVIDENCE_STATES,
   EVIDENCE_SOURCE_TYPES: EVIDENCE_SOURCE_TYPES,
@@ -752,5 +754,7 @@ module.exports = {
   validateDraft: validateDraft,
   buildConfirmedConfiguration: buildConfirmedConfiguration,
   clarifyDraft: clarifyDraft,
-  ClarifyDraft: clarifyDraft
+  ClarifyDraft: clarifyDraft,
+  fuseEvidence: fusion.fuseEvidence,
+  FuseEvidence: fusion.fuseEvidence
 };
