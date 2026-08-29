@@ -1,5 +1,5 @@
 // GENERATED FILE. DO NOT EDIT.
-// Source: docs/human-ux-patch/custom-price-schema.json.
+// Source: contracts/legacy-apps-script/custom-price-schema.json.
 // Regenerate: python tools/generate_human_ux_manifest.py
 var HUMAN_UX_MANIFEST = Object.freeze({
   "sheetName": "Custom_Price",

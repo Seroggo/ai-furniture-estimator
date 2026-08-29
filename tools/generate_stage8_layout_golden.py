@@ -8,12 +8,13 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
+if str(ROOT / "legacy") not in sys.path:
+    sys.path.insert(0, str(ROOT / "legacy"))
 
 from calculation_model import FillerPolicy, LayoutRequest, RequiredModule, compose_layout
 
 
-TARGET = ROOT / "tests" / "fixtures" / "stage8-layout-golden.json"
+TARGET = ROOT / "fixtures" / "legacy" / "stage8-layout-golden.json"
 
 
 SCENARIOS = [
@@ -70,7 +71,7 @@ def projection(result) -> dict[str, object]:
 
 
 def render() -> str:
-    output = {"fixture_version": "stage8-layout-golden-v1", "reference": "calculation_model/layout_configurator.py", "scenarios": []}
+    output = {"fixture_version": "stage8-layout-golden-v1", "reference": "legacy/calculation_model/layout_configurator.py", "scenarios": []}
     for scenario in SCENARIOS:
         result = compose_layout(request_from_json(scenario["request"]))
         output["scenarios"].append({**scenario, "expected": projection(result)})

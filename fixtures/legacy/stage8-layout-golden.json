@@ -1,0 +1,226 @@
+{
+  "fixture_version": "stage8-layout-golden-v1",
+  "reference": "legacy/calculation_model/layout_configurator.py",
+  "scenarios": [
+    {
+      "name": "rational_combination_with_filler",
+      "request": {
+        "run_length_mm": 2650,
+        "filler_policy": {
+          "min_width_mm": 0,
+          "max_width_mm": 50,
+          "location": "end"
+        }
+      },
+      "expected": {
+        "status": "VALID",
+        "widths_mm": [
+          800,
+          600,
+          600,
+          600
+        ],
+        "module_classes": [
+          "base_general",
+          "base_general",
+          "base_general",
+          "base_general"
+        ],
+        "roles": [
+          "generic_storage",
+          "generic_storage",
+          "generic_storage",
+          "generic_storage"
+        ],
+        "required": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "market_ranks": [
+          "B",
+          "A",
+          "A",
+          "A"
+        ],
+        "entity_types": [
+          "MODULE",
+          "MODULE",
+          "MODULE",
+          "MODULE"
+        ],
+        "occupied_length_mm": 2600,
+        "remainder_mm": 50,
+        "filler_width_mm": 50
+      }
+    },
+    {
+      "name": "mandatory_dishwasher_slot",
+      "request": {
+        "run_length_mm": 2400,
+        "required_modules": [
+          {
+            "module_id": "dishwasher",
+            "role": "dishwasher_slot",
+            "module_class": "base_dishwasher_slot",
+            "width_mm": 600,
+            "fixed_position": 1
+          }
+        ]
+      },
+      "expected": {
+        "status": "VALID",
+        "widths_mm": [
+          600,
+          600,
+          600,
+          600
+        ],
+        "module_classes": [
+          "base_general",
+          "base_dishwasher_slot",
+          "base_general",
+          "base_general"
+        ],
+        "roles": [
+          "generic_storage",
+          "dishwasher_slot",
+          "generic_storage",
+          "generic_storage"
+        ],
+        "required": [
+          false,
+          true,
+          false,
+          false
+        ],
+        "market_ranks": [
+          "A",
+          "A",
+          "A",
+          "A"
+        ],
+        "entity_types": [
+          "MODULE",
+          "APPLIANCE_SLOT",
+          "MODULE",
+          "MODULE"
+        ],
+        "occupied_length_mm": 2400,
+        "remainder_mm": 0,
+        "filler_width_mm": null
+      }
+    },
+    {
+      "name": "specialized_width_not_generic",
+      "request": {
+        "run_length_mm": 1350,
+        "filler_policy": {
+          "min_width_mm": 0,
+          "max_width_mm": 150,
+          "location": "end"
+        }
+      },
+      "expected": {
+        "status": "VALID",
+        "widths_mm": [
+          600,
+          600
+        ],
+        "module_classes": [
+          "base_general",
+          "base_general"
+        ],
+        "roles": [
+          "generic_storage",
+          "generic_storage"
+        ],
+        "required": [
+          false,
+          false
+        ],
+        "market_ranks": [
+          "A",
+          "A"
+        ],
+        "entity_types": [
+          "MODULE",
+          "MODULE"
+        ],
+        "occupied_length_mm": 1200,
+        "remainder_mm": 150,
+        "filler_width_mm": 150
+      }
+    },
+    {
+      "name": "explicit_specialized_cargo",
+      "request": {
+        "run_length_mm": 1350,
+        "required_modules": [
+          {
+            "module_id": "cargo",
+            "role": "narrow_cargo",
+            "module_class": "base_narrow_cargo",
+            "width_mm": 150,
+            "fixed_position": null
+          }
+        ]
+      },
+      "expected": {
+        "status": "VALID",
+        "widths_mm": [
+          150,
+          600,
+          600
+        ],
+        "module_classes": [
+          "base_narrow_cargo",
+          "base_general",
+          "base_general"
+        ],
+        "roles": [
+          "narrow_cargo",
+          "generic_storage",
+          "generic_storage"
+        ],
+        "required": [
+          true,
+          false,
+          false
+        ],
+        "market_ranks": [
+          "D",
+          "A",
+          "A"
+        ],
+        "entity_types": [
+          "MODULE",
+          "MODULE",
+          "MODULE"
+        ],
+        "occupied_length_mm": 1350,
+        "remainder_mm": 0,
+        "filler_width_mm": null
+      }
+    },
+    {
+      "name": "no_valid_layout",
+      "request": {
+        "run_length_mm": 650
+      },
+      "expected": {
+        "status": "NO_VALID_LAYOUT",
+        "widths_mm": [],
+        "module_classes": [],
+        "roles": [],
+        "required": [],
+        "market_ranks": [],
+        "entity_types": [],
+        "occupied_length_mm": 0,
+        "remainder_mm": 650,
+        "filler_width_mm": null
+      }
+    }
+  ]
+}

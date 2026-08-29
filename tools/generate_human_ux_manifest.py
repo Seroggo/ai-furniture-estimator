@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SOURCE = ROOT / "docs" / "human-ux-patch" / "custom-price-schema.json"
+DEFAULT_SOURCE = ROOT / "contracts" / "legacy-apps-script" / "custom-price-schema.json"
 DEFAULT_OUTPUT = ROOT / "apps-script" / "generated" / "human_ux_manifest.gs"
 
 
@@ -45,7 +45,7 @@ def render_manifest(manifest: dict[str, object]) -> str:
     payload = json.dumps(manifest, ensure_ascii=False, indent=2)
     return (
         "// GENERATED FILE. DO NOT EDIT.\n"
-        "// Source: docs/human-ux-patch/custom-price-schema.json.\n"
+        "// Source: contracts/legacy-apps-script/custom-price-schema.json.\n"
         "// Regenerate: python tools/generate_human_ux_manifest.py\n"
         f"var HUMAN_UX_MANIFEST = Object.freeze({payload});\n"
     )

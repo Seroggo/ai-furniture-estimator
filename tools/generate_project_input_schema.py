@@ -1,6 +1,6 @@
 """Generate the Apps Script representation of the canonical Project Input schema.
 
-The canonical source of truth is docs/stage-7-openrouter-parser/project-input.schema.json.
+The canonical source of truth is contracts/legacy-apps-script/project-input.schema.json.
 This generator resolves all internal $ref/$defs references into one self-contained
 JSON Schema object that Apps Script uses for deterministic local validation, plus an
 OpenRouter/OpenAI strict Structured Outputs transport representation generated from
@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SOURCE = ROOT / "docs" / "stage-7-openrouter-parser" / "project-input.schema.json"
+DEFAULT_SOURCE = ROOT / "contracts" / "legacy-apps-script" / "project-input.schema.json"
 DEFAULT_OUTPUT = ROOT / "apps-script" / "generated" / "project_input_schema.gs"
 
 SCHEMA_VERSION_ENUM = ("project-input-v2",)
@@ -204,7 +204,7 @@ def render_schema(schema: dict[str, Any]) -> str:
     version = schema["properties"]["schema_version"]["enum"][0]
     return (
         "// GENERATED FILE. DO NOT EDIT.\n"
-        "// Source: docs/stage-7-openrouter-parser/project-input.schema.json.\n"
+        "// Source: contracts/legacy-apps-script/project-input.schema.json.\n"
         "// Regenerate: python tools/generate_project_input_schema.py\n"
         f"var PROJECT_INPUT_SCHEMA_VERSION = {json.dumps(version, ensure_ascii=False)};\n"
         "// Canonical business/local validation contract.\n"

@@ -1,5 +1,5 @@
 // GENERATED FILE. DO NOT EDIT.
-// Source: docs/stage-7-openrouter-parser/project-input.schema.json.
+// Source: contracts/legacy-apps-script/project-input.schema.json.
 // Regenerate: python tools/generate_project_input_schema.py
 var PROJECT_INPUT_SCHEMA_VERSION = "project-input-v2";
 // Canonical business/local validation contract.

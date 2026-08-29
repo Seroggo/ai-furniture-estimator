@@ -9,8 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_COLUMNS = ROOT / "docs" / "stage-4-google-sheets" / "sheets-columns.csv"
-DEFAULT_RELATIONS = ROOT / "docs" / "stage-4-google-sheets" / "sheets-relations.csv"
+DEFAULT_COLUMNS = ROOT / "archive" / "stages" / "stage-4-google-sheets" / "sheets-columns.csv"
+DEFAULT_RELATIONS = ROOT / "archive" / "stages" / "stage-4-google-sheets" / "sheets-relations.csv"
 
 COLUMN_FIELDS = (
     "sheet_name",

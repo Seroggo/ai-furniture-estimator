@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "docs" / "stage-8-calculation-kernel" / "calculation-result.schema.json"
+SOURCE = ROOT / "contracts" / "legacy-apps-script" / "calculation-result.schema.json"
 TARGET = ROOT / "apps-script" / "generated" / "calculation_result_schema.gs"
 
 

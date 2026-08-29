@@ -7,8 +7,8 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
   "schemaVersion": 1,
   "compatibleRuntimeVersion": "stage-5-setup-v1",
   "sourceArtifacts": [
-    "docs/stage-4-google-sheets/sheets-columns.csv",
-    "docs/stage-4-google-sheets/sheets-relations.csv"
+    "archive/stages/stage-4-google-sheets/sheets-columns.csv",
+    "archive/stages/stage-4-google-sheets/sheets-relations.csv"
   ],
   "sheetOrder": [
     "Schema_Meta",
@@ -2060,7 +2060,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DRAFT",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Schema_Meta.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Schema_Meta.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2070,7 +2070,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "ACTIVE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Schema_Meta.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Schema_Meta.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2080,7 +2080,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "RETIRED",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Schema_Meta.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Schema_Meta.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2090,7 +2090,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "STRING",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2100,7 +2100,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "INTEGER",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2110,7 +2110,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DECIMAL",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2120,7 +2120,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "BOOLEAN",
       "sort_order": 4,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2130,7 +2130,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "JSON",
       "sort_order": 5,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#System_Config.value_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2140,7 +2140,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DRAFT",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#System_Config.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#System_Config.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2150,7 +2150,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "ACTIVE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#System_Config.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#System_Config.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2160,7 +2160,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "RETIRED",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#System_Config.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#System_Config.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2170,7 +2170,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "WIDTH",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.dimension\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.dimension\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2180,7 +2180,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "HEIGHT",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.dimension\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.dimension\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2190,7 +2190,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DEPTH",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.dimension\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.dimension\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2200,7 +2200,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "NOMINAL_WIDTH",
       "sort_order": 4,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.dimension\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.dimension\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2210,7 +2210,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "EXACT",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.size_qualifier\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.size_qualifier\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2220,7 +2220,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "RANGE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.size_qualifier\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.size_qualifier\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2230,7 +2230,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "A",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2240,7 +2240,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "B",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2250,7 +2250,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "C",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2260,7 +2260,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "D",
       "sort_order": 4,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2270,7 +2270,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "E",
       "sort_order": 5,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rank\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2280,7 +2280,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "CONFIRMED",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2290,7 +2290,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DERIVED",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2300,7 +2300,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "PROVISIONAL",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2310,7 +2310,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "REQUIRES_EXPERT",
       "sort_order": 4,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2320,7 +2320,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "NOT_SUPPORTED",
       "sort_order": 5,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2330,7 +2330,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DRAFT",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2340,7 +2340,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "ACTIVE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2350,7 +2350,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "RETIRED",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Size_Rules.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2360,7 +2360,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "CONFIRMED",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2370,7 +2370,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DERIVED",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2380,7 +2380,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "PROVISIONAL",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2390,7 +2390,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "REQUIRES_EXPERT",
       "sort_order": 4,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2400,7 +2400,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "NOT_SUPPORTED",
       "sort_order": 5,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2410,7 +2410,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DRAFT",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2420,7 +2420,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "ACTIVE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2430,7 +2430,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "RETIRED",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Module_Recipes.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2440,7 +2440,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "MATERIAL",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2450,7 +2450,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "EDGE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2460,7 +2460,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "HARDWARE",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2470,7 +2470,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "WORK",
       "sort_order": 4,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2480,7 +2480,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "SERVICE",
       "sort_order": 5,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.catalog_item_type\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2490,7 +2490,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DRAFT",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2500,7 +2500,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "ACTIVE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2510,7 +2510,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "RETIRED",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Catalog_Items.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2520,7 +2520,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "MANUAL_RUB",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#spr_price.pricing_mode\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#spr_price.pricing_mode\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2530,7 +2530,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "FX_AUTO",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#spr_price.pricing_mode\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#spr_price.pricing_mode\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2540,7 +2540,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "FX_MANUAL",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#spr_price.pricing_mode\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#spr_price.pricing_mode\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2550,7 +2550,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "GOOGLEFINANCE",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#spr_price.fx_rate_source\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#spr_price.fx_rate_source\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2560,7 +2560,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "MANUAL",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#spr_price.fx_rate_source\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#spr_price.fx_rate_source\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2570,7 +2570,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DRAFT",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#spr_price.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#spr_price.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2580,7 +2580,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "READY",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#spr_price.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#spr_price.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2590,7 +2590,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "INACTIVE",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#spr_price.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#spr_price.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2600,7 +2600,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DRAFT",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Pricebook_Versions.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Pricebook_Versions.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2610,7 +2610,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "ACTIVE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Pricebook_Versions.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Pricebook_Versions.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2620,7 +2620,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "RETIRED",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Pricebook_Versions.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Pricebook_Versions.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2630,7 +2630,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "production_pricebook",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Pricebook_Versions.source_context\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Pricebook_Versions.source_context\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2640,7 +2640,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "ENABLED",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Prices.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Prices.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2650,7 +2650,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DISABLED",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Prices.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Prices.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2660,7 +2660,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "NOT_APPLICABLE",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Prices.fx_rate_source\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Prices.fx_rate_source\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2670,7 +2670,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "GOOGLEFINANCE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Prices.fx_rate_source\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Prices.fx_rate_source\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2680,7 +2680,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "MANUAL",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Prices.fx_rate_source\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Prices.fx_rate_source\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2690,7 +2690,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "MANUAL_RUB",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Prices.price_derivation_mode\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Prices.price_derivation_mode\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2700,7 +2700,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "FX_AUTO",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Prices.price_derivation_mode\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Prices.price_derivation_mode\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2710,7 +2710,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "FX_MANUAL",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Prices.price_derivation_mode\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Prices.price_derivation_mode\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2720,7 +2720,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "CONFIRMED",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2730,7 +2730,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DERIVED",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2740,7 +2740,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "PROVISIONAL",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2750,7 +2750,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "REQUIRES_EXPERT",
       "sort_order": 4,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2760,7 +2760,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "NOT_SUPPORTED",
       "sort_order": 5,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.rule_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2770,7 +2770,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "CODE_BINDING",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.execution_mode\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.execution_mode\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2780,7 +2780,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "METADATA_ONLY",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.execution_mode\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.execution_mode\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2790,7 +2790,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "BLOCKING_STATUS",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.execution_mode\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.execution_mode\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2800,7 +2800,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "DRAFT",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2810,7 +2810,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "ACTIVE",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2820,7 +2820,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "RETIRED",
       "sort_order": 3,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.lifecycle_status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Calculation_Rules.lifecycle_status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2830,7 +2830,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "ACTIVE",
       "sort_order": 1,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Reference_Values.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Reference_Values.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     },
     {
@@ -2840,7 +2840,7 @@ var STAGE5_SCHEMA_MANIFEST = Object.freeze({
       "display_name": "RETIRED",
       "sort_order": 2,
       "status": "ACTIVE",
-      "provenance": "[\"docs/stage-4-google-sheets/sheets-columns.csv#Reference_Values.status\"]",
+      "provenance": "[\"archive/stages/stage-4-google-sheets/sheets-columns.csv#Reference_Values.status\"]",
       "notes": "System enum value from accepted Stage 4 schema"
     }
   ],

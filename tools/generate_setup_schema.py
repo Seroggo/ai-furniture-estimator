@@ -10,6 +10,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT / "legacy") not in sys.path:
+    sys.path.insert(0, str(ROOT / "legacy"))
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -104,7 +106,7 @@ def build_manifest(
                     "status": "ACTIVE",
                     "provenance": json.dumps(
                         [
-                            "docs/stage-4-google-sheets/sheets-columns.csv#"
+                            "archive/stages/stage-4-google-sheets/sheets-columns.csv#"
                             f"{row['sheet_name']}.{row['column_name']}"
                         ],
                         ensure_ascii=False,
@@ -155,8 +157,8 @@ def build_manifest(
         "schemaVersion": SCHEMA_VERSION,
         "compatibleRuntimeVersion": COMPATIBLE_RUNTIME_VERSION,
         "sourceArtifacts": [
-            "docs/stage-4-google-sheets/sheets-columns.csv",
-            "docs/stage-4-google-sheets/sheets-relations.csv",
+            "archive/stages/stage-4-google-sheets/sheets-columns.csv",
+            "archive/stages/stage-4-google-sheets/sheets-relations.csv",
         ],
         "sheetOrder": sheet_order,
         "sheets": sheets,
