@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "sheet_name": "Construction_Defaults",
+  "write_mode": "EDIT",
+  "human_editable": true,
+  "description": "Hidden construction default values per module type and condition. Drives default-candidate selection and required-question marking during input understanding and construction.",
+  "columns": [
+    {
+      "name": "module_type",
+      "order": 1,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Module type this default applies to, e.g. carcass, drawer, door.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 80
+      }
+    },
+    {
+      "name": "condition",
+      "order": 2,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Applicability condition (free-text human-readable, e.g. 'standard', 'tall_unit_gt_2000').",
+      "validation": {
+        "max_length": 120
+      }
+    },
+    {
+      "name": "parameter",
+      "order": 3,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Construction parameter name, e.g. back_insert_thickness_mm, shelf_count.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 120
+      }
+    },
+    {
+      "name": "default_value",
+      "order": 4,
+      "type": ["string", "number", "integer", "boolean", "null"],
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Default value for the parameter. Nullable only when resolution_mode is REQUIRED_QUESTION.",
+      "validation": {}
+    },
+    {
+      "name": "unit",
+      "order": 5,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Unit of measure for the default value, e.g. mm, pcs.",
+      "validation": {
+        "max_length": 20
+      }
+    },
+    {
+      "name": "resolution_mode",
+      "order": 6,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "How the parameter is resolved during input understanding: DEFAULT_CANDIDATE provides a default that may be accepted; REQUIRED_QUESTION forces a clarifying question.",
+      "validation": {
+        "enum": ["DEFAULT_CANDIDATE", "REQUIRED_QUESTION"]
+      }
+    },
+    {
+      "name": "confirmation_required",
+      "order": 7,
+      "type": "boolean",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Whether the user must confirm the default before it is applied.",
+      "validation": {}
+    },
+    {
+      "name": "active",
+      "order": 8,
+      "type": "boolean",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Whether the rule is currently active.",
+      "validation": {}
+    },
+    {
+      "name": "description",
+      "order": 9,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Human-readable description of the default rule.",
+      "validation": {
+        "max_length": 500
+      }
+    },
+    {
+      "name": "rule_id",
+      "order": 10,
+      "type": "string",
+      "required": true,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Stable machine identifier of the default rule. Used for stable joins; never edited by users.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 64
+      }
+    }
+  ]
+}

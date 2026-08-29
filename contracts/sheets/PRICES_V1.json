@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "sheet_name": "Prices",
+  "write_mode": "EDIT",
+  "human_editable": true,
+  "description": "Unified user-facing price list. Single source of truth for catalog pricing used in presale calculations. No separate machine price sheets.",
+  "columns": [
+    {
+      "name": "category",
+      "order": 1,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Human-readable price category, e.g. MATERIALS, EDGE, HARDWARE, WORKS.",
+      "validation": {
+        "enum": ["MATERIALS", "EDGE", "HARDWARE", "WORKS", "OTHER"]
+      }
+    },
+    {
+      "name": "name",
+      "order": 2,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Human-readable item name.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 200
+      }
+    },
+    {
+      "name": "unit",
+      "order": 3,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Unit of measure, e.g. pcs, m, m2, kg, sheet.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 20
+      }
+    },
+    {
+      "name": "price",
+      "order": 4,
+      "type": "number",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Unit price in the given currency.",
+      "validation": {
+        "minimum": 0
+      }
+    },
+    {
+      "name": "currency",
+      "order": 5,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "ISO 4217 currency code, e.g. RUB, EUR, USD.",
+      "validation": {
+        "pattern": "^[A-Z]{3}$"
+      }
+    },
+    {
+      "name": "vendor",
+      "order": 6,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Vendor or supplier name.",
+      "validation": {
+        "max_length": 120
+      }
+    },
+    {
+      "name": "article",
+      "order": 7,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Vendor article / SKU code, human-editable.",
+      "validation": {
+        "max_length": 80
+      }
+    },
+    {
+      "name": "active",
+      "order": 8,
+      "type": "boolean",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Whether the price row is currently active and used in calculations.",
+      "validation": {}
+    },
+    {
+      "name": "notes",
+      "order": 9,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Free-text user notes about the price row.",
+      "validation": {
+        "max_length": 500
+      }
+    },
+    {
+      "name": "updated_at",
+      "order": 10,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Last user edit timestamp (ISO 8601, UTC).",
+      "validation": {
+        "format": "date-time"
+      }
+    },
+    {
+      "name": "item_id",
+      "order": 11,
+      "type": "string",
+      "required": true,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Stable machine identifier of the price row. Used for stable joins; never edited by users.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 64
+      }
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "sheet_name": "SYSTEM",
+  "write_mode": "OVERWRITE",
+  "human_editable": false,
+  "description": "Technical key/value sheet for machine state and snapshots. All columns are hidden and not user-editable. Secrets are forbidden; no api_key, token, password, or secret keys are allowed.",
+  "columns": [
+    {
+      "name": "Key",
+      "order": 1,
+      "type": "string",
+      "required": true,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "System key name. Must be one of allowed_keys.",
+      "validation": {}
+    },
+    {
+      "name": "Value",
+      "order": 2,
+      "type": ["string", "number", "integer", "boolean", "null"],
+      "required": true,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "System value. For JSON-bearing keys the value is a serialized JSON string.",
+      "validation": {}
+    },
+    {
+      "name": "Value_type",
+      "order": 3,
+      "type": "string",
+      "required": true,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Declared type of the stored value.",
+      "validation": {
+        "enum": ["string", "number", "integer", "boolean", "json", "null"]
+      }
+    },
+    {
+      "name": "Updated_at",
+      "order": 4,
+      "type": "string",
+      "required": true,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Last update timestamp (ISO 8601, UTC).",
+      "validation": {
+        "format": "date-time"
+      }
+    }
+  ],
+  "allowed_keys": [
+    {
+      "key": "Calculation_id",
+      "value_type": "string",
+      "description": "Stable machine identifier of the current/last calculation."
+    },
+    {
+      "key": "Timestamp",
+      "value_type": "string",
+      "description": "ISO 8601 UTC timestamp of the last system update."
+    },
+    {
+      "key": "Status",
+      "value_type": "string",
+      "description": "Current system/calculation status."
+    },
+    {
+      "key": "Vision_model",
+      "value_type": "string",
+      "description": "Vision model identifier used for the last input understanding run."
+    },
+    {
+      "key": "Currency",
+      "value_type": "string",
+      "description": "ISO 4217 currency code used for the last calculation."
+    },
+    {
+      "key": "Fx_rate_used",
+      "value_type": "number",
+      "description": "FX rate used for currency conversion in the last calculation."
+    },
+    {
+      "key": "Price_snapshot_created_at",
+      "value_type": "string",
+      "description": "ISO 8601 UTC timestamp when the price snapshot was created."
+    },
+    {
+      "key": "Price_snapshot_json",
+      "value_type": "json",
+      "description": "Serialized JSON of the price snapshot used for the last calculation."
+    },
+    {
+      "key": "App_version",
+      "value_type": "string",
+      "description": "Application version that wrote the system state."
+    },
+    {
+      "key": "Schema_version",
+      "value_type": "string",
+      "description": "Sheets schema version, matching SHEETS_V1.schema_version."
+    },
+    {
+      "key": "Construction_profile_version",
+      "value_type": "string",
+      "description": "Construction profile version used for the last calculation."
+    },
+    {
+      "key": "Confirmed_configuration_json",
+      "value_type": "json",
+      "description": "Serialized JSON of the confirmed configuration used for the last calculation."
+    },
+    {
+      "key": "Construction_result_json",
+      "value_type": "json",
+      "description": "Serialized JSON of the construction result for the last calculation."
+    }
+  ],
+  "forbidden_keys": ["api_key", "token", "password", "secret", "ApiKey", "Token", "Password", "Secret"]
+}

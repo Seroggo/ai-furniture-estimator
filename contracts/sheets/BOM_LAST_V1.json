@@ -1,0 +1,182 @@
+{
+  "schema_version": "1.0",
+  "sheet_name": "BOM_LAST",
+  "write_mode": "OVERWRITE",
+  "human_editable": true,
+  "description": "Last human-readable bill of materials. The sheet is fully overwritten on each calculation. Simple tabular format suitable for export to Excel. Full BOM JSON is not stored here.",
+  "sections": ["PARTS", "MATERIALS", "EDGE", "HARDWARE", "WORKS", "TOTALS"],
+  "columns": [
+    {
+      "name": "section",
+      "order": 1,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "BOM section grouping. Must be one of the defined sections.",
+      "validation": {
+        "enum": ["PARTS", "MATERIALS", "EDGE", "HARDWARE", "WORKS", "TOTALS"]
+      }
+    },
+    {
+      "name": "item_name",
+      "order": 2,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Human-readable line item name.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 200
+      }
+    },
+    {
+      "name": "specification",
+      "order": 3,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Human-readable specification (material, color, brand).",
+      "validation": {
+        "max_length": 300
+      }
+    },
+    {
+      "name": "size",
+      "order": 4,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Human-readable dimensions string, e.g. '800x600x18 mm'.",
+      "validation": {
+        "max_length": 120
+      }
+    },
+    {
+      "name": "quantity",
+      "order": 5,
+      "type": "number",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Line item quantity.",
+      "validation": {
+        "minimum": 0
+      }
+    },
+    {
+      "name": "unit",
+      "order": 6,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Unit of measure, e.g. pcs, m, m2, kg.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 20
+      }
+    },
+    {
+      "name": "unit_price",
+      "order": 7,
+      "type": "number",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Unit price in the calculation currency.",
+      "validation": {
+        "minimum": 0
+      }
+    },
+    {
+      "name": "total",
+      "order": 8,
+      "type": "number",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Line total = quantity * unit_price.",
+      "validation": {
+        "minimum": 0
+      }
+    },
+    {
+      "name": "comment",
+      "order": 9,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Free-text user comment.",
+      "validation": {
+        "max_length": 500
+      }
+    },
+    {
+      "name": "source_module",
+      "order": 10,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Human-readable source module that produced the line, e.g. 'carcass-1', 'drawer-2'.",
+      "validation": {
+        "max_length": 80
+      }
+    },
+    {
+      "name": "item_id",
+      "order": 11,
+      "type": "string",
+      "required": true,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Stable machine identifier of the BOM line item.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 64
+      }
+    },
+    {
+      "name": "module_id",
+      "order": 12,
+      "type": "string",
+      "required": false,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Stable machine identifier of the source module.",
+      "validation": {
+        "max_length": 64
+      }
+    },
+    {
+      "name": "material_code",
+      "order": 13,
+      "type": "string",
+      "required": false,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Stable machine material code for pricebook joins.",
+      "validation": {
+        "max_length": 80
+      }
+    },
+    {
+      "name": "calculation_id",
+      "order": 14,
+      "type": "string",
+      "required": true,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Stable machine identifier of the calculation that produced this BOM.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 64
+      }
+    }
+  ]
+}

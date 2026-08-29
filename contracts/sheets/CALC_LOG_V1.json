@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0",
+  "sheet_name": "CALC_LOG",
+  "write_mode": "APPEND",
+  "human_editable": true,
+  "description": "Short history of presale calculations. One row = one calculation. Full BOM and full calculation JSON are not stored here.",
+  "columns": [
+    {
+      "name": "timestamp",
+      "order": 1,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Calculation timestamp (ISO 8601, UTC).",
+      "validation": {
+        "format": "date-time"
+      }
+    },
+    {
+      "name": "project_name",
+      "order": 2,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Human-readable project name.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 200
+      }
+    },
+    {
+      "name": "manager",
+      "order": 3,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Manager or operator name.",
+      "validation": {
+        "max_length": 120
+      }
+    },
+    {
+      "name": "status",
+      "order": 4,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Calculation status.",
+      "validation": {
+        "enum": ["DRAFT", "CONFIRMED", "COMPLETED", "FAILED", "ARCHIVED"]
+      }
+    },
+    {
+      "name": "currency",
+      "order": 5,
+      "type": "string",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "ISO 4217 currency code used for totals.",
+      "validation": {
+        "pattern": "^[A-Z]{3}$"
+      }
+    },
+    {
+      "name": "material_total",
+      "order": 6,
+      "type": "number",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Materials total in the calculation currency.",
+      "validation": {
+        "minimum": 0
+      }
+    },
+    {
+      "name": "hardware_total",
+      "order": 7,
+      "type": "number",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Hardware total in the calculation currency.",
+      "validation": {
+        "minimum": 0
+      }
+    },
+    {
+      "name": "work_total",
+      "order": 8,
+      "type": "number",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Works total in the calculation currency.",
+      "validation": {
+        "minimum": 0
+      }
+    },
+    {
+      "name": "grand_total",
+      "order": 9,
+      "type": "number",
+      "required": true,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Grand total = material_total + hardware_total + work_total.",
+      "validation": {
+        "minimum": 0
+      }
+    },
+    {
+      "name": "vision_model",
+      "order": 10,
+      "type": "string",
+      "required": false,
+      "human_editable": true,
+      "visibility": "VISIBLE",
+      "description": "Human-readable vision model identifier used for input understanding, if any.",
+      "validation": {
+        "max_length": 80
+      }
+    },
+    {
+      "name": "calculation_id",
+      "order": 11,
+      "type": "string",
+      "required": true,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Stable machine identifier of the calculation. Joins to BOM_LAST.calculation_id and SYSTEM.Calculation_id.",
+      "validation": {
+        "min_length": 1,
+        "max_length": 64
+      }
+    },
+    {
+      "name": "fx_rate_used",
+      "order": 12,
+      "type": "number",
+      "required": false,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "FX rate used for currency conversion, if any. Machine-managed snapshot value.",
+      "validation": {
+        "minimum": 0
+      }
+    }
+  ]
+}

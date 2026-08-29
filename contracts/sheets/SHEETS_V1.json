@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "manifest_name": "SHEETS_V1",
+  "description": "Google Sheets V1 deployment manifest. Defines exactly five tabs, their contract files, deployment order, write mode, and human-editability. A sixth tab must not be added without HQ decision.",
+  "sheets": [
+    {
+      "sheet_name": "Prices",
+      "contract_file": "PRICES_V1.json",
+      "order": 1,
+      "write_mode": "EDIT",
+      "human_editable": true
+    },
+    {
+      "sheet_name": "Construction_Defaults",
+      "contract_file": "CONSTRUCTION_DEFAULTS_V1.json",
+      "order": 2,
+      "write_mode": "EDIT",
+      "human_editable": true
+    },
+    {
+      "sheet_name": "BOM_LAST",
+      "contract_file": "BOM_LAST_V1.json",
+      "order": 3,
+      "write_mode": "OVERWRITE",
+      "human_editable": true
+    },
+    {
+      "sheet_name": "CALC_LOG",
+      "contract_file": "CALC_LOG_V1.json",
+      "order": 4,
+      "write_mode": "APPEND",
+      "human_editable": true
+    },
+    {
+      "sheet_name": "SYSTEM",
+      "contract_file": "SYSTEM_V1.json",
+      "order": 5,
+      "write_mode": "OVERWRITE",
+      "human_editable": false
+    }
+  ]
+}
