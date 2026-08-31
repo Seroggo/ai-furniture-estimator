@@ -94,6 +94,17 @@ function parseTargetPath(targetPath) {
     };
   }
 
+  var moduleConstructionMatch = /^assemblies\[(\d+)\]\.modules\[(\d+)\]\.construction\.([A-Za-z0-9_]+)$/.exec(normalized);
+  if (moduleConstructionMatch) {
+    return {
+      type: 'MODULE_CONSTRUCTION',
+      assemblyIndex: parseInt(moduleConstructionMatch[1], 10),
+      moduleIndex: parseInt(moduleConstructionMatch[2], 10),
+      parameter: moduleConstructionMatch[3],
+      normalizedPath: normalized
+    };
+  }
+
   var globalDimMatch = /^global_dimensions\.(finished_worktop_height_mm|toe_kick_height_mm|countertop_thickness_mm)$/.exec(normalized);
   if (globalDimMatch) {
     return {
@@ -140,6 +151,23 @@ function resolveCellLocation(draft, parsed) {
       },
       set: function (newCell) {
         module_.dimensions[parsed.dimensionKey] = newCell;
+      }
+    };
+  }
+
+  if (parsed.type === 'MODULE_CONSTRUCTION') {
+    if (!draft.assemblies || !draft.assemblies[parsed.assemblyIndex]) return null;
+    var constructionAssembly = draft.assemblies[parsed.assemblyIndex];
+    if (!constructionAssembly.modules || !constructionAssembly.modules[parsed.moduleIndex]) return null;
+    var constructionModule = constructionAssembly.modules[parsed.moduleIndex];
+    if (!isPlainObject(constructionModule.construction) || !isPlainObject(constructionModule.construction[parsed.parameter])) return null;
+    return {
+      kind: 'CONSTRUCTION_CELL',
+      get: function () {
+        return constructionModule.construction[parsed.parameter];
+      },
+      set: function (newCell) {
+        constructionModule.construction[parsed.parameter] = newCell;
       }
     };
   }
@@ -342,6 +370,15 @@ function fuseEvidence(draft, evidenceItems) {
         source_type: primarySourceType,
         evidence_state: 'EXPLICIT',
         note: 'Conflicting values at priority ' + primarySourceType + ': ' + uniqueValues.join(', ')
+      });
+    } else if (primarySourceType === 'USER_CONFIRMATION') {
+      location.set({
+        state: 'KNOWN',
+        value: clone(highestPriorityItems[0].value),
+        source_ref: primaryItem.source_ref,
+        source_type: primarySourceType,
+        evidence_state: 'MANAGER_CONFIRMED',
+        note: 'Fused value from ' + primarySourceType
       });
     }
   }

@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "npm run test:stage6 && npm run test:stage7 && npm run test:stage8 && npm run test:stage9 && npm run test:core && npm run test:stage10 && npm run test:regression && npm run test:sheets-v1 && npm run test:costing && npm run test:sheets-v1-writer",
+    "test": "npm run test:stage6 && npm run test:stage7 && npm run test:stage8 && npm run test:stage9 && npm run test:core && npm run test:stage10 && npm run test:predeployment-e2e && npm run test:regression && npm run test:sheets-v1 && npm run test:costing && npm run test:sheets-v1-writer",
     "test:stage6": "node --test tests/apps-script/test_stage6_apps_script.mjs",
     "test:stage7": "node --test tests/apps-script/test_stage7_openrouter_parser.mjs",
     "test:stage8": "node --test tests/apps-script/test_stage8_calculation_kernel.mjs",
@@ -14,6 +14,7 @@
     "test:stage10:fusion": "node --test tests/input-understanding/test_stage10_evidence_fusion.mjs",
     "test:stage10:confirmation": "node --test tests/input-understanding/test_stage10_confirmation.mjs",
     "test:stage10:e2e": "node --test tests/e2e/test_stage10_e2e.mjs",
+    "test:predeployment-e2e": "node --test tests/e2e/test_predeployment_pipeline_v1.mjs",
     "test:regression": "python -m unittest discover -s tests/legacy-calculation -p \"test_*.py\" && python -m unittest discover -s tests/sheets -p \"test_*.py\"",
     "test:sheets-v1": "python -m unittest tests/sheets/test_sheets_v1_generator.py && node --test tests/apps-script/test_sheets_v1_setup.mjs",
     "test:costing": "node --test tests/costing/test_costing_v1.mjs",

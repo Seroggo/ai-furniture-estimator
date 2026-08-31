@@ -176,6 +176,45 @@ function validateDimensionCell(cell, path, errors) {
   return true;
 }
 
+function validateConstructionParameterCell(cell, path, errors) {
+  if (!isPlainObject(cell)) {
+    errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'Construction parameter must be an object.', path));
+    return false;
+  }
+  if (!isNonEmptyString(cell.state) || !inEnum(cell.state, DRAFT_CELL_STATES)) {
+    errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'Construction parameter has an invalid state.', path + '.state'));
+    return false;
+  }
+  if (cell.state === 'KNOWN') {
+    if (!Object.prototype.hasOwnProperty.call(cell, 'value') || cell.value === undefined || cell.value === null) {
+      errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'KNOWN construction parameter requires a non-null value.', path + '.value'));
+      return false;
+    }
+    if (!isNonEmptyString(cell.source_ref)) {
+      errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'KNOWN construction parameter requires a source_ref.', path + '.source_ref'));
+      return false;
+    }
+    if (!isNonEmptyString(cell.source_type) || !inEnum(cell.source_type, EVIDENCE_SOURCE_TYPES)) {
+      errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'KNOWN construction parameter has an invalid source_type.', path + '.source_type'));
+      return false;
+    }
+    if (!isNonEmptyString(cell.evidence_state) || !inEnum(cell.evidence_state, DIMENSION_EVIDENCE_STATES)) {
+      errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'KNOWN construction parameter has an invalid evidence_state.', path + '.evidence_state'));
+      return false;
+    }
+    if (!isNonEmptyString(cell.note)) {
+      errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'KNOWN construction parameter requires a note.', path + '.note'));
+      return false;
+    }
+  } else if (cell.state === 'CONFLICT') {
+    if (!Array.isArray(cell.options) || cell.options.length < 2) {
+      errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'CONFLICT construction parameter requires at least two options.', path + '.options'));
+      return false;
+    }
+  }
+  return true;
+}
+
 function validateFront(front, path, errors) {
   if (!isPlainObject(front)) {
     errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'Front must be an object.', path));
@@ -292,6 +331,16 @@ function validateModule(module, assemblyIndex, moduleIndex, errors) {
   validateDimensionCell(module.dimensions.width_mm, path + '.dimensions.width_mm', errors);
   validateDimensionCell(module.dimensions.height_mm, path + '.dimensions.height_mm', errors);
   validateDimensionCell(module.dimensions.depth_mm, path + '.dimensions.depth_mm', errors);
+  if (module.construction !== undefined) {
+    if (!isPlainObject(module.construction)) {
+      errors.push(issue('DRAFT_STRUCTURE_INVALID', 'VALIDATION_ERROR', 'Module construction must be an object.', path + '.construction'));
+    } else {
+      var constructionKeys = Object.keys(module.construction).sort();
+      for (var c = 0; c < constructionKeys.length; c += 1) {
+        validateConstructionParameterCell(module.construction[constructionKeys[c]], path + '.construction.' + constructionKeys[c], errors);
+      }
+    }
+  }
 }
 
 function validateOpening(opening, path, errors) {
@@ -406,6 +455,23 @@ function resolveCell(cell, field, path, dimensionEvidence, issues) {
   return undefined;
 }
 
+function resolveConstructionCell(cell, field, path, issues) {
+  if (!cell || cell.state === 'MISSING') {
+    issues.push(issue('MISSING_REQUIRED_VALUE', 'BLOCKING', 'Construction parameter is missing and must be resolved before confirmation.', path));
+    return undefined;
+  }
+  if (cell.state === 'KNOWN') return cell.value;
+  if (cell.state === 'CONFLICT') {
+    issues.push(issue('UNRESOLVED_CONFLICT', 'BLOCKING', 'Construction parameter has unresolved conflicting values.', path));
+    return undefined;
+  }
+  if (cell.state === 'NEEDS_CONFIRMATION') {
+    issues.push(issue('CONFIRMATION_REQUIRED', 'BLOCKING', 'Construction parameter still requires confirmation.', path));
+    return undefined;
+  }
+  return undefined;
+}
+
 function resolveNullableCell(cell, field, path, dimensionEvidence, issues) {
   if (cell.state === 'KNOWN') {
     dimensionEvidence.push({
@@ -464,6 +530,18 @@ function mapModule(module, assemblyIndex, moduleIndex, issues) {
   }
   if (module.notes !== undefined) {
     mapped.notes = clone(module.notes);
+  }
+  if (isPlainObject(module.construction)) {
+    mapped.construction = {};
+    var constructionKeys = Object.keys(module.construction).sort();
+    for (var c = 0; c < constructionKeys.length; c += 1) {
+      var constructionKey = constructionKeys[c];
+      var constructionCell = module.construction[constructionKey];
+      var constructionValue = resolveConstructionCell(constructionCell, constructionKey, basePath + '.construction.' + constructionKey, issues);
+      if (constructionValue !== undefined) {
+        mapped.construction[constructionKey] = constructionValue;
+      }
+    }
   }
   return mapped;
 }
@@ -606,22 +684,61 @@ function collectDimensionCells(draft) {
   return cells;
 }
 
+function collectConstructionCells(draft) {
+  var cells = [];
+  if (!isPlainObject(draft) || !Array.isArray(draft.assemblies)) return cells;
+  for (var a = 0; a < draft.assemblies.length; a += 1) {
+    var assembly = draft.assemblies[a];
+    if (!isPlainObject(assembly) || !Array.isArray(assembly.modules)) continue;
+    for (var m = 0; m < assembly.modules.length; m += 1) {
+      var module_ = assembly.modules[m];
+      if (!isPlainObject(module_) || !isPlainObject(module_.construction)) continue;
+      var keys = Object.keys(module_.construction).sort();
+      for (var k = 0; k < keys.length; k += 1) {
+        var parameter = keys[k];
+        cells.push({
+          target_path: '$.assemblies[' + a + '].modules[' + m + '].construction.' + parameter,
+          parameter: parameter,
+          cell: module_.construction[parameter]
+        });
+      }
+    }
+  }
+  return cells;
+}
+
+function makeClarificationQuestion(targetPath, state, options) {
+  var reason = state === 'MISSING' ? 'MISSING_REQUIRED_VALUE' : state === 'CONFLICT' ? 'UNRESOLVED_CONFLICT' : 'CONFIRMATION_REQUIRED';
+  return {
+    Question_id: makeQuestionId(targetPath, reason),
+    Target_path: targetPath,
+    Reason: reason,
+    Current_state: state,
+    Options: Array.isArray(options) ? options.slice() : []
+  };
+}
+
+function hasConstructionValue(value) {
+  return value !== undefined && value !== null && value !== '';
+}
+
 function sortedUniqueNumbers(values) {
   var seen = {};
   var out = [];
   for (var i = 0; i < values.length; i += 1) {
-    var v = values[i];
-    if (isNumber(v) && !Object.prototype.hasOwnProperty.call(seen, v)) {
-      seen[v] = true;
-      out.push(v);
+    var value = values[i];
+    if (isNumber(value) && !Object.prototype.hasOwnProperty.call(seen, value)) {
+      seen[value] = true;
+      out.push(value);
     }
   }
-  out.sort(function (x, y) { return x - y; });
+  out.sort(function (left, right) { return left - right; });
   return out;
 }
 
 function clarifyDraft(draft) {
   var cells = collectDimensionCells(draft);
+  var constructionCells = collectConstructionCells(draft);
 
   var understood = [];
   var missing = [];
@@ -661,20 +778,13 @@ function clarifyDraft(draft) {
       if (required) {
         var missingReason = 'MISSING_REQUIRED_VALUE';
         blockers.push({ Target_path: targetPath, Reason: missingReason });
-        questions.push({
-          Question_id: makeQuestionId(targetPath, missingReason),
-          Target_path: targetPath,
-          Reason: missingReason,
-          Current_state: state,
-          Options: []
-        });
+        questions.push(makeClarificationQuestion(targetPath, state, []));
       }
       continue;
     }
 
     if (state === 'CONFLICT') {
-      var rawOptions = Array.isArray(cell.options) ? cell.options : [];
-      var conflictOptions = sortedUniqueNumbers(rawOptions);
+      var conflictOptions = sortedUniqueNumbers(Array.isArray(cell.options) ? cell.options : []);
       var conflictEvidence = [];
       for (var c = 0; c < conflictOptions.length; c += 1) {
         conflictEvidence.push({ Value: conflictOptions[c] });
@@ -684,29 +794,15 @@ function clarifyDraft(draft) {
         Options: conflictOptions,
         Evidence: conflictEvidence
       };
-      if (isNonEmptyString(cell.source_ref)) {
-        conflictRecord.Source_ref = cell.source_ref;
-      }
-      if (isNonEmptyString(cell.source_type)) {
-        conflictRecord.Source_type = cell.source_type;
-      }
-      if (isNonEmptyString(cell.evidence_state)) {
-        conflictRecord.Evidence_state = cell.evidence_state;
-      }
-      if (isNonEmptyString(cell.note)) {
-        conflictRecord.Note = cell.note;
-      }
+      if (isNonEmptyString(cell.source_ref)) conflictRecord.Source_ref = cell.source_ref;
+      if (isNonEmptyString(cell.source_type)) conflictRecord.Source_type = cell.source_type;
+      if (isNonEmptyString(cell.evidence_state)) conflictRecord.Evidence_state = cell.evidence_state;
+      if (isNonEmptyString(cell.note)) conflictRecord.Note = cell.note;
       conflicts.push(conflictRecord);
 
       var conflictReason = 'UNRESOLVED_CONFLICT';
       blockers.push({ Target_path: targetPath, Reason: conflictReason });
-      questions.push({
-        Question_id: makeQuestionId(targetPath, conflictReason),
-        Target_path: targetPath,
-        Reason: conflictReason,
-        Current_state: state,
-        Options: conflictOptions
-      });
+      questions.push(makeClarificationQuestion(targetPath, state, conflictOptions));
       continue;
     }
 
@@ -723,10 +819,57 @@ function clarifyDraft(draft) {
         Current_state: state,
         Options: confirmOptions
       });
-      if (required) {
-        blockers.push({ Target_path: targetPath, Reason: confirmReason });
+      if (required) blockers.push({ Target_path: targetPath, Reason: confirmReason });
+    }
+  }
+
+  for (var j = 0; j < constructionCells.length; j += 1) {
+    var constructionEntry = constructionCells[j];
+    var constructionCell = constructionEntry.cell;
+    if (!isPlainObject(constructionCell)) continue;
+    var constructionPath = constructionEntry.target_path;
+    if (constructionCell.source_type === 'DEFAULT_CANDIDATE' && hasConstructionValue(constructionCell.value)) {
+      defaultCandidates.push({
+        Target_path: constructionPath,
+        Value: constructionCell.value,
+        Evidence_id: constructionCell.source_ref || null
+      });
+    }
+    if (constructionCell.state === 'KNOWN') {
+      if (hasConstructionValue(constructionCell.value)) {
+        understood.push({
+          Target_path: constructionPath,
+          Value: constructionCell.value,
+          Selected_evidence_id: constructionCell.source_ref || null
+        });
       }
-      continue;
+    } else if (constructionCell.state === 'MISSING') {
+      missing.push({ Target_path: constructionPath });
+      blockers.push({ Target_path: constructionPath, Reason: 'MISSING_REQUIRED_VALUE' });
+      questions.push(makeClarificationQuestion(constructionPath, constructionCell.state, []));
+    } else if (constructionCell.state === 'CONFLICT') {
+      var constructionOptions = Array.isArray(constructionCell.options) ? constructionCell.options.slice() : [];
+      conflicts.push({
+        Target_path: constructionPath,
+        Options: constructionOptions,
+        Evidence: constructionOptions.map(function (value) { return { Value: value }; })
+      });
+      blockers.push({ Target_path: constructionPath, Reason: 'UNRESOLVED_CONFLICT' });
+      var conflictQuestion = makeClarificationQuestion(constructionPath, constructionCell.state, constructionOptions);
+      conflictQuestion.Default_value = constructionCell.value === undefined ? null : constructionCell.value;
+      conflictQuestion.Default_source_ref = constructionCell.source_ref || null;
+      questions.push(conflictQuestion);
+    } else if (constructionCell.state === 'NEEDS_CONFIRMATION') {
+      var constructionOptions = constructionCell.source_type === 'DEFAULT_CANDIDATE' && hasConstructionValue(constructionCell.value)
+        ? [constructionCell.value]
+        : [];
+      var constructionQuestion = makeClarificationQuestion(constructionPath, constructionCell.state, constructionOptions);
+      constructionQuestion.Default_value = constructionCell.value === undefined ? null : constructionCell.value;
+      constructionQuestion.Default_source_ref = constructionCell.source_ref || null;
+      questions.push(constructionQuestion);
+      if (constructionCell.source_type === 'DEFAULT_CANDIDATE' && hasConstructionValue(constructionCell.value)) {
+        blockers.push({ Target_path: constructionPath, Reason: 'CONFIRMATION_REQUIRED' });
+      }
     }
   }
 
@@ -742,8 +885,9 @@ function clarifyDraft(draft) {
 
 var fusion = require('./fusion.js');
 var confirmation = require('./confirmation.js');
-var constructionAdapter = require('./construction_adapter.js');
-var pipeline = require('./pipeline.js');
+  var constructionAdapter = require('./construction_adapter.js');
+  var pipeline = require('./pipeline.js');
+  var constructionDefaults = require('./construction_defaults.js');
 
 module.exports = {
   EVIDENCE_STATES: EVIDENCE_STATES,
@@ -767,5 +911,7 @@ module.exports = {
   runConstructionFromDraft: constructionAdapter.runConstructionFromDraft,
   RunConstructionFromDraft: constructionAdapter.RunConstructionFromDraft,
   runStage10Pipeline: pipeline.runStage10Pipeline,
-  RunStage10Pipeline: pipeline.RunStage10Pipeline
+  RunStage10Pipeline: pipeline.RunStage10Pipeline,
+  resolveConstructionDefaults: constructionDefaults.resolveConstructionDefaults,
+  ResolveConstructionDefaults: constructionDefaults.ResolveConstructionDefaults
 };

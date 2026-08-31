@@ -116,12 +116,27 @@ function buildDynamicBrief(clarificationResult) {
   if (Array.isArray(clarificationResult.Questions)) {
     result.Questions = stableSortQuestions(
       clarificationResult.Questions.map(function (q) {
+        var questionOptions = Array.isArray(q.Options) ? q.Options.slice() : [];
+        if (questionOptions.length === 0 && q.Reason === 'CONFIRMATION_REQUIRED' && q.Default_value !== undefined && q.Default_value !== null) {
+          questionOptions = [q.Default_value];
+        }
+        if (questionOptions.length === 0 && q.Reason === 'CONFIRMATION_REQUIRED' && Array.isArray(clarificationResult.Default_candidates)) {
+          for (var d = 0; d < clarificationResult.Default_candidates.length; d += 1) {
+            var candidate = clarificationResult.Default_candidates[d];
+            if (candidate.Target_path === q.Target_path && candidate.Value !== undefined && candidate.Value !== null) {
+              questionOptions = [candidate.Value];
+              break;
+            }
+          }
+        }
         return {
           Question_id: q.Question_id,
           Target_path: q.Target_path,
           Reason: q.Reason,
           Current_state: q.Current_state,
-          Options: Array.isArray(q.Options) ? q.Options.slice() : []
+          Options: questionOptions,
+          Default_value: q.Default_value === undefined ? null : q.Default_value,
+          Default_source_ref: q.Default_source_ref === undefined ? null : q.Default_source_ref
         };
       })
     );
@@ -268,7 +283,7 @@ function validateAnswers(brief, answers) {
       continue;
     }
 
-    if (!isNumber(ans.Value)) {
+    if (!isNumber(ans.Value) && question.Reason !== 'CONFIRMATION_REQUIRED') {
       issues.push(issue('ANSWER_VALUE_INVALID', 'VALIDATION_ERROR', 'Answer Value must be a finite number.', pathBase + '.Value', ans.Question_id));
       continue;
     }

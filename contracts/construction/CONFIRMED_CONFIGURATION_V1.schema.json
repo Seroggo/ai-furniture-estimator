@@ -358,6 +358,10 @@
             "$ref": "#/$defs/applianceSlot"
           }
         },
+        "construction": {
+          "type": "object",
+          "additionalProperties": {}
+        },
         "notes": {
           "type": "array",
           "items": {

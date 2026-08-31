@@ -121,6 +121,16 @@
         "min_length": 1,
         "max_length": 64
       }
+    },
+    {
+      "name": "Condition_json",
+      "order": 11,
+      "type": "string",
+      "required": false,
+      "human_editable": false,
+      "visibility": "HIDDEN",
+      "description": "Deterministic machine condition. Empty or null means the rule applies after module_type matching.",
+      "validation": {}
     }
   ]
 }

@@ -31,6 +31,7 @@ function issue(code, status, message, path) {
 }
 
 var MODULE_DIMENSION_PATTERN = /^assemblies\[(\d+)\]\.modules\[(\d+)\]\.dimensions\.(width_mm|height_mm|depth_mm)$/;
+var MODULE_CONSTRUCTION_PATTERN = /^assemblies\[(\d+)\]\.modules\[(\d+)\]\.construction\.[A-Za-z0-9_]+$/;
 var ASSEMBLY_DIMENSION_PATTERN = /^assemblies\[(\d+)\]\.(overall_width_mm|overall_depth_mm|finished_height_mm)$/;
 var GLOBAL_DIMENSION_PATTERN = /^global_dimensions\.(finished_worktop_height_mm|toe_kick_height_mm|countertop_thickness_mm)$/;
 
@@ -39,6 +40,7 @@ function resolvesToDraftCell(targetPath) {
     return false;
   }
   return MODULE_DIMENSION_PATTERN.test(targetPath) ||
+    MODULE_CONSTRUCTION_PATTERN.test(targetPath) ||
     ASSEMBLY_DIMENSION_PATTERN.test(targetPath) ||
     GLOBAL_DIMENSION_PATTERN.test(targetPath);
 }

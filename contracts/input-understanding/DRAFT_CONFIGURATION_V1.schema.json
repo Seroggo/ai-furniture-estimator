@@ -159,6 +159,55 @@
         }
       }
     },
+    "constructionCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "KNOWN",
+            "MISSING",
+            "CONFLICT",
+            "NEEDS_CONFIRMATION"
+          ]
+        },
+        "value": {},
+        "options": {
+          "type": "array",
+          "minItems": 2
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_type": {
+          "enum": [
+            "USER_CONFIRMATION",
+            "USER_DIMENSION",
+            "USER_TEXT",
+            "IMAGE_TEXT",
+            "VISION_ENTITY",
+            "DEFAULT_CANDIDATE"
+          ]
+        },
+        "evidence_state": {
+          "enum": [
+            "EXPLICIT",
+            "DERIVED",
+            "VISUAL_INFERRED",
+            "ALPHA_DEFAULT",
+            "MANAGER_CONFIRMED"
+          ]
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
     "front": {
       "type": "object",
       "additionalProperties": false,
@@ -317,6 +366,12 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/applianceSlot"
+          }
+        },
+        "construction": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/constructionCell"
           }
         },
         "notes": {
