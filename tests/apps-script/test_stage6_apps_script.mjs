@@ -30,6 +30,7 @@ const allowedSource = new Set([
   'recipe_resolver.gs',
   'setup_system.gs',
   'sheets_v1_setup.gs',
+  'sheets_v1_result_writer.gs',
   'stage9_server.gs',
   'web_app.html',
 ]);
@@ -80,6 +81,7 @@ test('clasp ignore is an exact deploy whitelist', () => {
     '!calculation_orchestrator.gs',
     '!setup_system.gs',
     '!sheets_v1_setup.gs',
+    '!sheets_v1_result_writer.gs',
     '!stage9_server.gs',
     '!web_app.html',
     '!openrouter_client.gs',

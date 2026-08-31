@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "npm run test:stage6 && npm run test:stage7 && npm run test:stage8 && npm run test:stage9 && npm run test:core && npm run test:stage10 && npm run test:regression && npm run test:sheets-v1",
+    "test": "npm run test:stage6 && npm run test:stage7 && npm run test:stage8 && npm run test:stage9 && npm run test:core && npm run test:stage10 && npm run test:regression && npm run test:sheets-v1 && npm run test:costing && npm run test:sheets-v1-writer",
     "test:stage6": "node --test tests/apps-script/test_stage6_apps_script.mjs",
     "test:stage7": "node --test tests/apps-script/test_stage7_openrouter_parser.mjs",
     "test:stage8": "node --test tests/apps-script/test_stage8_calculation_kernel.mjs",
@@ -16,6 +16,8 @@
     "test:stage10:e2e": "node --test tests/e2e/test_stage10_e2e.mjs",
     "test:regression": "python -m unittest discover -s tests/legacy-calculation -p \"test_*.py\" && python -m unittest discover -s tests/sheets -p \"test_*.py\"",
     "test:sheets-v1": "python -m unittest tests/sheets/test_sheets_v1_generator.py && node --test tests/apps-script/test_sheets_v1_setup.mjs",
+    "test:costing": "node --test tests/costing/test_costing_v1.mjs",
+    "test:sheets-v1-writer": "node --test tests/apps-script/test_sheets_v1_result_writer.mjs",
     "schema:check": "python tools/generate_setup_schema.py --check && python tools/generate_human_ux_manifest.py --check && python tools/generate_project_input_schema.py --check && python tools/generate_calculation_result_schema.py --check && python tools/generate_module_size_rules.py --check && python tools/generate_stage8_layout_golden.py --check && python tools/generate_sheets_v1_manifest.py --check",
     "generate:sheets-v1": "python tools/generate_sheets_v1_manifest.py",
     "check:sheets-v1": "python tools/generate_sheets_v1_manifest.py --check",

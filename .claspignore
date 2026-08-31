@@ -12,6 +12,7 @@
 !calculation_orchestrator.gs
 !setup_system.gs
 !sheets_v1_setup.gs
+!sheets_v1_result_writer.gs
 !stage9_server.gs
 !web_app.html
 !openrouter_client.gs
