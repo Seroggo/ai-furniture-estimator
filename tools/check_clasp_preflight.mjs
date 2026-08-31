@@ -15,6 +15,7 @@ const expected = [
   'generated/module_size_rules.gs',
   'generated/project_input_schema.gs',
   'generated/schema_manifest.gs',
+  'generated/sheets_v1_manifest.gs',
   'layout_runtime.gs',
   'master_data_loader.gs',
   'openrouter_client.gs',
@@ -25,6 +26,7 @@ const expected = [
   'quantity_engine.gs',
   'recipe_resolver.gs',
   'setup_system.gs',
+  'sheets_v1_setup.gs',
   'stage9_server.gs',
   'web_app.html',
 ];
@@ -69,6 +71,7 @@ run('python', ['tools/generate_project_input_schema.py', '--check']);
 run('python', ['tools/generate_calculation_result_schema.py', '--check']);
 run('python', ['tools/generate_module_size_rules.py', '--check']);
 run('python', ['tools/generate_stage8_layout_golden.py', '--check']);
+run('python', ['tools/generate_sheets_v1_manifest.py', '--check']);
 if (process.env.npm_execpath) {
   run(process.execPath, [process.env.npm_execpath, 'test']);
 } else if (process.platform === 'win32') {

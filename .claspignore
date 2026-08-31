@@ -11,6 +11,7 @@
 !pricebook_resolver.gs
 !calculation_orchestrator.gs
 !setup_system.gs
+!sheets_v1_setup.gs
 !stage9_server.gs
 !web_app.html
 !openrouter_client.gs
@@ -18,6 +19,7 @@
 !prompts/project_parser_prompt.gs
 !generated/human_ux_manifest.gs
 !generated/schema_manifest.gs
+!generated/sheets_v1_manifest.gs
 !generated/project_input_schema.gs
 !generated/calculation_result_schema.gs
 !generated/module_size_rules.gs

@@ -16,6 +16,7 @@ const expectedFiles = [
   'generated/human_ux_manifest.gs',
   'generated/module_size_rules.gs',
   'generated/project_input_schema.gs',
+  'generated/sheets_v1_manifest.gs',
   'generated/schema_manifest.gs',
   'layout_runtime.gs',
   'master_data_loader.gs',
@@ -27,6 +28,7 @@ const expectedFiles = [
   'quantity_engine.gs',
   'recipe_resolver.gs',
   'setup_system.gs',
+  'sheets_v1_setup.gs',
   'stage9_server.gs',
   'web_app.html',
 ];
@@ -87,6 +89,7 @@ function canonicalRemoteFile(file) {
   if (/^(?:.*\/)?layout_runtime\.(?:js|gs)$/.test(normalizedFile)) return 'layout_runtime.gs';
   if (/^(?:.*\/)?master_data_loader\.(?:js|gs)$/.test(normalizedFile)) return 'master_data_loader.gs';
   if (/^(?:.*\/)?setup_system\.(?:js|gs)$/.test(normalizedFile)) return 'setup_system.gs';
+  if (/^(?:.*\/)?sheets_v1_setup\.(?:js|gs)$/.test(normalizedFile)) return 'sheets_v1_setup.gs';
   if (/^(?:.*\/)?stage9_server\.(?:js|gs)$/.test(normalizedFile)) return 'stage9_server.gs';
   if (/^(?:.*\/)?web_app\.html$/.test(normalizedFile)) return 'web_app.html';
   if (/^(?:.*\/)?openrouter_client\.(?:js|gs)$/.test(normalizedFile)) return 'openrouter_client.gs';
@@ -100,6 +103,9 @@ function canonicalRemoteFile(file) {
   }
   if (/^(?:generated\/)?human_ux_manifest\.(?:js|gs)$/.test(normalizedFile)) {
     return 'generated/human_ux_manifest.gs';
+  }
+  if (/^(?:generated\/)?sheets_v1_manifest\.(?:js|gs)$/.test(normalizedFile)) {
+    return 'generated/sheets_v1_manifest.gs';
   }
   if (/^(?:generated\/)?schema_manifest\.(?:js|gs)$/.test(normalizedFile)) {
     return 'generated/schema_manifest.gs';
