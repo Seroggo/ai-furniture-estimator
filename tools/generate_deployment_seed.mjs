@@ -23,7 +23,7 @@ function parseCsv(text) {
   }
   if (value.length || row.length) { row.push(value.replace(/\r$/, '')); rows.push(row); }
   if (quoted) throw new Error('Unterminated quoted CSV value.');
-  const headers = rows.shift();
+  const headers = rows.shift().map((header) => header.replace(/^\uFEFF/, ''));
   return rows.filter((cells) => cells.some((cell) => cell !== '')).map((cells, rowIndex) => {
     if (cells.length !== headers.length) throw new Error('Invalid CSV row ' + (rowIndex + 2) + '.');
     const record = {};

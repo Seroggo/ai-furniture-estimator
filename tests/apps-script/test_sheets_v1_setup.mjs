@@ -75,7 +75,24 @@ class FakeRange {
     for (let r = 0; r < this.numRows; r += 1) {
       assert.equal(this.numColumns, values[r].length, `${this.sheet.name}: setValues column count mismatch`);
       for (let c = 0; c < this.numColumns; c += 1) {
-        this.sheet.writeValue(this.row + r, this.column + c, values[r][c]);
+        const cellValue = values[r][c];
+        const colIndex = this.column + c;
+        const rule = this.sheet.validations.get(colIndex);
+        if (rule && rule.allowInvalid === false && rule.criteria && cellValue !== '' && cellValue !== null && cellValue !== undefined) {
+          if (rule.criteria.type === 'CHECKBOX' && typeof cellValue !== 'boolean') {
+            throw new Error(`Validation failed at ${this.sheet.name}!${String.fromCharCode(64 + colIndex)}${this.row + r}: CHECKBOX requires boolean, got ${typeof cellValue}`);
+          }
+          if (rule.criteria.type === 'VALUE_IN_LIST' && !rule.criteria.values.includes(cellValue)) {
+            throw new Error(`Validation failed at ${this.sheet.name}!${String.fromCharCode(64 + colIndex)}${this.row + r}: value not in list`);
+          }
+          if (rule.criteria.type === 'NUMBER_GREATER_THAN_OR_EQUAL_TO' && (typeof cellValue !== 'number' || cellValue < rule.criteria.value)) {
+            throw new Error(`Validation failed at ${this.sheet.name}!${String.fromCharCode(64 + colIndex)}${this.row + r}: number must be >= ${rule.criteria.value}`);
+          }
+          if (rule.criteria.type === 'DATE_IS_VALID' && !(['[object Date]'].includes(Object.prototype.toString.call(cellValue)) && !Number.isNaN(cellValue.getTime()))) {
+            throw new Error(`Validation failed at ${this.sheet.name}!${String.fromCharCode(64 + colIndex)}${this.row + r}: valid Date required`);
+          }
+        }
+        this.sheet.writeValue(this.row + r, colIndex, cellValue);
       }
     }
     return this;
@@ -195,6 +212,11 @@ function createRuntime(initialSheetNames = ['Sheet1']) {
     readFileSync(resolve(appsRoot, 'generated/sheets_v1_manifest.gs'), 'utf8'),
     context,
     { filename: 'generated/sheets_v1_manifest.gs' },
+  );
+  vm.runInContext(
+    readFileSync(resolve(appsRoot, 'generated/deployment_seed.gs'), 'utf8'),
+    context,
+    { filename: 'generated/deployment_seed.gs' },
   );
   vm.runInContext(
     readFileSync(resolve(appsRoot, 'sheets_v1_setup.gs'), 'utf8'),
@@ -333,4 +355,83 @@ test('setupSheetsV1 uses the active spreadsheet', () => {
   assert.equal(result.status, 'PASS');
   assert.deepEqual(snapshot(result.sheets), orderedNames);
   assert.deepEqual(spreadsheet.getSheets().slice(0, 5).map((sheet) => sheet.getName()), orderedNames);
+});
+
+test('setupSheetsV1_ applies deployment seed with correct type coercion', () => {
+  const { spreadsheet, context } = createRuntime();
+  context.setupSheetsV1_(spreadsheet, {seed: true});
+  
+  const prices = spreadsheet.getSheetByName('Prices');
+  const pricesHeaders = expectedHeaders('Prices');
+  const activeColIndex = pricesHeaders.indexOf('active') + 1;
+  const priceColIndex = pricesHeaders.indexOf('price') + 1;
+  const pricesRowCount = prices.getLastRow() - 1;
+  
+  // Verify all 17 Prices rows received correctly typed values
+  assert.equal(pricesRowCount, 17, 'All 17 Prices seed rows should be written');
+  
+  // Verify boolean column (active) receives boolean values for all rows
+  const activeValues = prices.getRange(2, activeColIndex, pricesRowCount, 1).getValues();
+  activeValues.forEach((row, index) => {
+    assert.equal(typeof row[0], 'boolean', `Prices row ${index + 2} active should be boolean, got ${typeof row[0]}`);
+    assert.equal(row[0], true, `Prices row ${index + 2} active should be true`);
+  });
+  
+  // Verify number column (price) receives number values for all rows
+  const priceValues = prices.getRange(2, priceColIndex, pricesRowCount, 1).getValues();
+  priceValues.forEach((row, index) => {
+    assert.equal(typeof row[0], 'number', `Prices row ${index + 2} price should be number, got ${typeof row[0]}`);
+    assert.ok(row[0] > 0, `Prices row ${index + 2} price should be positive`);
+  });
+  
+  // Verify string columns (category, currency) receive string values
+  const categoryColIndex = pricesHeaders.indexOf('category') + 1;
+  const categoryValues = prices.getRange(2, categoryColIndex, pricesRowCount, 1).getValues();
+  categoryValues.forEach((row, index) => {
+    assert.equal(typeof row[0], 'string', `Prices row ${index + 2} category should be string, got ${typeof row[0]}`);
+    assert.ok(['MATERIALS', 'EDGE', 'HARDWARE', 'WORKS', 'OTHER'].includes(row[0]), `Prices row ${index + 2} category should satisfy enum validation`);
+  });
+
+  const updatedAtColIndex = pricesHeaders.indexOf('updated_at') + 1;
+  const updatedAtValues = prices.getRange(2, updatedAtColIndex, pricesRowCount, 1).getValues();
+  updatedAtValues.forEach((row, index) => {
+    assert.equal(typeof row[0].getTime, 'function', `Prices row ${index + 2} updated_at should be Date-compatible`);
+    assert.ok(!Number.isNaN(row[0].getTime()), `Prices row ${index + 2} updated_at should be a valid date`);
+  });
+});
+
+test('setupSheetsV1_ applies Construction_Defaults seed with correct type coercion', () => {
+  const { spreadsheet, context } = createRuntime();
+  context.SHEETS_V1_DEPLOYMENT_SEED.Construction_Defaults[0].active = 'True';
+  context.SHEETS_V1_DEPLOYMENT_SEED.Construction_Defaults[0].confirmation_required = 'false';
+  context.setupSheetsV1_(spreadsheet, {seed: true});
+  
+  const defaults = spreadsheet.getSheetByName('Construction_Defaults');
+  const defaultsHeaders = expectedHeaders('Construction_Defaults');
+  const activeColIndex = defaultsHeaders.indexOf('active') + 1;
+  const confirmationColIndex = defaultsHeaders.indexOf('confirmation_required') + 1;
+  const defaultValueColIndex = defaultsHeaders.indexOf('default_value') + 1;
+  const defaultsRowCount = defaults.getLastRow() - 1;
+  
+  // Verify all 9 Construction_Defaults rows received correctly typed values
+  assert.equal(defaultsRowCount, 9, 'All 9 Construction_Defaults seed rows should be written');
+  
+  // Verify boolean columns receive boolean values
+  const activeValues = defaults.getRange(2, activeColIndex, defaultsRowCount, 1).getValues();
+  activeValues.forEach((row, index) => {
+    assert.equal(typeof row[0], 'boolean', `Construction_Defaults row ${index + 2} active should be boolean, got ${typeof row[0]}`);
+  });
+  
+  const confirmationValues = defaults.getRange(2, confirmationColIndex, defaultsRowCount, 1).getValues();
+  confirmationValues.forEach((row, index) => {
+    assert.equal(typeof row[0], 'boolean', `Construction_Defaults row ${index + 2} confirmation_required should be boolean, got ${typeof row[0]}`);
+  });
+  
+  // Verify string columns receive string values
+  const moduleTypeColIndex = defaultsHeaders.indexOf('module_type') + 1;
+  const moduleTypeValues = defaults.getRange(2, moduleTypeColIndex, defaultsRowCount, 1).getValues();
+  moduleTypeValues.forEach((row, index) => {
+    assert.equal(typeof row[0], 'string', `Construction_Defaults row ${index + 2} module_type should be string, got ${typeof row[0]}`);
+    assert.ok(row[0].length > 0, `Construction_Defaults row ${index + 2} module_type should not be empty`);
+  });
 });

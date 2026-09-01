@@ -1,8 +1,8 @@
-/** GENERATED deployment seed. Build: b2e871ee7c03eab4e042c9f4c4c953123e3a34cdd9f4c19207b8c6ae1e206b3d */
+/** GENERATED deployment seed. Build: 450cab35307b44814e93e7d5a628efc853d43cd771e0deb6b5e78dd64e78de8f */
 var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
   "Prices": [
     {
-      "﻿category": "MATERIAL",
+      "category": "MATERIAL",
       "name": "ЛДСП 16 мм белая, 2800x2070",
       "unit": "m2",
       "price": 600.89,
@@ -15,7 +15,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "LDSP_16_WHITE"
     },
     {
-      "﻿category": "MATERIAL",
+      "category": "MATERIAL",
       "name": "МДФ шлифованная 16 мм Kronostar, 2800x2070",
       "unit": "m2",
       "price": 565.39,
@@ -28,7 +28,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "MDF_16_RAW"
     },
     {
-      "﻿category": "MATERIAL",
+      "category": "MATERIAL",
       "name": "ХДФ шлифованная 3 мм Ultradecor, 2800x2070",
       "unit": "m2",
       "price": 142.86,
@@ -41,7 +41,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "HDF_3_RAW"
     },
     {
-      "﻿category": "MATERIAL",
+      "category": "MATERIAL",
       "name": "ЛХДФ белая 3 мм Ultradecor, 2800x2070",
       "unit": "m2",
       "price": 175.64,
@@ -54,7 +54,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "LHDF_3_WHITE"
     },
     {
-      "﻿category": "FACADE",
+      "category": "FACADE",
       "name": "Фасад МДФ ПВХ 16 мм, базовая категория",
       "unit": "m2",
       "price": 4350,
@@ -67,7 +67,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "FACADE_MDF_PVC_16"
     },
     {
-      "﻿category": "COUNTERTOP",
+      "category": "COUNTERTOP",
       "name": "Столешница ЛДСП 38 мм, 600 мм глубина",
       "unit": "m",
       "price": 2117.08,
@@ -80,7 +80,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "COUNTERTOP_LDSP_38"
     },
     {
-      "﻿category": "EDGE",
+      "category": "EDGE",
       "name": "Кромка ПВХ 2x22 мм белая гладкая",
       "unit": "m",
       "price": 14.35,
@@ -93,7 +93,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "EDGE_PVC_2X22_WHITE"
     },
     {
-      "﻿category": "EDGE",
+      "category": "EDGE",
       "name": "Кромка ПВХ 0.4x22 мм светло-серая",
       "unit": "m",
       "price": 4.47,
@@ -106,7 +106,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "EDGE_PVC_0_4X22"
     },
     {
-      "﻿category": "HARDWARE",
+      "category": "HARDWARE",
       "name": "Петля накладная 105° с амортизацией",
       "unit": "pcs",
       "price": 105.21,
@@ -119,7 +119,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "HINGE_SOFTCLOSE_105"
     },
     {
-      "﻿category": "HARDWARE",
+      "category": "HARDWARE",
       "name": "Направляющие шариковые полного выдвижения 450 мм",
       "unit": "set",
       "price": 410.31,
@@ -132,7 +132,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "DRAWER_SLIDE_450_FULL"
     },
     {
-      "﻿category": "HARDWARE",
+      "category": "HARDWARE",
       "name": "Опора кухонная пластиковая регулируемая 100 мм",
       "unit": "pcs",
       "price": 32.25,
@@ -145,7 +145,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "LEG_KITCHEN_100"
     },
     {
-      "﻿category": "HARDWARE",
+      "category": "HARDWARE",
       "name": "Полкодержатель стальной никелированный 5 мм",
       "unit": "pcs",
       "price": 4.17,
@@ -158,7 +158,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "SHELF_SUPPORT_5MM"
     },
     {
-      "﻿category": "HARDWARE",
+      "category": "HARDWARE",
       "name": "Конфирмат 7x50",
       "unit": "pcs",
       "price": 1.38,
@@ -171,7 +171,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "CONFIRMAT_7X50"
     },
     {
-      "﻿category": "HARDWARE",
+      "category": "HARDWARE",
       "name": "Ручка-рейлинг 128 мм сатиновый хром",
       "unit": "pcs",
       "price": 206.75,
@@ -184,7 +184,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "HANDLE_128"
     },
     {
-      "﻿category": "ACCESSORY",
+      "category": "ACCESSORY",
       "name": "Цоколь кухонный ПВХ 100 мм",
       "unit": "m",
       "price": 162.63,
@@ -197,7 +197,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "PLINTH_PVC_100"
     },
     {
-      "﻿category": "HARDWARE",
+      "category": "HARDWARE",
       "name": "Навес для настенного шкафа, комплект 80 кг",
       "unit": "set",
       "price": 323.51,
@@ -210,7 +210,7 @@ var SHEETS_V1_DEPLOYMENT_SEED = Object.freeze({
       "item_id": "WALL_HANGER_80KG"
     },
     {
-      "﻿category": "HARDWARE",
+      "category": "HARDWARE",
       "name": "Монтажная планка для навесов 2000 мм",
       "unit": "m",
       "price": 805.72,

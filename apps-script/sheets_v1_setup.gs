@@ -65,8 +65,7 @@ function sheetsV1ApplyDeploymentSeed_(spreadsheet, definitions) {
     var columns = definition.columns.slice().sort(function (left, right) { return left.order - right.order; });
     var matrix = rows.map(function (row) {
       return columns.map(function (column) {
-        var value = row[column.name];
-        return value === undefined || value === null ? '' : value;
+        return sheetsV1NormalizeSeedValue_(row[column.name], column);
       });
     });
     var sheet = spreadsheet.getSheetByName(sheetName);
@@ -74,6 +73,35 @@ function sheetsV1ApplyDeploymentSeed_(spreadsheet, definitions) {
     if (lastRow > 1) sheet.getRange(2, 1, lastRow - 1, columns.length).clearContent();
     if (matrix.length) sheet.getRange(2, 1, matrix.length, columns.length).setValues(matrix);
   });
+}
+
+
+function sheetsV1NormalizeSeedValue_(value, column) {
+  if (value === undefined || value === null || value === '') return '';
+  var validation = column.validation || {};
+  var types = Object.prototype.toString.call(column.type) === '[object Array]' ? column.type : [column.type];
+
+  if (Object.prototype.toString.call(validation['enum']) === '[object Array]') {
+    var text = String(value);
+    if (validation['enum'].indexOf(text) !== -1) return text;
+    if (column.name === 'category' && text === 'MATERIAL' && validation['enum'].indexOf('MATERIALS') !== -1) return 'MATERIALS';
+    if (validation['enum'].indexOf('OTHER') !== -1) return 'OTHER';
+    throw new Error('Deployment seed value is outside enum for ' + column.name + ': ' + text);
+  }
+  if (validation.format === 'date-time' || validation.format === 'date') {
+    var date = value instanceof Date ? value : new Date(value);
+    if (isNaN(date.getTime())) throw new Error('Deployment seed date is invalid for ' + column.name + '.');
+    return date;
+  }
+  if (types.indexOf('boolean') !== -1 && (typeof value === 'boolean' || /^(true|false)$/i.test(String(value)))) {
+    return typeof value === 'boolean' ? value : String(value).toLowerCase() === 'true';
+  }
+  if ((types.indexOf('number') !== -1 || types.indexOf('integer') !== -1) && typeof value === 'number') {
+    if (!isFinite(value)) throw new Error('Deployment seed number is invalid for ' + column.name + '.');
+    return value;
+  }
+  if (types.indexOf('string') !== -1) return String(value);
+  return value;
 }
 
 
