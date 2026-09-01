@@ -10,10 +10,14 @@ const appsRoot = resolve(root, 'apps-script');
 const claspEntry = resolve(root, 'node_modules', '@google', 'clasp', 'build', 'src', 'index.js');
 const allowedSource = new Set([
   'appsscript.json',
+  'active_v1_server.gs',
   'calculation_orchestrator.gs',
   'custom_price.gs',
   'decimal_math.gs',
+  'generated/active_v1_config.gs',
+  'generated/active_v1_runtime.gs',
   'generated/calculation_result_schema.gs',
+  'generated/deployment_seed.gs',
   'generated/human_ux_manifest.gs',
   'generated/module_size_rules.gs',
   'generated/project_input_schema.gs',
@@ -93,6 +97,10 @@ test('clasp ignore is an exact deploy whitelist', () => {
     '!generated/project_input_schema.gs',
     '!generated/calculation_result_schema.gs',
     '!generated/module_size_rules.gs',
+    '!generated/active_v1_runtime.gs',
+    '!generated/active_v1_config.gs',
+    '!generated/deployment_seed.gs',
+    '!active_v1_server.gs',
   ]);
   for (const file of walk()) assert.ok(allowedSource.has(file), `unexpected deployable source: ${file}`);
 });
@@ -131,7 +139,7 @@ test('remote-derived appsscript manifest is valid when checkpoint has supplied i
   assert.equal(manifest.runtimeVersion, 'V8');
   assert.equal(typeof manifest.exceptionLogging, 'string');
   assert.deepEqual(manifest.oauthScopes, [
-    'https://www.googleapis.com/auth/spreadsheets.currentonly',
+    'https://www.googleapis.com/auth/spreadsheets',
     'https://www.googleapis.com/auth/script.external_request',
   ]);
   assert.equal('webapp' in manifest, false);

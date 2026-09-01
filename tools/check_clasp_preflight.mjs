@@ -7,10 +7,14 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const expected = [
   'appsscript.json',
+  'active_v1_server.gs',
   'calculation_orchestrator.gs',
   'custom_price.gs',
   'decimal_math.gs',
   'generated/calculation_result_schema.gs',
+  'generated/active_v1_config.gs',
+  'generated/active_v1_runtime.gs',
+  'generated/deployment_seed.gs',
   'generated/human_ux_manifest.gs',
   'generated/module_size_rules.gs',
   'generated/project_input_schema.gs',
@@ -27,9 +31,10 @@ const expected = [
   'recipe_resolver.gs',
   'setup_system.gs',
   'sheets_v1_setup.gs',
+  'sheets_v1_result_writer.gs',
   'stage9_server.gs',
   'web_app.html',
-];
+].sort();
 const claspEntry = resolve(root, 'node_modules', '@google', 'clasp', 'build', 'src', 'index.js');
 
 function fail(message) {

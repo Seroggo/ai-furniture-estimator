@@ -24,3 +24,7 @@
 !generated/project_input_schema.gs
 !generated/calculation_result_schema.gs
 !generated/module_size_rules.gs
+!generated/active_v1_runtime.gs
+!generated/active_v1_config.gs
+!generated/deployment_seed.gs
+!active_v1_server.gs

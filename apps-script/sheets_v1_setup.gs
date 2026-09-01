@@ -2,22 +2,48 @@
 
 function setupSheetsV1() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  if (!spreadsheet) {
-    throw new Error('setupSheetsV1 requires an active Google Spreadsheet.');
-  }
+  if (!spreadsheet) throw new Error('setupSheetsV1 requires an active Google Spreadsheet.');
   return setupSheetsV1_(spreadsheet);
 }
 
 
-function setupSheetsV1_(spreadsheet) {
+function getSheetsV1Spreadsheet_() {
+  var active = SpreadsheetApp.getActiveSpreadsheet();
+  if (active) return active;
+  var id = PropertiesService.getScriptProperties().getProperty('SHEETS_V1_SPREADSHEET_ID');
+  if (!id) throw new Error('Set SHEETS_V1_SPREADSHEET_ID or bind the script to the DEV Spreadsheet.');
+  return SpreadsheetApp.openById(id);
+}
+
+
+function backupAndSetupSheetsV1() {
+  var spreadsheet = getSheetsV1Spreadsheet_();
+  var stamp = Utilities.formatDate(new Date(), 'Etc/UTC', 'yyyyMMdd-HHmmss');
+  var backup = spreadsheet.copy(spreadsheet.getName() + ' DEV backup ' + stamp);
+  PropertiesService.getScriptProperties().setProperty('SHEETS_V1_SPREADSHEET_ID', spreadsheet.getId());
+  if (typeof getOpenRouterVisionModel_ === 'function') getOpenRouterVisionModel_();
+  var result = setupSheetsV1_(spreadsheet, {reset: true, seed: true, prune: true});
+  result.backup_id = backup.getId();
+  result.backup_url = backup.getUrl();
+  result.spreadsheet_id = spreadsheet.getId();
+  result.spreadsheet_url = spreadsheet.getUrl();
+  return result;
+}
+
+
+function setupSheetsV1_(spreadsheet, options) {
+  options = options || {};
   var definitions = sheetsV1DefinitionsInOrder_(SHEETS_V1_MANIFEST);
   definitions.forEach(function (definition) {
     var sheet = spreadsheet.getSheetByName(definition.sheet_name);
     if (!sheet) {
       sheet = spreadsheet.insertSheet(definition.sheet_name);
     }
+    if (options.reset === true) sheet.clear();
     sheetsV1ConfigureSheet_(sheet, definition);
   });
+  if (options.seed === true) sheetsV1ApplyDeploymentSeed_(spreadsheet, definitions);
+  if (options.prune === true) sheetsV1PruneExtraSheets_(spreadsheet, definitions);
   sheetsV1OrderSheets_(spreadsheet, definitions.map(function (definition) {
     return definition.sheet_name;
   }));
@@ -25,8 +51,38 @@ function setupSheetsV1_(spreadsheet) {
     status: 'PASS',
     manifest: SHEETS_V1_MANIFEST.manifest_name,
     schemaVersion: SHEETS_V1_MANIFEST.schema_version,
-    sheets: definitions.map(function (definition) { return definition.sheet_name; })
+    sheets: definitions.map(function (definition) { return definition.sheet_name; }),
+    price_rows: options.seed === true ? SHEETS_V1_DEPLOYMENT_SEED.Prices.length : null,
+    construction_default_rows: options.seed === true ? SHEETS_V1_DEPLOYMENT_SEED.Construction_Defaults.length : null
   };
+}
+
+
+function sheetsV1ApplyDeploymentSeed_(spreadsheet, definitions) {
+  ['Prices', 'Construction_Defaults'].forEach(function (sheetName) {
+    var definition = definitions.filter(function (item) { return item.sheet_name === sheetName; })[0];
+    var rows = SHEETS_V1_DEPLOYMENT_SEED[sheetName];
+    var columns = definition.columns.slice().sort(function (left, right) { return left.order - right.order; });
+    var matrix = rows.map(function (row) {
+      return columns.map(function (column) {
+        var value = row[column.name];
+        return value === undefined || value === null ? '' : value;
+      });
+    });
+    var sheet = spreadsheet.getSheetByName(sheetName);
+    var lastRow = sheet.getLastRow();
+    if (lastRow > 1) sheet.getRange(2, 1, lastRow - 1, columns.length).clearContent();
+    if (matrix.length) sheet.getRange(2, 1, matrix.length, columns.length).setValues(matrix);
+  });
+}
+
+
+function sheetsV1PruneExtraSheets_(spreadsheet, definitions) {
+  var allowed = {};
+  definitions.forEach(function (definition) { allowed[definition.sheet_name] = true; });
+  spreadsheet.getSheets().slice().forEach(function (sheet) {
+    if (!allowed[sheet.getName()]) spreadsheet.deleteSheet(sheet);
+  });
 }
 
 

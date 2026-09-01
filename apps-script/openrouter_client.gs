@@ -5,6 +5,7 @@ var OPENROUTER_MAX_RETRIES = 2;
 var OPENROUTER_TIMEOUT_MS = 60000;
 var OPENROUTER_RETRY_DELAY_MS = 1000;
 var OPENROUTER_MAX_TIMEOUT_SECONDS = 60;
+var OPENROUTER_DEFAULT_VISION_MODEL = 'qwen/qwen3-vl-235b-a22b-instruct';
 
 var OPENROUTER_ERROR_CATEGORIES = Object.freeze({
   CONFIG_ERROR: 'CONFIG_ERROR',
@@ -52,6 +53,128 @@ function callOpenRouter(payload, options) {
   }
 
   return lastError;
+}
+
+
+/** Real multimodal provider used by the active V1 vision adapter. */
+function callOpenRouterVision(imageInput, options) {
+  options = options || {};
+  var images = imageInput && Array.isArray(imageInput.images) ? imageInput.images : [];
+  if (!images.length) return buildErrorResult_('INPUT_INVALID', 'Vision input requires at least one image.');
+
+  var apiKey = getOpenRouterApiKey_();
+  if (!apiKey) return buildErrorResult_('CONFIG_ERROR', 'OPENROUTER_API_KEY is not configured in Script Properties.');
+  var model = getOpenRouterVisionModel_();
+  var requestPayload = buildVisionRequestPayload_(imageInput, model);
+  var transport = options.transport || UrlFetchApp.fetch.bind(UrlFetchApp);
+  var sleeper = options.sleeper || Utilities.sleep;
+  var timeoutMs = normalizeTimeoutMs_(options.timeoutMs);
+  var maxRetries = normalizeMaxRetries_(options.maxRetries);
+  var lastError = null;
+
+  for (var attempt = 0; attempt <= maxRetries; attempt++) {
+    var result = executeRequest_(transport, requestPayload, apiKey, timeoutMs);
+    if (result.status === 'SUCCESS') {
+      result.modelRequested = model;
+      return result;
+    }
+    lastError = result;
+    if (!result.retryable) return result;
+    if (attempt < maxRetries) sleeper(OPENROUTER_RETRY_DELAY_MS * (attempt + 1));
+  }
+  return lastError;
+}
+
+
+function getOpenRouterVisionModel_() {
+  try {
+    var properties = PropertiesService.getScriptProperties();
+    var configured = normalizeRuntimeProperty_(properties.getProperty('OPENROUTER_VISION_MODEL'));
+    if (configured) return configured;
+    properties.setProperty('OPENROUTER_VISION_MODEL', OPENROUTER_DEFAULT_VISION_MODEL);
+  } catch (error) {
+    return OPENROUTER_DEFAULT_VISION_MODEL;
+  }
+  return OPENROUTER_DEFAULT_VISION_MODEL;
+}
+
+
+function buildVisionRequestPayload_(imageInput, model) {
+  var allowed = Array.isArray(imageInput.allowed_target_paths) ? imageInput.allowed_target_paths : [];
+  var prompt = 'Inspect only visible furniture facts. Do not guess hidden dimensions. ' +
+    'For visible_dimensions use only one of these exact target paths: ' + allowed.join(', ') + '.';
+  var content = [{type: 'text', text: prompt}];
+  imageInput.images.forEach(function (image) {
+    content.push({
+      type: 'image_url',
+      image_url: {url: 'data:' + image.mime_type + ';base64,' + image.data}
+    });
+  });
+  return {
+    model: model,
+    messages: [
+      {role: 'system', content: 'Return a conservative structured visual observation for the active V1 furniture pipeline.'},
+      {role: 'user', content: content}
+    ],
+    provider: {require_parameters: true},
+    response_format: {
+      type: 'json_schema',
+      json_schema: {name: 'active_v1_vision_observation', strict: true, schema: buildVisionObservationSchema_()}
+    },
+    stream: false
+  };
+}
+
+
+function buildVisionObservationSchema_() {
+  return {
+    type: 'object',
+    additionalProperties: false,
+    required: ['source_ref', 'entities', 'visible_text', 'visible_dimensions'],
+    properties: {
+      source_ref: {type: 'string'},
+      entities: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['type', 'confidence', 'target_path'],
+          properties: {
+            type: {type: 'string', enum: ['BASE_CABINET', 'WALL_CABINET', 'TALL_CABINET', 'SINK', 'DISHWASHER', 'HOB', 'OVEN', 'HOOD', 'REFRIGERATOR', 'ISLAND', 'COUNTERTOP']},
+            confidence: {type: 'number', minimum: 0, maximum: 1},
+            target_path: {type: 'string'}
+          }
+        }
+      },
+      visible_text: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['text', 'confidence', 'target_path'],
+          properties: {
+            text: {type: 'string'},
+            confidence: {type: 'number', minimum: 0, maximum: 1},
+            target_path: {type: 'string'}
+          }
+        }
+      },
+      visible_dimensions: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['target_path', 'value', 'unit', 'confidence'],
+          properties: {
+            target_path: {type: 'string'},
+            value: {type: 'number', exclusiveMinimum: 0},
+            unit: {type: 'string', enum: ['mm', 'cm', 'm']},
+            confidence: {type: 'number', minimum: 0, maximum: 1}
+          }
+        }
+      }
+    }
+  };
 }
 
 

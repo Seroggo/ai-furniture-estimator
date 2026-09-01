@@ -95,7 +95,8 @@ function runPredeploymentPipelineV1(input, options) {
   if (errors.length) return { Status: STATUS.PARTIAL, Stage10: null, Construction_defaults: null, Confirmed_configuration: null, Construction_result: null, Price_snapshot: null, Costing: null, Sheets_bundle: null, Issues: errors };
 
   var source = clone(input.Stage10 || input);
-  if (opts.VisionProvider) {
+  var answersProvided = Array.isArray(source.Confirmation_answers) && source.Confirmation_answers.length > 0;
+  if (opts.VisionProvider && !answersProvided) {
     if (!isObject(source.Vision)) source.Vision = {};
     source.Vision.Provider = opts.VisionProvider;
   }
@@ -105,8 +106,8 @@ function runPredeploymentPipelineV1(input, options) {
   var stageResult = stage10Pipeline.runStage10Pipeline(source);
   var result = { Status: STATUS.NEEDS_CLARIFICATION, Stage10: stageResult, Construction_defaults: defaults, Confirmed_configuration: null, Construction_result: null, Price_snapshot: null, Costing: null, Sheets_bundle: null, Issues: clone(stageResult.Issues || []) };
   var questionCount = stageResult.Brief && Array.isArray(stageResult.Brief.Questions) ? stageResult.Brief.Questions.length : 0;
-  if (!stageResult.Ok && questionCount && (userAnswers.length || defaults.Default_candidates.length)) {
-    source.Confirmation_answers = makeDefaultAnswers(stageResult.Brief, defaults.Default_candidates, userAnswers);
+  if (!stageResult.Ok && questionCount && userAnswers.length) {
+    source.Confirmation_answers = userAnswers.map(clone);
     stageResult = stage10Pipeline.runStage10Pipeline(source);
     result.Stage10 = stageResult;
     result.Issues = clone(stageResult.Issues || []);
@@ -131,15 +132,11 @@ function runPredeploymentPipelineV1(input, options) {
     result.Issues.push(problem('COSTING_ERROR', error.message, '$.Costing'));
     return result;
   }
-  if (result.Costing.Status !== 'COMPLETE') {
-    result.Status = STATUS.PARTIAL;
-    return result;
-  }
   var bundleContext = clone(context);
   bundleContext.confirmed_configuration = result.Confirmed_configuration;
   bundleContext.construction_result = constructionForCosting;
   result.Sheets_bundle = costing.buildSheetsV1Bundle(bundleContext, result.Costing, result.Price_snapshot);
-  result.Status = STATUS.COMPLETE;
+  result.Status = result.Costing.Status === 'COMPLETE' ? STATUS.COMPLETE : STATUS.PARTIAL;
   return result;
 }
 

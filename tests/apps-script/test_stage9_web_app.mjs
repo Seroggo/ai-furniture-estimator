@@ -68,7 +68,7 @@ function createClientRuntime({fileReaderMode = 'success'} = {}) {
   const runner = {
     withSuccessHandler(listener) { this.successHandler = listener; return this; },
     withFailureHandler(listener) { this.failureHandler = listener; return this; },
-    submitStage9Project(value) {
+    submitActiveV1Project(value) {
       state.serverCalls.push(JSON.parse(JSON.stringify(value)));
     },
   };
@@ -180,7 +180,8 @@ test('browser text-only submit sends a literal empty image array without FileRea
   await runtime.node('submit-button').listeners.click();
   assert.equal(runtime.state.fileReaderCalls, 0);
   assert.deepEqual(runtime.state.serverCalls, [{
-    request_version: 'stage9-request-v1',
+    request_version: 'active-v1-request-v1',
+    action: 'START',
     text: 'Прямая кухня 3000 мм',
     images: [],
   }]);
@@ -416,7 +417,7 @@ test('script-like model text is preserved as text data and client has no unsafe 
   assert.match(htmlSource, /document\.createElement/);
 });
 
-test('UI contains required controls, states and only the Stage 9 browser call', () => {
+test('UI contains required controls, states and only the active V1 browser call', () => {
   for (const id of ['project-text', 'image-picker', 'file-list', 'submit-button', 'loading-state',
     'understood-title', 'questions-title', 'calculation-title', 'edit-button']) {
     assert.match(htmlSource, new RegExp(`id="${id}"`), `missing ${id}`);
@@ -424,7 +425,8 @@ test('UI contains required controls, states and only the Stage 9 browser call', 
   assert.match(htmlSource, /accept="image\/png,image\/jpeg,image\/webp"/);
   assert.match(htmlSource, /if \(submitting\) return/);
   assert.match(htmlSource, /submitButton\.disabled = value/);
-  assert.match(htmlSource, /\.submitStage9Project\(request\)/);
+  assert.match(htmlSource, /\.submitActiveV1Project\(request\)/);
+  assert.doesNotMatch(htmlSource, /\.submitStage9Project\(request\)/);
   assert.doesNotMatch(htmlSource, /parseProjectInput|calculateProject|UrlFetchApp|SpreadsheetApp|DriveApp/);
   assert.doesNotMatch(htmlSource, /https?:\/\//);
 });

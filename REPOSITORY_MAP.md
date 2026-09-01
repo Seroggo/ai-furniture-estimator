@@ -100,7 +100,8 @@ Test suites organized by domain.
 - `tests/e2e/` — end-to-end integration tests
   - `test_stage10_e2e.mjs`
   - `test_predeployment_pipeline_v1.mjs`
-- `tests/apps-script/` — Apps Script runtime and Sheets adapter tests (Stage 6–9)
+- `tests/apps-script/` — Apps Script runtime and Sheets adapter tests (Stage 6–9 and Active V1)
+  - `test_active_v1_deployment.mjs` — Active V1 deployment and runtime tests
   - `test_stage6_apps_script.mjs`
   - `test_stage7_openrouter_parser.mjs`
   - `test_stage8_calculation_kernel.mjs`
@@ -176,13 +177,14 @@ External reference inputs and baseline data.
 Tracked Google Apps Script runtime files and generated deployment artifacts.
 
 - `apps-script/`
+  - `active_v1_server.gs` — Active V1 Web App server boundary
   - `appsscript.json` — Apps Script project manifest
   - `calculation_orchestrator.gs` — calculation orchestration
   - `custom_price.gs` — custom price handling
   - `decimal_math.gs` — decimal arithmetic helpers
   - `layout_runtime.gs` — layout runtime
   - `master_data_loader.gs` — master data loading
-  - `openrouter_client.gs` — OpenRouter client
+  - `openrouter_client.gs` — OpenRouter client with Vision support
   - `pricebook_resolver.gs` — pricebook resolution
   - `project_input_adapter.gs` — project input adapter
   - `project_parser.gs` — project parser
@@ -190,12 +192,15 @@ Tracked Google Apps Script runtime files and generated deployment artifacts.
   - `quantity_engine.gs` — quantity engine
   - `recipe_resolver.gs` — recipe resolver
   - `setup_system.gs` — system setup
-  - `sheets_v1_setup.gs` — Sheets V1 setup adapter
+  - `sheets_v1_setup.gs` — Sheets V1 setup and seed adapter
   - `sheets_v1_result_writer.gs` — Sheets V1 result writer
   - `stage9_server.gs` — Stage 9 server
   - `web_app.html` — web application
 - `apps-script/generated/`
+  - `active_v1_config.gs` — frozen ALPHA_CONSTRUCTION_PROFILE_V1 for Active V1
+  - `active_v1_runtime.gs` — bundled Active V1 pipeline runtime
   - `calculation_result_schema.gs`
+  - `deployment_seed.gs` — Prices and Construction_Defaults seed
   - `human_ux_manifest.gs`
   - `module_size_rules.gs`
   - `project_input_schema.gs`
@@ -208,8 +213,10 @@ Build utilities, generators, and validation scripts.
 
 - `tools/check_clasp_preflight.mjs` — clasp deployment preflight check
 - `tools/clasp_checkpoint.mjs` — clasp deployment checkpoint manager
+- `tools/generate_apps_script_runtime.mjs` — Active V1 runtime bundler
 - `tools/generate_calculation_result_schema.py` — Apps Script calculation result schema generator
 - `tools/generate_construction_golden.mjs` — Construction Core golden result generator
+- `tools/generate_deployment_seed.mjs` — Prices and Construction_Defaults seed generator
 - `tools/generate_human_ux_manifest.py` — Human UX manifest generator
 - `tools/generate_module_size_rules.py` — Module size rules generator
 - `tools/generate_project_input_schema.py` — Project input schema generator
@@ -233,7 +240,9 @@ Use these paths in prompts and documentation.
 | Construction adapter | `src/input-understanding/construction_adapter.js` |
 | Construction Core | `src/construction-core/index.js` |
 | Costing and BOM bundle | `src/costing/index.js` |
-| Pre-deployment pipeline | `src/runtime/predeployment_pipeline_v1.js` |
+| Active V1 pre-deployment pipeline | `src/runtime/predeployment_pipeline_v1.js` |
+| Active V1 server boundary | `apps-script/active_v1_server.gs` |
+| Active V1 runtime bundle | `apps-script/generated/active_v1_runtime.gs` |
 | Construction profile | `config/construction/ALPHA_CONSTRUCTION_PROFILE_V1.json` |
 | Evidence schema | `contracts/input-understanding/INPUT_EVIDENCE_V1.schema.json` |
 | Draft schema | `contracts/input-understanding/DRAFT_CONFIGURATION_V1.schema.json` |

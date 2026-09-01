@@ -9,10 +9,14 @@ const canonicalRoot = resolve(repositoryRoot, 'apps-script');
 const snapshotsRoot = resolve(repositoryRoot, '.clasp-snapshots');
 const expectedFiles = [
   'appsscript.json',
+  'active_v1_server.gs',
   'calculation_orchestrator.gs',
   'custom_price.gs',
   'decimal_math.gs',
   'generated/calculation_result_schema.gs',
+  'generated/active_v1_config.gs',
+  'generated/active_v1_runtime.gs',
+  'generated/deployment_seed.gs',
   'generated/human_ux_manifest.gs',
   'generated/module_size_rules.gs',
   'generated/project_input_schema.gs',
@@ -29,9 +33,10 @@ const expectedFiles = [
   'recipe_resolver.gs',
   'setup_system.gs',
   'sheets_v1_setup.gs',
+  'sheets_v1_result_writer.gs',
   'stage9_server.gs',
   'web_app.html',
-];
+].sort();
 
 function fail(message) {
   console.error(`ERROR: ${message}`);
@@ -83,6 +88,7 @@ function normalized(path) {
 function canonicalRemoteFile(file) {
   const normalizedFile = file.replaceAll('\\', '/');
   if (normalizedFile === 'appsscript.json') return 'appsscript.json';
+  if (/^(?:.*\/)?active_v1_server\.(?:js|gs)$/.test(normalizedFile)) return 'active_v1_server.gs';
   if (/^(?:.*\/)?calculation_orchestrator\.(?:js|gs)$/.test(normalizedFile)) return 'calculation_orchestrator.gs';
   if (/^(?:.*\/)?custom_price\.(?:js|gs)$/.test(normalizedFile)) return 'custom_price.gs';
   if (/^(?:.*\/)?decimal_math\.(?:js|gs)$/.test(normalizedFile)) return 'decimal_math.gs';
@@ -90,6 +96,7 @@ function canonicalRemoteFile(file) {
   if (/^(?:.*\/)?master_data_loader\.(?:js|gs)$/.test(normalizedFile)) return 'master_data_loader.gs';
   if (/^(?:.*\/)?setup_system\.(?:js|gs)$/.test(normalizedFile)) return 'setup_system.gs';
   if (/^(?:.*\/)?sheets_v1_setup\.(?:js|gs)$/.test(normalizedFile)) return 'sheets_v1_setup.gs';
+  if (/^(?:.*\/)?sheets_v1_result_writer\.(?:js|gs)$/.test(normalizedFile)) return 'sheets_v1_result_writer.gs';
   if (/^(?:.*\/)?stage9_server\.(?:js|gs)$/.test(normalizedFile)) return 'stage9_server.gs';
   if (/^(?:.*\/)?web_app\.html$/.test(normalizedFile)) return 'web_app.html';
   if (/^(?:.*\/)?openrouter_client\.(?:js|gs)$/.test(normalizedFile)) return 'openrouter_client.gs';
@@ -107,6 +114,9 @@ function canonicalRemoteFile(file) {
   if (/^(?:generated\/)?sheets_v1_manifest\.(?:js|gs)$/.test(normalizedFile)) {
     return 'generated/sheets_v1_manifest.gs';
   }
+  if (/^(?:generated\/)?active_v1_config\.(?:js|gs)$/.test(normalizedFile)) return 'generated/active_v1_config.gs';
+  if (/^(?:generated\/)?active_v1_runtime\.(?:js|gs)$/.test(normalizedFile)) return 'generated/active_v1_runtime.gs';
+  if (/^(?:generated\/)?deployment_seed\.(?:js|gs)$/.test(normalizedFile)) return 'generated/deployment_seed.gs';
   if (/^(?:generated\/)?schema_manifest\.(?:js|gs)$/.test(normalizedFile)) {
     return 'generated/schema_manifest.gs';
   }

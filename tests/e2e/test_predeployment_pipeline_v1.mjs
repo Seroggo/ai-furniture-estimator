@@ -45,6 +45,22 @@ function baseOptions(observation, calculationId = 'CALC_E2E_001') {
 function stageInput(draft, observation) {
   return { Stage10: { Draft: structuredClone(draft), Evidence: [], Vision: { Image_input: observation.source_ref }, Profile: structuredClone(profile), Benchmark_reference: structuredClone(benchmarkReference) } };
 }
+function runConfirmed(input, options) {
+  const first = runPredeploymentPipelineV1(input, options);
+  if (first.Status !== 'NEEDS_CLARIFICATION') return first;
+  const questions = first.Stage10.Brief.Questions;
+  const answers = questions.map((question) => {
+    assert.ok(question.Options.length > 0, 'test fixture needs a value for ' + question.Target_path);
+    return {Question_id: question.Question_id, Target_path: question.Target_path, Value: question.Options[0]};
+  });
+  const confirmedInput = structuredClone(input);
+  confirmedInput.Stage10.Draft = structuredClone(first.Stage10.Draft);
+  delete confirmedInput.Stage10.Vision;
+  confirmedInput.Stage10.Confirmation_answers = answers;
+  const confirmOptions = {...options};
+  delete confirmOptions.VisionProvider;
+  return runPredeploymentPipelineV1(confirmedInput, confirmOptions);
+}
 
 class FakeRange {
   constructor(sheet, row, column, rows, columns) { Object.assign(this, { sheet, row, column, rows, columns }); }
@@ -97,7 +113,10 @@ test('A. happy path reaches COMPLETE and writes Sheets V1 twice correctly', () =
   const input = stageInput(scenarioADraft, scenarioAObservation);
   const opts = baseOptions(scenarioAObservation);
   const inputBefore = JSON.stringify(input), defaultsBefore = JSON.stringify(opts.ConstructionDefaults), pricesBefore = JSON.stringify(opts.PriceRows);
-  happyResult = runPredeploymentPipelineV1(input, opts);
+  const clarification = runPredeploymentPipelineV1(input, opts);
+  assert.equal(clarification.Status, 'NEEDS_CLARIFICATION');
+  assert.equal(clarification.Sheets_bundle, null);
+  happyResult = runConfirmed(input, opts);
   assert.equal(happyResult.Status, 'COMPLETE');
   assert.equal(happyResult.Stage10.Ok, true);
   assert.ok(happyResult.Confirmed_configuration);
@@ -108,7 +127,7 @@ test('A. happy path reaches COMPLETE and writes Sheets V1 twice correctly', () =
   assert.equal(JSON.stringify(input), inputBefore);
   assert.equal(JSON.stringify(opts.ConstructionDefaults), defaultsBefore);
   assert.equal(JSON.stringify(opts.PriceRows), pricesBefore);
-  const again = runPredeploymentPipelineV1(input, opts);
+  const again = runConfirmed(input, opts);
   assert.equal(JSON.stringify(again), JSON.stringify(happyResult));
 
   const { spreadsheet, context } = sheetsRuntime();
@@ -121,7 +140,7 @@ test('A. happy path reaches COMPLETE and writes Sheets V1 twice correctly', () =
   assert.ok(rows(spreadsheet.getSheetByName('SYSTEM')).length > 0);
 
   const secondOptions = baseOptions(scenarioAObservation, 'CALC_E2E_002');
-  const second = runPredeploymentPipelineV1(input, secondOptions);
+  const second = runConfirmed(input, secondOptions);
   context.bundle2 = second.Sheets_bundle;
   vm.runInContext('setupSheetsV1_(SpreadsheetApp.getActiveSpreadsheet()); writeSheetsV1Result_(SpreadsheetApp.getActiveSpreadsheet(), bundle2)', context);
   assert.equal(spreadsheet.getSheets().length, 5);
@@ -177,10 +196,10 @@ test('D. 733 mm width remains exact and deterministic through Construction Core'
   draft.assemblies[0].modules[0].dimensions.width_mm = { state: 'KNOWN', value: 733, source_ref: 'NOTE_A', source_type: 'USER_DIMENSION', evidence_state: 'EXPLICIT', note: 'Explicit 733 mm.' };
   const observation = structuredClone(scenarioAObservation);
   observation.visible_dimensions = observation.visible_dimensions.filter((item) => !item.target_path.endsWith('width_mm'));
-  const result = runPredeploymentPipelineV1(stageInput(draft, observation), baseOptions(observation, 'CALC_733'));
+  const result = runConfirmed(stageInput(draft, observation), baseOptions(observation, 'CALC_733'));
   assert.equal(result.Status, 'COMPLETE');
   assert.equal(result.Confirmed_configuration.assemblies[0].modules[0].width_mm, 733);
   const bottom = result.Construction_result.Parts.find((part) => part.Part_type === 'BOTTOM');
   assert.equal(bottom.Length_mm, 733 - 32);
-  assert.equal(JSON.stringify(result), JSON.stringify(runPredeploymentPipelineV1(stageInput(draft, observation), baseOptions(observation, 'CALC_733'))));
+  assert.equal(JSON.stringify(result), JSON.stringify(runConfirmed(stageInput(draft, observation), baseOptions(observation, 'CALC_733'))));
 });

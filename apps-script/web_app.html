@@ -152,7 +152,7 @@
   <script>
     (() => {
       'use strict';
-      const REQUEST_VERSION = 'stage9-request-v1';
+      const REQUEST_VERSION = 'active-v1-request-v1';
       const MAX_TEXT = 12000;
       const MAX_FILES = 3;
       const MAX_FILE_BYTES = 4 * 1024 * 1024;
@@ -161,6 +161,8 @@
       const byId = (id) => document.getElementById(id);
       let selectedFiles = [];
       let submitting = false;
+      let pendingState = null;
+      let pendingQuestions = [];
 
       const textArea = byId('project-text');
       const picker = byId('image-picker');
@@ -369,13 +371,80 @@
         resultRegion.scrollIntoView({behavior: 'smooth', block: 'start'});
       }
 
+      function renderActiveResponse(view) {
+        const resultRegion = byId('result-region');
+        resultRegion.hidden = false;
+        setText(byId('result-title'), view.title || 'Результат');
+        setText(byId('result-message'), view.message || 'Ответ получен.');
+        setText(byId('request-reference'), 'Номер запроса: ' + (view.request_id || 'не указан'));
+        const statusCard = byId('status-card');
+        statusCard.className = 'panel status';
+        if (view.status === 'ERROR') statusCard.classList.add('error');
+        else if (view.status === 'NEEDS_CLARIFICATION' || view.status === 'PARTIAL') statusCard.classList.add('blocker');
+
+        clearNode(byId('understood-list'));
+        byId('understood-empty').hidden = false;
+        const list = byId('question-list');
+        clearNode(list);
+        pendingState = view.state || null;
+        pendingQuestions = Array.isArray(view.questions) ? view.questions : [];
+        pendingQuestions.forEach((question, index) => {
+          const item = document.createElement('li');
+          const label = document.createElement('label');
+          label.setAttribute('for', 'question-' + index);
+          setText(label, question.target_path);
+          const input = document.createElement('input');
+          input.id = 'question-' + index;
+          input.type = 'number';
+          input.step = 'any';
+          input.required = true;
+          if (question.default_value !== undefined && question.default_value !== null) input.value = question.default_value;
+          const hint = document.createElement('p');
+          hint.className = 'hint';
+          setText(hint, question.reason === 'CONFIRMATION_REQUIRED'
+            ? 'Подтвердите предложенное значение или введите другое.'
+            : 'Введите точное значение в миллиметрах.');
+          item.append(label, input, hint);
+          list.appendChild(item);
+        });
+        if (pendingQuestions.length) {
+          const item = document.createElement('li');
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'primary';
+          button.id = 'confirm-button';
+          setText(button, 'Подтвердить и рассчитать');
+          button.addEventListener('click', submitConfirmation);
+          item.appendChild(button);
+          list.appendChild(item);
+        }
+        byId('questions-empty').hidden = pendingQuestions.length > 0;
+
+        const summary = view.summary;
+        byId('cost-block').hidden = !summary;
+        clearNode(byId('cost-list'));
+        if (summary) {
+          setText(byId('cost-total'), 'Итого: ' + (summary.grand_total == null ? '—' : summary.grand_total) + ' ' + (summary.currency || 'RUB'));
+          const line = document.createElement('li');
+          setText(line, 'BOM: ' + (summary.bom_rows || 0) + ' строк; нерешённых позиций: ' + (summary.unresolved_rows || 0) + '.');
+          byId('cost-list').appendChild(line);
+        }
+        byId('layout-block').hidden = true;
+        byId('blocker-block').hidden = true;
+        byId('warning-block').hidden = true;
+        byId('calculation-empty').hidden = Boolean(summary);
+        const technical = view.technical_reference || {};
+        setText(byId('calculation-code'), 'Active V1: ' + (view.status || 'UNKNOWN') + '; Sheets: ' + (technical.sheets_write || 'SKIPPED') + '.');
+        resultRegion.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+
       function transportFailure() {
-        renderResponse({
+        renderActiveResponse({
           request_id: 'не получен',
-          display_status: 'ERROR',
+          status: 'ERROR',
           title: 'Ошибка соединения',
           message: 'Сервер не вернул безопасный ответ. Повторите попытку позже.',
-          understood_summary: [], missing_questions: [], blockers: [], warnings: []
+          questions: [], state: null, summary: null
         });
       }
 
@@ -421,11 +490,11 @@
           }
         }
 
-        request = {request_version: REQUEST_VERSION, text, images: encodedImages};
+        request = {request_version: REQUEST_VERSION, action: 'START', text, images: encodedImages};
         try {
           google.script.run
             .withSuccessHandler((view) => {
-              renderResponse(view);
+              renderActiveResponse(view);
               clearPayload();
               setSubmitting(false);
             })
@@ -434,12 +503,50 @@
               clearPayload();
               setSubmitting(false);
             })
-            .submitStage9Project(request);
+            .submitActiveV1Project(request);
         } catch (error) {
           transportFailure();
           clearPayload();
           setSubmitting(false);
         }
+      }
+
+      function submitConfirmation() {
+        if (submitting || !pendingState || !pendingState.draft) return;
+        showClientError('');
+        const answers = [];
+        for (let index = 0; index < pendingQuestions.length; index += 1) {
+          const input = byId('question-' + index);
+          const value = Number(input && input.value);
+          if (!Number.isFinite(value) || value <= 0) {
+            showClientError('Заполните все уточнения положительными числовыми значениями.');
+            if (input) input.focus();
+            return;
+          }
+          answers.push({
+            Question_id: pendingQuestions[index].question_id,
+            Target_path: pendingQuestions[index].target_path,
+            Value: value
+          });
+        }
+        setSubmitting(true);
+        const request = {
+          request_version: REQUEST_VERSION,
+          action: 'CONFIRM',
+          request_id: byId('request-reference').textContent.replace('Номер запроса: ', ''),
+          draft: pendingState.draft,
+          answers: answers
+        };
+        google.script.run
+          .withSuccessHandler((view) => {
+            renderActiveResponse(view);
+            setSubmitting(false);
+          })
+          .withFailureHandler(() => {
+            transportFailure();
+            setSubmitting(false);
+          })
+          .submitActiveV1Project(request);
       }
 
       textArea.addEventListener('input', () => {
@@ -460,6 +567,8 @@
       });
       submitButton.addEventListener('click', submit);
       byId('edit-button').addEventListener('click', () => {
+        pendingState = null;
+        pendingQuestions = [];
         textArea.disabled = false;
         textArea.focus();
         textArea.scrollIntoView({behavior: 'smooth', block: 'center'});
