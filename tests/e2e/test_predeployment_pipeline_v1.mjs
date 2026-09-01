@@ -84,8 +84,8 @@ class FakeSheet {
   getLastColumn() { return Math.max(0, ...[...this.grid.keys()].map((key) => Number(key.split(':')[1]))); }
   getMaxRows() { return Math.max(100, this.getLastRow()); }
   setFrozenRows() {}
-  hideColumn(column) { this.hidden.add(column); }
-  showColumn(column) { this.hidden.delete(column); }
+  hideColumns(column) { this.hidden.add(column); }
+  showColumns(column) { this.hidden.delete(column); }
 }
 class FakeSpreadsheet {
   constructor() { this.sheets = []; this.active = null; }

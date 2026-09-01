@@ -82,8 +82,8 @@ class FakeSheet {
   getName() { return this.name; }
   getFrozenRows() { return this.frozenRows; }
   setFrozenRows(n) { this.frozenRows = n; }
-  hideColumn(c) { this.hiddenColumns.add(c); }
-  showColumn(c) { this.hiddenColumns.delete(c); }
+  hideColumns(c) { this.hiddenColumns.add(c); }
+  showColumns(c) { this.hiddenColumns.delete(c); }
 
   cellKey(row, col) { return `${row}:${col}`; }
 

@@ -108,9 +108,9 @@ function sheetsV1ConfigureSheet_(sheet, definition) {
       columnRange.setDataValidation(rule);
     }
     if (column.visibility === 'HIDDEN') {
-      sheet.hideColumn(index + 1);
+      sheet.hideColumns(index + 1);
     } else {
-      sheet.showColumn(index + 1);
+      sheet.showColumns(index + 1);
     }
   });
 }

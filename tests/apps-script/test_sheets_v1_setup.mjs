@@ -152,8 +152,8 @@ class FakeSheet {
   }
   setFrozenRows(n) { this.frozenRows = n; return this; }
   getFrozenRows() { return this.frozenRows; }
-  hideColumn(position) { this.hiddenColumns.add(position); return this; }
-  showColumn(position) { this.hiddenColumns.delete(position); return this; }
+  hideColumns(position) { this.hiddenColumns.add(position); return this; }
+  showColumns(position) { this.hiddenColumns.delete(position); return this; }
   isColumnHidden(position) { return this.hiddenColumns.has(position); }
   validationForColumn(position) { return this.validations.get(position) || null; }
 }
