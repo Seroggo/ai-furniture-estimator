@@ -18,7 +18,7 @@
     "test:regression": "python -m unittest discover -s tests/legacy-calculation -p \"test_*.py\" && python -m unittest discover -s tests/sheets -p \"test_*.py\"",
     "test:sheets-v1": "python -m unittest tests/sheets/test_sheets_v1_generator.py && node --test tests/apps-script/test_sheets_v1_setup.mjs",
     "test:costing": "node --test tests/costing/test_costing_v1.mjs",
-    "test:sheets-v1-writer": "node --test tests/apps-script/test_sheets_v1_result_writer.mjs",
+    "test:sheets-v1-writer": "node --test tests/apps-script/test_sheets_v1_result_writer.mjs tests/apps-script/test_active_v1_human_sheets.mjs",
     "schema:check": "python tools/generate_setup_schema.py --check && python tools/generate_human_ux_manifest.py --check && python tools/generate_project_input_schema.py --check && python tools/generate_calculation_result_schema.py --check && python tools/generate_module_size_rules.py --check && python tools/generate_stage8_layout_golden.py --check && python tools/generate_sheets_v1_manifest.py --check",
     "generate:sheets-v1": "python tools/generate_sheets_v1_manifest.py",
     "check:sheets-v1": "python tools/generate_sheets_v1_manifest.py --check",

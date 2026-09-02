@@ -48,12 +48,14 @@ function submitActiveV1Project(request) {
         return response.data;
       }
     } : null;
+    var sprMappings = activeV1ReadSprMappings_(spreadsheet);
+    var calculationDate = new Date();
     var options = {
       ConstructionDefaults: activeV1ReadRows_(spreadsheet, 'Construction_Defaults'),
-      PriceRows: activeV1ReadRows_(spreadsheet, 'Prices'),
+      PriceRows: activeV1ReadCustomPriceRows_(spreadsheet, sprMappings),
       CalculationContext: {
         calculation_id: requestId + '_CALC',
-        timestamp: new Date().toISOString(),
+        timestamp: calculationDate.toISOString(),
         project_name: stageInput.Draft.project_id,
         manager: 'DEV_MANAGER',
         vision_model: visionModel || getOpenRouterVisionModel_(),
@@ -68,7 +70,7 @@ function submitActiveV1Project(request) {
     var result = runActiveV1Pipeline({Stage10: stageInput}, options);
     var writeResult = null;
     if ((result.Status === 'COMPLETE' || result.Status === 'PARTIAL') && result.Sheets_bundle) {
-      writeResult = writeSheetsV1Result_(spreadsheet, result.Sheets_bundle);
+      writeResult = writeActiveV1SheetsResult_(spreadsheet, result.Sheets_bundle, sprMappings, calculationDate);
     }
     var view = activeV1ResultView_(requestId, result, writeResult, visionModel);
     console.log('ACTIVE_V1 request_id=' + requestId + ' status=' + view.status +
@@ -115,6 +117,138 @@ function activeV1ReadRows_(spreadsheet, sheetName) {
     headers.forEach(function (header, index) { record[header] = row[index]; });
     return record;
   });
+}
+
+
+function activeV1ReadCustomPriceRows_(spreadsheet, mappings) {
+  var customSheet = activeV1RequireSheet_(spreadsheet, 'Custom_Price');
+  var customValues = activeV1ReadTable_(customSheet, 'Custom_Price', 1, 13);
+  var sprMappings = mappings || activeV1ReadSprMappings_(spreadsheet);
+  var rows = [];
+
+  customValues.rows.forEach(function (row, offset) {
+    var rowNumber = customValues.dataStartRow + offset;
+    if (activeV1RowBlank_(row)) return;
+    var categoryHuman = activeV1Text_(row[0]);
+    var name = activeV1Text_(row[1]);
+    var unitHuman = activeV1Text_(row[2]);
+    var price = activeV1Number_(row[8]);
+    var itemId = activeV1Text_(row[12]);
+    var missing = [];
+    if (!categoryHuman) missing.push('Категория');
+    if (!name) missing.push('Наименование');
+    if (!unitHuman) missing.push('Ед. изм.');
+    if (price === null || price < 0) missing.push('Цена в ₽');
+    if (!itemId) missing.push('Item_id');
+    if (missing.length) {
+      throw new Error('Custom_Price!' + rowNumber + ': missing or invalid required value(s): ' + missing.join(', '));
+    }
+    rows.push({
+      category: activeV1SprMap_(sprMappings, 'price_category', categoryHuman, 'HUMAN_TO_MACHINE', 'Custom_Price!' + rowNumber + '!Категория'),
+      name: name,
+      unit: activeV1SprMap_(sprMappings, 'unit', unitHuman, 'HUMAN_TO_MACHINE', 'Custom_Price!' + rowNumber + '!Ед. изм.'),
+      price: price,
+      currency: 'RUB',
+      vendor: null,
+      article: null,
+      active: true,
+      notes: activeV1Text_(row[11]) || null,
+      updated_at: row[10] || null,
+      item_id: itemId
+    });
+  });
+  return rows;
+}
+
+
+function activeV1ReadSprMappings_(spreadsheet) {
+  var sprSheet = activeV1RequireSheet_(spreadsheet, 'spr');
+  var sprValues = activeV1ReadTable_(sprSheet, 'spr', 1, 5);
+  return activeV1BuildSprMappings_(sprValues.rows);
+}
+
+
+function activeV1RequireSheet_(spreadsheet, sheetName) {
+  var sheet = spreadsheet.getSheetByName(sheetName);
+  if (!sheet) throw new Error('Missing Active V1 tab: ' + sheetName);
+  return sheet;
+}
+
+
+function activeV1ReadTable_(sheet, sheetName, headerRow, width) {
+  var lastRow = sheet.getLastRow();
+  var actualHeaders = sheet.getRange(headerRow, 1, 1, width).getDisplayValues()[0];
+  var expected = sheetName === 'Custom_Price'
+    ? ['Категория', 'Наименование', 'Ед. изм.', 'Цена', 'Валюта', 'Режим цены', 'Курс ручной', 'Курс текущий', 'Цена в ₽', 'По умолчанию', 'Дата обновления', 'Комментарий', 'item_id']
+    : ['type', 'human_value', 'machine_value', 'direction', 'comment'];
+  if (JSON.stringify(actualHeaders) !== JSON.stringify(expected)) {
+    throw new Error('Incompatible headers in ' + sheetName + ': expected ' + expected.join('|') + ', got ' + actualHeaders.join('|'));
+  }
+  return {
+    dataStartRow: headerRow + 1,
+    rows: lastRow > headerRow ? sheet.getRange(headerRow + 1, 1, lastRow - headerRow, width).getValues() : []
+  };
+}
+
+
+function activeV1BuildSprMappings_(rows) {
+  var mappings = {};
+  rows.forEach(function (row, offset) {
+    if (activeV1RowBlank_(row)) return;
+    var type = activeV1Text_(row[0]);
+    var human = activeV1Text_(row[1]);
+    var machine = activeV1Text_(row[2]);
+    var direction = activeV1Text_(row[3]).toUpperCase();
+    var rowNumber = offset + 2;
+    if (!type || !human || !machine) {
+      throw new Error('spr!' + rowNumber + ': type, human_value, and machine_value are required.');
+    }
+    if (['HUMAN_TO_MACHINE', 'MACHINE_TO_HUMAN', 'BOTH'].indexOf(direction) === -1) {
+      throw new Error('spr!' + rowNumber + ': unsupported direction ' + JSON.stringify(direction) + '.');
+    }
+    if (direction === 'HUMAN_TO_MACHINE' || direction === 'BOTH') {
+      activeV1AddSprMapping_(mappings, type, 'HUMAN_TO_MACHINE', human, machine, rowNumber);
+    }
+    if (direction === 'MACHINE_TO_HUMAN' || direction === 'BOTH') {
+      activeV1AddSprMapping_(mappings, type, 'MACHINE_TO_HUMAN', machine, human, rowNumber);
+    }
+  });
+  return mappings;
+}
+
+
+function activeV1AddSprMapping_(mappings, type, direction, key, value, rowNumber) {
+  var mappingKey = type + '\\u0000' + direction + '\\u0000' + key;
+  if (mappings[mappingKey] && mappings[mappingKey].value !== value) {
+    throw new Error('spr!' + rowNumber + ': ambiguous mapping for type=' + type + ', direction=' + direction + ', value=' + JSON.stringify(key) + '.');
+  }
+  mappings[mappingKey] = {value: value, row: rowNumber};
+}
+
+
+function activeV1SprMap_(mappings, type, value, direction, source) {
+  var key = type + '\\u0000' + direction + '\\u0000' + value;
+  if (!mappings[key]) {
+    throw new Error(source + ': missing spr mapping for type=' + type + ', direction=' + direction + ', value=' + JSON.stringify(value) + '.');
+  }
+  return mappings[key].value;
+}
+
+
+function activeV1RowBlank_(row) {
+  return row.every(function (value) { return value === '' || value === null || value === false; });
+}
+
+
+function activeV1Text_(value) {
+  return value === null || value === undefined ? '' : String(value).trim();
+}
+
+
+function activeV1Number_(value) {
+  if (value === '' || value === null || value === undefined || typeof value === 'boolean') return null;
+  var number = Number(value);
+  return isFinite(number) ? number : null;
 }
 
 
