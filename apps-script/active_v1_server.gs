@@ -378,14 +378,21 @@ function activeV1DimensionPaths_(draft) {
 
 function activeV1ResultView_(requestId, result, writeResult, visionModel) {
   var clarification = result.Stage10 && result.Stage10.Brief || {};
+  var draft = result.Stage10 && result.Stage10.Draft || null;
+  var understoodSummary = draft ? activeV1KnownFacts_(draft) : [];
   var questions = Array.isArray(clarification.Questions) ? clarification.Questions.map(function (question) {
     var options = Array.isArray(question.Options) ? question.Options : [];
+    var targetPath = question.Target_path;
+    var reason = question.Reason;
+    var isCandidate = reason === 'CONFIRMATION_REQUIRED' && options.length > 0;
     return {
       question_id: question.Question_id,
-      target_path: question.Target_path,
-      reason: question.Reason,
+      target_path: targetPath,
+      reason: reason,
       options: options,
-      default_value: options.length ? options[0] : question.Default_value
+      default_value: options.length ? options[0] : question.Default_value,
+      human_label: activeV1HumanLabel_(targetPath),
+      value_kind: isCandidate ? 'CANDIDATE' : 'USER_INPUT'
     };
   }) : [];
   var costing = result.Costing || {};
@@ -402,6 +409,7 @@ function activeV1ResultView_(requestId, result, writeResult, visionModel) {
       : 'Active V1 выполнил Construction Core и Costing.',
     questions: questions,
     default_candidates: clarification.Defaults_to_confirm || [],
+    understood_summary: understoodSummary,
     state: result.Status === 'NEEDS_CLARIFICATION' ? {draft: result.Stage10.Draft} : null,
     summary: {
       grand_total: totals.Grand_total === undefined ? null : totals.Grand_total,
@@ -428,10 +436,91 @@ function activeV1ErrorView_(requestId, message, code) {
     message: message,
     questions: [],
     default_candidates: [],
+    understood_summary: [],
     state: null,
     summary: null,
     technical_reference: {error_code: String(code || 'SYSTEM_ERROR')}
   };
+}
+
+
+/** Deterministic human-readable label for a Stage 10 target path.
+ *  Machine path is never rewritten here — it is returned separately to the runtime
+ *  for Stage 10 confirmation. Add new mappings only; do not change Stage 10 contract. */
+function activeV1HumanLabel_(targetPath) {
+  if (!targetPath || typeof targetPath !== 'string') return '';
+  var match = /^assemblies\[(\d+)\]\.modules\[(\d+)\]\.dimensions\.(width_mm|height_mm|depth_mm)$/.exec(targetPath);
+  if (match) {
+    var moduleNumber = Number(match[2]) + 1;
+    var field = match[3];
+    var fieldLabel = field === 'width_mm' ? 'Ширина модуля'
+      : field === 'height_mm' ? 'Высота модуля'
+      : 'Глубина модуля';
+    return fieldLabel + ' ' + moduleNumber + ', мм';
+  }
+  if (targetPath === 'layout.run_length_mm') return 'Длина стены, мм';
+  if (targetPath === 'layout.run_shape') return 'Форма кухни';
+  if (targetPath === 'layout.zone') return 'Зона (нижние/верхние/пенал)';
+  return '';
+}
+
+
+/** Build a list of facts that the system already understood from the current Draft.
+ *  Only KNOWN values from fields Stage 10 / Construction Core already populated are used.
+ *  No new inference is performed here — if a field is not yet known, it is omitted. */
+function activeV1KnownFacts_(draft) {
+  var facts = [];
+  function pushFact(label, value, factState) {
+    if (value === null || value === undefined || value === '') return;
+    facts.push({label: label, value: String(value), fact_state: factState || 'KNOWN'});
+  }
+  if (!draft) return facts;
+  var layout = draft.layout_summary || draft.layout || null;
+  if (layout) {
+    if (layout.run_length_mm !== undefined && layout.run_length_mm !== null) {
+      pushFact('Длина стены', layout.run_length_mm + ' мм');
+    }
+    if (layout.run_shape) {
+      var shapeLabel = layout.run_shape === 'straight' ? 'прямая'
+        : layout.run_shape === 'l_shape' ? 'Г-образная'
+        : layout.run_shape === 'u_shape' ? 'П-образная'
+        : layout.run_shape;
+      pushFact('Форма кухни', shapeLabel);
+    }
+    if (layout.zone) {
+      var zoneLabel = layout.zone === 'base' ? 'нижние'
+        : layout.zone === 'wall' ? 'верхние'
+        : layout.zone === 'tall' ? 'пенал'
+        : layout.zone;
+      pushFact('Зона', zoneLabel);
+    }
+  }
+  var modules = Array.isArray(draft.assemblies) && draft.assemblies[0] && Array.isArray(draft.assemblies[0].modules)
+    ? draft.assemblies[0].modules : [];
+  modules.forEach(function (module, moduleIndex) {
+    var number = moduleIndex + 1;
+    var dims = module && module.dimensions || {};
+    if (dims.width_mm && dims.width_mm.state === 'KNOWN' && dims.width_mm.value) {
+      pushFact('Ширина модуля ' + number, dims.width_mm.value + ' мм');
+    }
+    var role = module && (module.role || module.module_type);
+    if (role) {
+      var roleLabel = role === 'BASE_CABINET' ? 'нижний шкаф'
+        : role === 'WALL_CABINET' ? 'верхний шкаф'
+        : role === 'TALL_CABINET' ? 'пенал'
+        : role === 'APPLIANCE_SLOT' ? 'техника'
+        : role === 'APPLIANCE_TOWER' ? 'колонна с техникой'
+        : role === 'GENERAL_STORAGE' ? 'универсальный шкаф'
+        : role === 'DRAWER_CABINET' ? 'ящики'
+        : role === 'SINK_BASE' ? 'мойка'
+        : role;
+      pushFact('Тип модуля ' + number, roleLabel);
+    }
+  });
+  if (draft.project_id) {
+    pushFact('ID проекта', draft.project_id);
+  }
+  return facts;
 }
 
 

@@ -61,6 +61,8 @@
     .empty { color: var(--muted); margin: 0; }
     .total { font-size: 1.45rem; font-weight: 750; margin: 4px 0 14px; }
     .technical { margin-top: 14px; overflow-wrap: anywhere; }
+    .candidate-note { color: var(--warning); font-weight: 600; }
+    .candidate-hint { display: block; margin-top: 6px; padding: 8px 10px; border-radius: 8px; background: var(--warning-soft); color: var(--warning); font-size: .9rem; }
     [hidden] { display: none !important; }
     @media (max-width: 700px) {
       main { width: min(100% - 20px, 980px); margin-top: 18px; }
@@ -187,6 +189,12 @@
         return bytes < 1024 * 1024
           ? `${Math.ceil(bytes / 1024)} КБ`
           : `${(bytes / (1024 * 1024)).toFixed(1)} МБ`;
+      }
+
+      function formatNumber(value) {
+        const number = Number(value);
+        if (!Number.isFinite(number)) return String(value == null ? '' : value);
+        return Number.isInteger(number) ? String(number) : number.toFixed(1);
       }
 
       function validateFiles(files) {
@@ -382,8 +390,12 @@
         if (view.status === 'ERROR') statusCard.classList.add('error');
         else if (view.status === 'NEEDS_CLARIFICATION' || view.status === 'PARTIAL') statusCard.classList.add('blocker');
 
-        clearNode(byId('understood-list'));
-        byId('understood-empty').hidden = false;
+        const understood = byId('understood-list');
+        clearNode(understood);
+        const facts = Array.isArray(view.understood_summary) ? view.understood_summary : [];
+        facts.forEach((fact) => appendFact(understood, fact));
+        byId('understood-empty').hidden = facts.length > 0;
+
         const list = byId('question-list');
         clearNode(list);
         pendingState = view.state || null;
@@ -392,18 +404,28 @@
           const item = document.createElement('li');
           const label = document.createElement('label');
           label.setAttribute('for', 'question-' + index);
-          setText(label, question.target_path);
+          setText(label, question.human_label || 'Уточнение значения');
+          if (question.target_path) {
+            label.setAttribute('data-target-path', question.target_path);
+          }
           const input = document.createElement('input');
           input.id = 'question-' + index;
           input.type = 'number';
           input.step = 'any';
           input.required = true;
-          if (question.default_value !== undefined && question.default_value !== null) input.value = question.default_value;
+          const hasCandidate = question.value_kind === 'CANDIDATE'
+            && question.default_value !== undefined
+            && question.default_value !== null
+            && question.default_value !== '';
+          if (hasCandidate) input.value = question.default_value;
           const hint = document.createElement('p');
           hint.className = 'hint';
-          setText(hint, question.reason === 'CONFIRMATION_REQUIRED'
-            ? 'Подтвердите предложенное значение или введите другое.'
-            : 'Введите точное значение в миллиметрах.');
+          if (hasCandidate) {
+            setText(hint, 'Предложенное значение: ' + formatNumber(question.default_value) + ' мм — подтвердите или измените.');
+            hint.classList.add('candidate-hint');
+          } else {
+            setText(hint, 'Введите точное значение в миллиметрах.');
+          }
           item.append(label, input, hint);
           list.appendChild(item);
         });
