@@ -28,6 +28,12 @@ service_account*.json
 *refresh-token*.json
 cookies*.json
 
+# Local Vision benchmark API artefacts
+benchmarks/vision/results/**
+benchmarks/vision/reports/**
+!benchmarks/vision/results/.gitkeep
+!benchmarks/vision/reports/.gitkeep
+
 Source-materials/Medvedev.Works.Calc/
 
 # Non-runtime alpha construction task materials

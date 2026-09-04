@@ -1,0 +1,333 @@
+{
+  "schema_version": "1.5",
+  "result_status": "OK",
+  "scene_type": "KITCHEN",
+  "sources": [
+    {"image_id": "IMG_01", "description": "Front elevation of the main linear run."},
+    {"image_id": "IMG_02", "description": "Perspective view of the main linear run."},
+    {"image_id": "IMG_03", "description": "Side view of the tall fridge housing."},
+    {"image_id": "IMG_04", "description": "Overview from the room entrance."}
+  ],
+  "assemblies": [
+    {
+      "assembly_id": "A_LINEAR_MAIN",
+      "kind": "LINEAR_RUN",
+      "confidence": 0.97,
+      "source_image_ids": ["IMG_01", "IMG_02"],
+      "order_reference_image_id": "IMG_01",
+      "overall_dimensions": {
+        "width_mm": {
+          "status": "EXPLICIT",
+          "value_mm": 3000,
+          "raw_text": "3000",
+          "source_image_ids": ["IMG_01"],
+          "candidates": [],
+          "evidence": [
+            {"source_image_id": "IMG_01", "type": "DIMENSION_CHAIN", "raw_text": "3000", "description": "Total run dimension line across the whole linear row."}
+          ]
+        },
+        "height_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []},
+        "depth_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []}
+      },
+      "appliances": [],
+      "modules": [
+        {
+          "module_id": "M01",
+          "tier": "BASE",
+          "order": 1,
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "role_confidence": 0.95,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.96,
+          "source_image_ids": ["IMG_01", "IMG_02"],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 400,
+              "raw_text": "400",
+              "source_image_ids": ["IMG_01"],
+              "candidates": [],
+              "evidence": [
+                {"source_image_id": "IMG_01", "type": "DIMENSION_CHAIN", "raw_text": "400", "description": "Dimension chain segment bound to the leftmost drawer cabinet."}
+              ]
+            },
+            "height_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []},
+            "depth_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []}
+          },
+          "appliances": [],
+          "visible_features": [
+            {
+              "type": "DRAWER_FRONTS",
+              "confidence": 0.97,
+              "source_image_ids": ["IMG_01", "IMG_02"],
+              "evidence": [
+                {"source_image_id": "IMG_02", "type": "VISIBLE_OBJECT", "raw_text": null, "description": "Three stacked drawer fronts with horizontal handles."}
+              ]
+            }
+          ],
+          "evidence": [
+            {"source_image_id": "IMG_01", "type": "VISUAL_BOUNDARY", "raw_text": null, "description": "Vertical carcass seam left of the first drawer stack."},
+            {"source_image_id": "IMG_02", "type": "CROSS_VIEW_MATCH", "raw_text": null, "description": "Same cabinet body confirmed in the perspective view."}
+          ]
+        },
+        {
+          "module_id": "M02",
+          "tier": "BASE",
+          "order": 2,
+          "module_type": "APPLIANCE_SLOT",
+          "role": "GENERAL_STORAGE",
+          "role_confidence": 0.9,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.94,
+          "source_image_ids": ["IMG_01", "IMG_02"],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 600,
+              "raw_text": "600",
+              "source_image_ids": ["IMG_01"],
+              "candidates": [],
+              "evidence": [
+                {"source_image_id": "IMG_01", "type": "DIMENSION_CHAIN", "raw_text": "600", "description": "Dimension chain segment above the cooking module."}
+              ]
+            },
+            "height_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []},
+            "depth_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []}
+          },
+          "appliances": [
+            {
+              "type": "COOKTOP",
+              "confidence": 0.98,
+              "source_image_ids": ["IMG_01", "IMG_02"],
+              "evidence": [
+                {"source_image_id": "IMG_02", "type": "VISIBLE_OBJECT", "raw_text": null, "description": "Four-burner hob surface flush with the worktop."}
+              ]
+            },
+            {
+              "type": "OVEN",
+              "confidence": 0.9,
+              "source_image_ids": ["IMG_02"],
+              "evidence": [
+                {"source_image_id": "IMG_02", "type": "VISIBLE_OBJECT", "raw_text": null, "description": "Built-in oven front with control panel below the hob."}
+              ]
+            }
+          ],
+          "visible_features": [],
+          "evidence": [
+            {"source_image_id": "IMG_01", "type": "VISUAL_BOUNDARY", "raw_text": null, "description": "Carcass seams on both sides of the cooking zone."},
+            {"source_image_id": "IMG_02", "type": "CROSS_VIEW_MATCH", "raw_text": null, "description": "Cooking zone position matches between elevation and perspective."}
+          ]
+        },
+        {
+          "module_id": "M03",
+          "tier": "BASE",
+          "order": 3,
+          "module_type": "BASE_CABINET",
+          "role": "DISHWASHER_SLOT",
+          "role_confidence": 0.92,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.93,
+          "source_image_ids": ["IMG_01", "IMG_02"],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 600,
+              "raw_text": "600",
+              "source_image_ids": ["IMG_01"],
+              "candidates": [],
+              "evidence": [
+                {"source_image_id": "IMG_01", "type": "DIMENSION_CHAIN", "raw_text": "600", "description": "Dimension chain segment above the dishwasher module."}
+              ]
+            },
+            "height_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []},
+            "depth_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []}
+          },
+          "appliances": [
+            {
+              "type": "DISHWASHER",
+              "confidence": 0.9,
+              "source_image_ids": ["IMG_02"],
+              "evidence": [
+                {"source_image_id": "IMG_02", "type": "VISIBLE_OBJECT", "raw_text": null, "description": "Integrated dishwasher front panel to the right of the cooking zone."}
+              ]
+            }
+          ],
+          "visible_features": [],
+          "evidence": [
+            {"source_image_id": "IMG_01", "type": "VISUAL_BOUNDARY", "raw_text": null, "description": "Vertical seams isolating the dishwasher aperture."},
+            {"source_image_id": "IMG_02", "type": "CROSS_VIEW_MATCH", "raw_text": null, "description": "Dishwasher aperture confirmed in perspective."}
+          ]
+        },
+        {
+          "module_id": "M04",
+          "tier": "BASE",
+          "order": 4,
+          "module_type": "BASE_CABINET",
+          "role": "SINK_BASE",
+          "role_confidence": 0.96,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.95,
+          "source_image_ids": ["IMG_02", "IMG_04"],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 800,
+              "raw_text": "800",
+              "source_image_ids": ["IMG_02"],
+              "candidates": [],
+              "evidence": [
+                {"source_image_id": "IMG_02", "type": "DIMENSION_LABEL", "raw_text": "800", "description": "Label under the sink cabinet in the perspective view."}
+              ]
+            },
+            "height_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []},
+            "depth_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []}
+          },
+          "appliances": [],
+          "visible_features": [
+            {
+              "type": "SINK",
+              "confidence": 0.98,
+              "source_image_ids": ["IMG_02", "IMG_04"],
+              "evidence": [
+                {"source_image_id": "IMG_04", "type": "VISIBLE_OBJECT", "raw_text": null, "description": "Inset sink bowl with mixer tap visible from the entrance."}
+              ]
+            },
+            {
+              "type": "HINGED_DOOR",
+              "confidence": 0.9,
+              "source_image_ids": ["IMG_02"],
+              "evidence": [
+                {"source_image_id": "IMG_02", "type": "VISIBLE_OBJECT", "raw_text": null, "description": "Two hinged door fronts below the sink bowl."}
+              ]
+            }
+          ],
+          "evidence": [
+            {"source_image_id": "IMG_02", "type": "VISUAL_BOUNDARY", "raw_text": null, "description": "Carcass seams around the sink base."},
+            {"source_image_id": "IMG_04", "type": "CROSS_VIEW_MATCH", "raw_text": null, "description": "Sink base position matches the overview image."}
+          ]
+        },
+        {
+          "module_id": "M06",
+          "tier": "TALL",
+          "order": 5,
+          "module_type": "TALL_CABINET",
+          "role": "REFRIGERATOR_HOUSING",
+          "role_confidence": 0.97,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.97,
+          "source_image_ids": ["IMG_03", "IMG_04"],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 600,
+              "raw_text": "600",
+              "source_image_ids": ["IMG_03"],
+              "candidates": [],
+              "evidence": [
+                {"source_image_id": "IMG_03", "type": "DIMENSION_LABEL", "raw_text": "600", "description": "Label marking the tall unit width."}
+              ]
+            },
+            "height_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 2100,
+              "raw_text": "2100",
+              "source_image_ids": ["IMG_03"],
+              "candidates": [],
+              "evidence": [
+                {"source_image_id": "IMG_03", "type": "DIMENSION_LABEL", "raw_text": "2100", "description": "Vertical dimension label for the tall unit height."}
+              ]
+            },
+            "depth_mm": {"status": "UNKNOWN", "value_mm": null, "raw_text": null, "source_image_ids": [], "candidates": [], "evidence": []}
+          },
+          "appliances": [
+            {
+              "type": "REFRIGERATOR",
+              "confidence": 0.97,
+              "source_image_ids": ["IMG_03", "IMG_04"],
+              "evidence": [
+                {"source_image_id": "IMG_03", "type": "VISIBLE_OBJECT", "raw_text": null, "description": "Integrated refrigerator behind the tall unit doors."}
+              ]
+            }
+          ],
+          "visible_features": [],
+          "evidence": [
+            {"source_image_id": "IMG_03", "type": "VISUAL_BOUNDARY", "raw_text": null, "description": "Full-height carcass boundaries of the tall unit."},
+            {"source_image_id": "IMG_04", "type": "CROSS_VIEW_MATCH", "raw_text": null, "description": "Tall unit confirmed at the right end of the run."}
+          ]
+        }
+      ]
+    }
+  ],
+  "spatial_relations": [
+    {
+      "subject_module_id": "M01",
+      "relation": "LEFT_OF",
+      "object_module_id": "M02",
+      "confidence": 0.95,
+      "source_image_ids": ["IMG_01"],
+      "evidence": [
+        {"source_image_id": "IMG_01", "type": "VISUAL_BOUNDARY", "raw_text": null, "description": "Drawer cabinet directly left of the cooking zone in the elevation."}
+      ]
+    },
+    {
+      "subject_module_id": "M02",
+      "relation": "LEFT_OF",
+      "object_module_id": "M03",
+      "confidence": 0.95,
+      "source_image_ids": ["IMG_01"],
+      "evidence": [
+        {"source_image_id": "IMG_01", "type": "VISUAL_BOUNDARY", "raw_text": null, "description": "Cooking zone directly left of the dishwasher aperture."}
+      ]
+    },
+    {
+      "subject_module_id": "M03",
+      "relation": "LEFT_OF",
+      "object_module_id": "M04",
+      "confidence": 0.95,
+      "source_image_ids": ["IMG_02"],
+      "evidence": [
+        {"source_image_id": "IMG_02", "type": "VISUAL_BOUNDARY", "raw_text": null, "description": "Dishwasher directly left of the sink base."}
+      ]
+    },
+    {
+      "subject_module_id": "M04",
+      "relation": "LEFT_OF",
+      "object_module_id": "M06",
+      "confidence": 0.9,
+      "source_image_ids": ["IMG_04"],
+      "evidence": [
+        {"source_image_id": "IMG_04", "type": "VISUAL_BOUNDARY", "raw_text": null, "description": "Sink base directly left of the tall refrigerator housing."}
+      ]
+    }
+  ],
+  "unassigned_dimensions": [
+    {
+      "status": "EXPLICIT",
+      "value_mm": 720,
+      "raw_text": "720",
+      "source_image_ids": ["IMG_03"],
+      "candidates": [],
+      "reason": "Visible dimension 720 could not be bound to a specific target without guessing."
+    },
+    {
+      "status": "AMBIGUOUS",
+      "value_mm": null,
+      "raw_text": null,
+      "source_image_ids": ["IMG_02"],
+      "candidates": [
+        {"value_mm": 900, "raw_text": "900?", "source_image_id": "IMG_02"},
+        {"value_mm": 1200, "raw_text": "1200?", "source_image_id": "IMG_02"}
+      ],
+      "reason": "Two overlapping labels near the sink cabinet cannot be disambiguated."
+    }
+  ],
+  "visible_text": [
+    {"text": "400", "source_image_id": "IMG_01", "confidence": 0.99},
+    {"text": "600", "source_image_id": "IMG_01", "confidence": 0.99},
+    {"text": "800", "source_image_id": "IMG_02", "confidence": 0.98},
+    {"text": "2100", "source_image_id": "IMG_03", "confidence": 0.98},
+    {"text": "3000", "source_image_id": "IMG_01", "confidence": 0.99}
+  ],
+  "warnings": []
+}

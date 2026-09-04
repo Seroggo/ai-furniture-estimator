@@ -1,0 +1,9 @@
+{
+  "models": [
+    {
+      "id": "qwen/qwen3-vl-235b-a22b-instruct",
+      "slug": "qwen3-vl-235b",
+      "enabled": true
+    }
+  ]
+}

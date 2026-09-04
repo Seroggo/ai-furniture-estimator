@@ -1,0 +1,1164 @@
+{
+  "schema_version": "1.5",
+  "result_status": "OK",
+  "scene_type": "KITCHEN",
+  "sources": [
+    {
+      "image_id": "IMG_01",
+      "description": "general render sheet"
+    },
+    {
+      "image_id": "IMG_02",
+      "description": "plan"
+    },
+    {
+      "image_id": "IMG_03",
+      "description": "main wall elevation"
+    },
+    {
+      "image_id": "IMG_04",
+      "description": "island elevations"
+    }
+  ],
+  "assemblies": [
+    {
+      "assembly_id": "A1",
+      "kind": "LINEAR_RUN",
+      "confidence": 0.99,
+      "source_image_ids": [
+        "IMG_01",
+        "IMG_02",
+        "IMG_03"
+      ],
+      "order_reference_image_id": "IMG_03",
+      "overall_dimensions": {
+        "width_mm": {
+          "status": "UNKNOWN",
+          "value_mm": null,
+          "raw_text": null,
+          "source_image_ids": [],
+          "candidates": [],
+          "evidence": []
+        },
+        "height_mm": {
+          "status": "UNKNOWN",
+          "value_mm": null,
+          "raw_text": null,
+          "source_image_ids": [],
+          "candidates": [],
+          "evidence": []
+        },
+        "depth_mm": {
+          "status": "UNKNOWN",
+          "value_mm": null,
+          "raw_text": null,
+          "source_image_ids": [],
+          "candidates": [],
+          "evidence": []
+        }
+      },
+      "appliances": [
+        {
+          "type": "HOOD",
+          "confidence": 0.98,
+          "source_image_ids": [
+            "IMG_01"
+          ],
+          "evidence": [
+            {
+              "source_image_id": "IMG_01",
+              "type": "VISIBLE_OBJECT",
+              "raw_text": null,
+              "description": "A long metallic extraction hood is visibly mounted over the main wall cooking zone and is not enclosed in a cabinet module."
+            }
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "module_id": "A1_M01",
+          "tier": "TALL",
+          "order": 1,
+          "module_type": "TALL_CABINET",
+          "role": "REFRIGERATOR_HOUSING",
+          "role_confidence": 0.86,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.98,
+          "source_image_ids": [
+            "IMG_01",
+            "IMG_02",
+            "IMG_03"
+          ],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 600,
+              "raw_text": "600",
+              "source_image_ids": [
+                "IMG_03"
+              ],
+              "candidates": [],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "DIMENSION_CHAIN",
+                  "raw_text": "600",
+                  "description": "The leftmost 600-mm segment in the top dimension chain spans the visible full-height left cabinet body."
+                }
+              ]
+            },
+            "height_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            },
+            "depth_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            }
+          },
+          "appliances": [
+            {
+              "type": "REFRIGERATOR",
+              "confidence": 0.84,
+              "source_image_ids": [
+                "IMG_02",
+                "IMG_03"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_02",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "A refrigeration/freezer symbol is drawn inside the cabinet footprint at one end of the main wall run."
+                },
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "CROSS_VIEW_MATCH",
+                  "raw_text": null,
+                  "description": "The full-height cabinet at the corresponding end of the elevation is the same bounded tall body identified in plan."
+                }
+              ]
+            }
+          ],
+          "visible_features": [],
+          "evidence": [
+            {
+              "source_image_id": "IMG_03",
+              "type": "VISUAL_BOUNDARY",
+              "raw_text": null,
+              "description": "Two visible outer vertical cabinet-body edges enclose the full-height wood-toned unit at the far left of the elevation."
+            },
+            {
+              "source_image_id": "IMG_01",
+              "type": "VISIBLE_OBJECT",
+              "raw_text": null,
+              "description": "The renders show one continuous full-height wood-toned cabinet body at the left end of the main wall."
+            }
+          ]
+        },
+        {
+          "module_id": "A1_M02",
+          "tier": "BASE",
+          "order": 1,
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "role_confidence": 0.98,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.99,
+          "source_image_ids": [
+            "IMG_03"
+          ],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 600,
+              "raw_text": "600",
+              "source_image_ids": [
+                "IMG_03"
+              ],
+              "candidates": [],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "DIMENSION_CHAIN",
+                  "raw_text": "600",
+                  "description": "The first 600-mm base-cabinet segment in the lower dimension chain spans the visible left base cabinet body."
+                }
+              ]
+            },
+            "height_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            },
+            "depth_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            }
+          },
+          "appliances": [],
+          "visible_features": [
+            {
+              "type": "DRAWER_FRONTS",
+              "confidence": 0.98,
+              "source_image_ids": [
+                "IMG_03"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "Stacked horizontal drawer fronts are visible inside one bounded base cabinet body."
+                }
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "source_image_id": "IMG_03",
+              "type": "VISUAL_BOUNDARY",
+              "raw_text": null,
+              "description": "Vertical cabinet-body boundaries enclose the first base cabinet between the left tall unit and the next base cabinet."
+            },
+            {
+              "source_image_id": "IMG_03",
+              "type": "VISIBLE_OBJECT",
+              "raw_text": null,
+              "description": "The enclosed body contains stacked drawer fronts rather than separate cabinet bodies."
+            }
+          ]
+        },
+        {
+          "module_id": "A1_M03",
+          "tier": "BASE",
+          "order": 2,
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "role_confidence": 0.99,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.99,
+          "source_image_ids": [
+            "IMG_02",
+            "IMG_03"
+          ],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 900,
+              "raw_text": "900",
+              "source_image_ids": [
+                "IMG_03"
+              ],
+              "candidates": [],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "DIMENSION_CHAIN",
+                  "raw_text": "900",
+                  "description": "The 900-mm segment in the lower dimension chain spans the clearly bounded central base cabinet."
+                }
+              ]
+            },
+            "height_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            },
+            "depth_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            }
+          },
+          "appliances": [
+            {
+              "type": "COOKTOP",
+              "confidence": 0.96,
+              "source_image_ids": [
+                "IMG_02"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_02",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "A four-burner cooktop symbol is visibly drawn inside the 900-mm segment of the main wall run in plan."
+                }
+              ]
+            }
+          ],
+          "visible_features": [
+            {
+              "type": "DRAWER_FRONTS",
+              "confidence": 0.98,
+              "source_image_ids": [
+                "IMG_03"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "Stacked horizontal drawer fronts are visible inside the central bounded base cabinet body."
+                }
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "source_image_id": "IMG_03",
+              "type": "VISUAL_BOUNDARY",
+              "raw_text": null,
+              "description": "Two vertical cabinet-body boundaries enclose the central base cabinet."
+            },
+            {
+              "source_image_id": "IMG_02",
+              "type": "CROSS_VIEW_MATCH",
+              "raw_text": null,
+              "description": "The plan contains one 900-mm main-wall segment with a cooktop symbol, matching the unique 900-mm central base cabinet in the elevation."
+            }
+          ]
+        },
+        {
+          "module_id": "A1_M04",
+          "tier": "BASE",
+          "order": 3,
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "role_confidence": 0.97,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.99,
+          "source_image_ids": [
+            "IMG_03"
+          ],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 600,
+              "raw_text": "600",
+              "source_image_ids": [
+                "IMG_03"
+              ],
+              "candidates": [],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "DIMENSION_CHAIN",
+                  "raw_text": "600",
+                  "description": "The right-side 600-mm base-cabinet segment in the lower dimension chain spans the visible base cabinet immediately before the right tall unit."
+                }
+              ]
+            },
+            "height_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            },
+            "depth_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            }
+          },
+          "appliances": [],
+          "visible_features": [
+            {
+              "type": "DRAWER_FRONTS",
+              "confidence": 0.97,
+              "source_image_ids": [
+                "IMG_03"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "Stacked horizontal drawer fronts are visible inside the bounded right base cabinet body."
+                }
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "source_image_id": "IMG_03",
+              "type": "VISUAL_BOUNDARY",
+              "raw_text": null,
+              "description": "Visible vertical cabinet-body boundaries enclose the right base cabinet immediately left of the appliance tower."
+            },
+            {
+              "source_image_id": "IMG_03",
+              "type": "VISIBLE_OBJECT",
+              "raw_text": null,
+              "description": "Drawer-front seams occur inside one continuous bounded cabinet body."
+            }
+          ]
+        },
+        {
+          "module_id": "A1_M05",
+          "tier": "TALL",
+          "order": 2,
+          "module_type": "TALL_CABINET",
+          "role": "APPLIANCE_TOWER",
+          "role_confidence": 0.99,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.99,
+          "source_image_ids": [
+            "IMG_01",
+            "IMG_03"
+          ],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 605,
+              "raw_text": "605",
+              "source_image_ids": [
+                "IMG_03"
+              ],
+              "candidates": [],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "DIMENSION_CHAIN",
+                  "raw_text": "605",
+                  "description": "The far-right 605-mm top-chain segment spans the visible full-height right appliance cabinet body."
+                }
+              ]
+            },
+            "height_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            },
+            "depth_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            }
+          },
+          "appliances": [
+            {
+              "type": "MICROWAVE",
+              "confidence": 0.95,
+              "source_image_ids": [
+                "IMG_01",
+                "IMG_03"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "A compact built-in appliance is visibly drawn in the upper appliance opening of the right tall cabinet."
+                },
+                {
+                  "source_image_id": "IMG_01",
+                  "type": "CROSS_VIEW_MATCH",
+                  "raw_text": null,
+                  "description": "The render shows the corresponding compact built-in appliance above the oven in the same right tall cabinet."
+                }
+              ]
+            },
+            {
+              "type": "OVEN",
+              "confidence": 0.99,
+              "source_image_ids": [
+                "IMG_01",
+                "IMG_03"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_03",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "A built-in oven with a distinct door/window is visibly drawn inside the right tall cabinet."
+                },
+                {
+                  "source_image_id": "IMG_01",
+                  "type": "CROSS_VIEW_MATCH",
+                  "raw_text": null,
+                  "description": "The render shows the corresponding built-in oven in the same right tall cabinet body."
+                }
+              ]
+            }
+          ],
+          "visible_features": [],
+          "evidence": [
+            {
+              "source_image_id": "IMG_03",
+              "type": "VISUAL_BOUNDARY",
+              "raw_text": null,
+              "description": "Two visible outer vertical edges enclose one continuous full-height cabinet body at the far right of the elevation."
+            },
+            {
+              "source_image_id": "IMG_03",
+              "type": "VISIBLE_OBJECT",
+              "raw_text": null,
+              "description": "Two built-in appliance openings are visibly contained within that tall cabinet body."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "assembly_id": "A2",
+      "kind": "ISLAND",
+      "confidence": 0.99,
+      "source_image_ids": [
+        "IMG_01",
+        "IMG_02",
+        "IMG_04"
+      ],
+      "order_reference_image_id": "IMG_04",
+      "overall_dimensions": {
+        "width_mm": {
+          "status": "EXPLICIT",
+          "value_mm": 2780,
+          "raw_text": "2780",
+          "source_image_ids": [
+            "IMG_04"
+          ],
+          "candidates": [],
+          "evidence": [
+            {
+              "source_image_id": "IMG_04",
+              "type": "DIMENSION_CHAIN",
+              "raw_text": "2780",
+              "description": "The kitchen-side island elevation contains an overall horizontal dimension line labelled 2780 spanning the island body."
+            }
+          ]
+        },
+        "height_mm": {
+          "status": "EXPLICIT",
+          "value_mm": 910,
+          "raw_text": "910",
+          "source_image_ids": [
+            "IMG_04"
+          ],
+          "candidates": [],
+          "evidence": [
+            {
+              "source_image_id": "IMG_04",
+              "type": "DIMENSION_CHAIN",
+              "raw_text": "910",
+              "description": "The island elevation contains a vertical finished-height dimension labelled 910."
+            }
+          ]
+        },
+        "depth_mm": {
+          "status": "EXPLICIT",
+          "value_mm": 1200,
+          "raw_text": "1200",
+          "source_image_ids": [
+            "IMG_04"
+          ],
+          "candidates": [],
+          "evidence": [
+            {
+              "source_image_id": "IMG_04",
+              "type": "DIMENSION_CHAIN",
+              "raw_text": "1200",
+              "description": "The island end elevation contains a horizontal depth dimension labelled 1200 spanning the island end."
+            }
+          ]
+        }
+      },
+      "appliances": [],
+      "modules": [
+        {
+          "module_id": "A2_M01",
+          "tier": "BASE",
+          "order": 1,
+          "module_type": "CUSTOM_CABINET",
+          "role": "UNKNOWN",
+          "role_confidence": 0.74,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.96,
+          "source_image_ids": [
+            "IMG_02",
+            "IMG_04"
+          ],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 600,
+              "raw_text": "600",
+              "source_image_ids": [
+                "IMG_04"
+              ],
+              "candidates": [],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_04",
+                  "type": "DIMENSION_CHAIN",
+                  "raw_text": "600",
+                  "description": "The leftmost 600-mm segment in the kitchen-side island dimension chain spans one visibly bounded cabinet body."
+                }
+              ]
+            },
+            "height_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            },
+            "depth_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            }
+          },
+          "appliances": [],
+          "visible_features": [],
+          "evidence": [
+            {
+              "source_image_id": "IMG_04",
+              "type": "VISUAL_BOUNDARY",
+              "raw_text": null,
+              "description": "The kitchen-side island elevation shows one bounded 600-mm cabinet body at the left end."
+            },
+            {
+              "source_image_id": "IMG_02",
+              "type": "TEXT_LABEL",
+              "raw_text": "Винный шкаф",
+              "description": "The corresponding end segment of the island plan is visibly labelled 'Винный шкаф'."
+            },
+            {
+              "source_image_id": "IMG_02",
+              "type": "CROSS_VIEW_MATCH",
+              "raw_text": null,
+              "description": "The labelled end segment in plan occupies the same end position as the leftmost 600-mm cabinet in the kitchen-side island elevation when the view direction is matched."
+            }
+          ]
+        },
+        {
+          "module_id": "A2_M02",
+          "tier": "BASE",
+          "order": 2,
+          "module_type": "BASE_CABINET",
+          "role": "DRAWER_CABINET",
+          "role_confidence": 0.98,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.99,
+          "source_image_ids": [
+            "IMG_04"
+          ],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 600,
+              "raw_text": "600",
+              "source_image_ids": [
+                "IMG_04"
+              ],
+              "candidates": [],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_04",
+                  "type": "DIMENSION_CHAIN",
+                  "raw_text": "600",
+                  "description": "The second 600-mm segment in the kitchen-side island dimension chain spans the visibly bounded drawer cabinet."
+                }
+              ]
+            },
+            "height_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            },
+            "depth_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            }
+          },
+          "appliances": [],
+          "visible_features": [
+            {
+              "type": "DRAWER_FRONTS",
+              "confidence": 0.99,
+              "source_image_ids": [
+                "IMG_04"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_04",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "Two stacked horizontal fronts are visibly drawn inside one bounded 600-mm cabinet body."
+                }
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "source_image_id": "IMG_04",
+              "type": "VISUAL_BOUNDARY",
+              "raw_text": null,
+              "description": "Visible vertical cabinet-body boundaries enclose the second 600-mm island module."
+            },
+            {
+              "source_image_id": "IMG_04",
+              "type": "VISIBLE_OBJECT",
+              "raw_text": null,
+              "description": "The bounded body contains stacked drawer fronts."
+            }
+          ]
+        },
+        {
+          "module_id": "A2_M03",
+          "tier": "BASE",
+          "order": 3,
+          "module_type": "BASE_CABINET",
+          "role": "SINK_BASE",
+          "role_confidence": 0.99,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.99,
+          "source_image_ids": [
+            "IMG_01",
+            "IMG_02",
+            "IMG_04"
+          ],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 900,
+              "raw_text": "900",
+              "source_image_ids": [
+                "IMG_04"
+              ],
+              "candidates": [],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_04",
+                  "type": "DIMENSION_CHAIN",
+                  "raw_text": "900",
+                  "description": "The 900-mm segment in the kitchen-side island dimension chain spans the bounded cabinet directly under the sink zone."
+                }
+              ]
+            },
+            "height_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            },
+            "depth_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            }
+          },
+          "appliances": [],
+          "visible_features": [
+            {
+              "type": "SINK",
+              "confidence": 0.99,
+              "source_image_ids": [
+                "IMG_01",
+                "IMG_02",
+                "IMG_04"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_01",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "The renders visibly show a sink and faucet on the island."
+                },
+                {
+                  "source_image_id": "IMG_02",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "The plan visibly shows the sink inside the 900-mm island segment."
+                },
+                {
+                  "source_image_id": "IMG_04",
+                  "type": "VISIBLE_OBJECT",
+                  "raw_text": null,
+                  "description": "The kitchen-side island elevation shows the sink/faucet service zone directly above the 900-mm cabinet body."
+                }
+              ]
+            }
+          ],
+          "evidence": [
+            {
+              "source_image_id": "IMG_04",
+              "type": "VISUAL_BOUNDARY",
+              "raw_text": null,
+              "description": "Visible vertical cabinet-body boundaries enclose the 900-mm island cabinet."
+            },
+            {
+              "source_image_id": "IMG_04",
+              "type": "VISIBLE_OBJECT",
+              "raw_text": null,
+              "description": "The sink/faucet service zone is visibly located directly above that bounded cabinet."
+            }
+          ]
+        },
+        {
+          "module_id": "A2_M04",
+          "tier": "BASE",
+          "order": 4,
+          "module_type": "APPLIANCE_SLOT",
+          "role": "DISHWASHER_SLOT",
+          "role_confidence": 0.99,
+          "boundary_status": "CLEAR",
+          "boundary_confidence": 0.99,
+          "source_image_ids": [
+            "IMG_04"
+          ],
+          "dimensions": {
+            "width_mm": {
+              "status": "EXPLICIT",
+              "value_mm": 600,
+              "raw_text": "600",
+              "source_image_ids": [
+                "IMG_04"
+              ],
+              "candidates": [],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_04",
+                  "type": "DIMENSION_CHAIN",
+                  "raw_text": "600",
+                  "description": "The rightmost 600-mm segment in the kitchen-side island dimension chain spans the visibly bounded bay labelled ПММ."
+                }
+              ]
+            },
+            "height_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            },
+            "depth_mm": {
+              "status": "UNKNOWN",
+              "value_mm": null,
+              "raw_text": null,
+              "source_image_ids": [],
+              "candidates": [],
+              "evidence": []
+            }
+          },
+          "appliances": [
+            {
+              "type": "DISHWASHER",
+              "confidence": 0.99,
+              "source_image_ids": [
+                "IMG_04"
+              ],
+              "evidence": [
+                {
+                  "source_image_id": "IMG_04",
+                  "type": "TEXT_LABEL",
+                  "raw_text": "ПММ",
+                  "description": "The rightmost bounded island bay is visibly labelled 'ПММ'."
+                }
+              ]
+            }
+          ],
+          "visible_features": [],
+          "evidence": [
+            {
+              "source_image_id": "IMG_04",
+              "type": "VISUAL_BOUNDARY",
+              "raw_text": null,
+              "description": "The rightmost island bay is enclosed by visible vertical body boundaries."
+            },
+            {
+              "source_image_id": "IMG_04",
+              "type": "TEXT_LABEL",
+              "raw_text": "ПММ",
+              "description": "The bay contains the visible label 'ПММ'."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "spatial_relations": [
+    {
+      "subject_module_id": "A1_M01",
+      "relation": "LEFT_OF",
+      "object_module_id": "A1_M02",
+      "confidence": 0.99,
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "evidence": [
+        {
+          "source_image_id": "IMG_03",
+          "type": "VISIBLE_OBJECT",
+          "raw_text": null,
+          "description": "The full-height left cabinet body is visibly positioned immediately to the left of the base-cabinet run."
+        }
+      ]
+    },
+    {
+      "subject_module_id": "A1_M05",
+      "relation": "RIGHT_OF",
+      "object_module_id": "A1_M04",
+      "confidence": 0.99,
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "evidence": [
+        {
+          "source_image_id": "IMG_03",
+          "type": "VISIBLE_OBJECT",
+          "raw_text": null,
+          "description": "The full-height right appliance cabinet body is visibly positioned immediately to the right of the base-cabinet run."
+        }
+      ]
+    }
+  ],
+  "unassigned_dimensions": [
+    {
+      "status": "EXPLICIT",
+      "value_mm": 450,
+      "raw_text": "450",
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "candidates": [],
+      "reason": "The readable top-chain segment spans an open/tiled zone; no independent cabinet body exists there, so it is not a module width."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 1205,
+      "raw_text": "1205",
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "candidates": [],
+      "reason": "The readable top-chain segment spans the central open/hood zone and cannot be assigned to a cabinet module."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 445,
+      "raw_text": "445",
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "candidates": [],
+      "reason": "The readable top-chain segment spans an open/tiled zone; no independent cabinet body exists there, so it is not a module width."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 3300,
+      "raw_text": "3300",
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "candidates": [],
+      "reason": "A readable horizontal project dimension is present in the main-wall elevation, but its exact target is not safe to bind to the whole assembly or one module."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 2500,
+      "raw_text": "2500",
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "candidates": [],
+      "reason": "A readable vertical project dimension is present, but it cannot be assigned safely as the explicit overall height of one cabinet module."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 910,
+      "raw_text": "910",
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "candidates": [],
+      "reason": "The readable 910 dimension denotes finished worktop height rather than the explicit overall height of one base cabinet body."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 400,
+      "raw_text": "400",
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "candidates": [],
+      "reason": "A readable internal vertical dimension appears in the right appliance-tower area; it is not the tower's overall height."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 600,
+      "raw_text": "600",
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "candidates": [],
+      "reason": "A readable internal vertical dimension appears beside the oven area; it is not the tower's overall height."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 300,
+      "raw_text": "300",
+      "source_image_ids": [
+        "IMG_03"
+      ],
+      "candidates": [],
+      "reason": "A readable lower-compartment vertical dimension appears in the right appliance tower; it is not the tower's overall height."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 2760,
+      "raw_text": "2760",
+      "source_image_ids": [
+        "IMG_04"
+      ],
+      "candidates": [],
+      "reason": "The guest-side island front contains a readable 2760 span that is distinct from the explicit 2780 overall island body width."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 2700,
+      "raw_text": "2700",
+      "source_image_ids": [
+        "IMG_04"
+      ],
+      "candidates": [],
+      "reason": "A readable guest-side lower/front span is present, but it is not safely bindable to an assembly or module overall dimension."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 1865,
+      "raw_text": "1865",
+      "source_image_ids": [
+        "IMG_04"
+      ],
+      "candidates": [],
+      "reason": "A readable horizontal dimension is present above the kitchen-side island elevation; its exact target is not safely bindable to an assembly or module."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 730,
+      "raw_text": "730",
+      "source_image_ids": [
+        "IMG_04"
+      ],
+      "candidates": [],
+      "reason": "A readable internal/front vertical dimension is present in the island elevation; it is not the explicit overall height of one module."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 365,
+      "raw_text": "365",
+      "source_image_ids": [
+        "IMG_04"
+      ],
+      "candidates": [],
+      "reason": "A readable drawer-front/internal vertical dimension is present; the module contract does not store drawer-front dimensions."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 100,
+      "raw_text": "100",
+      "source_image_ids": [
+        "IMG_04"
+      ],
+      "candidates": [],
+      "reason": "A readable plinth/toe-kick vertical dimension is present; the V1.5 module contract has no dedicated plinth dimension field."
+    },
+    {
+      "status": "EXPLICIT",
+      "value_mm": 40,
+      "raw_text": "40",
+      "source_image_ids": [
+        "IMG_04"
+      ],
+      "candidates": [],
+      "reason": "A readable countertop/top-panel thickness dimension is present; the V1.5 module contract has no dedicated countertop-thickness field."
+    }
+  ],
+  "visible_text": [
+    {
+      "text": "Винный шкаф",
+      "source_image_id": "IMG_02",
+      "confidence": 0.99
+    },
+    {
+      "text": "ПММ",
+      "source_image_id": "IMG_04",
+      "confidence": 0.99
+    },
+    {
+      "text": "слив + вода выводы из пола",
+      "source_image_id": "IMG_04",
+      "confidence": 0.96
+    }
+  ],
+  "warnings": [
+    {
+      "code": "UNASSIGNED_DIMENSION",
+      "message": "Several explicit project dimensions are intentionally retained as unassigned because they describe open zones, internal front/compartment geometry, worktop/plinth geometry, or targets not represented safely by the V1.5 assembly/module dimension fields.",
+      "source_image_ids": [
+        "IMG_03",
+        "IMG_04"
+      ]
+    },
+    {
+      "code": "OTHER",
+      "message": "The island end segment labelled 'Винный шкаф' is represented as CUSTOM_CABINET with role UNKNOWN because V1.5 has no dedicated wine-cabinet role.",
+      "source_image_ids": [
+        "IMG_02",
+        "IMG_04"
+      ]
+    }
+  ]
+}
