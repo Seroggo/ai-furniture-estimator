@@ -30,7 +30,7 @@ function normalized(value) {
 }
 
 function f1(precision, recall) {
-  if (precision === 0 && recall === 0) return 1;
+  if (precision === 0 && recall === 0) return 0;
   return (2 * precision * recall) / (precision + recall);
 }
 

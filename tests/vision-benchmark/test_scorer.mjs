@@ -3,6 +3,16 @@ import assert from 'node:assert/strict';
 import {loadJson, replaceAllObjectIds, addExtraModule, removeModule, addInventedAppliance, addWrongAssignedDimension, omitExplicitDimension, changeModuleRole, changeSpatialRelation, replaceDimensionValue} from './fixture-utils.mjs';
 import {scoreResult, aggregateRuns} from '../../tools/vision-benchmark/lib/scorer.mjs';
 
+function emptyResult(result) {
+  const output = structuredClone(result);
+  output.assemblies = [];
+  output.spatial_relations = [];
+  output.unassigned_dimensions = [];
+  output.visible_text = [];
+  output.warnings = [];
+  return output;
+}
+
 test('Gold compared with itself scores 100 and passes hard gates', async () => {
   const gold = await loadJson();
   const scored = scoreResult(gold, gold);
@@ -16,6 +26,34 @@ test('semantic copy with all declared IDs changed still scores 100', async () =>
   const scored = scoreResult(candidate, gold);
   assert.equal(scored.score, 100);
   assert.equal(scored.hardGates.pass, true);
+});
+
+test('non-empty Gold with a completely empty candidate scores zero for every fact metric', async () => {
+  const gold = await loadJson();
+  const scored = scoreResult(emptyResult(gold), gold);
+
+  assert.equal(scored.score, 0);
+  assert.equal(scored.metric_details.assemblies.f1, 0);
+  assert.equal(scored.metric_details.modules.detection.f1, 0);
+  assert.equal(scored.metric_details.appliances_features.appliances.f1, 0);
+  assert.equal(scored.metric_details.appliances_features.features.f1, 0);
+  assert.equal(scored.metric_details.dimensions.detection.f1, 0);
+  assert.equal(scored.metric_details.dimensions.binding.f1, 0);
+  assert.equal(scored.metric_details.spatial_relations.f1, 0);
+});
+
+test('empty Gold with an empty candidate remains a perfect match', async () => {
+  const empty = emptyResult(await loadJson());
+  const scored = scoreResult(empty, empty);
+
+  assert.equal(scored.score, 100);
+  assert.equal(scored.metric_details.assemblies.f1, 1);
+  assert.equal(scored.metric_details.modules.detection.f1, 1);
+  assert.equal(scored.metric_details.appliances_features.appliances.f1, 1);
+  assert.equal(scored.metric_details.appliances_features.features.f1, 1);
+  assert.equal(scored.metric_details.dimensions.detection.f1, 1);
+  assert.equal(scored.metric_details.dimensions.binding.f1, 1);
+  assert.equal(scored.metric_details.spatial_relations.f1, 1);
 });
 
 test('one extra false-positive module is a hard-gate failure', async () => {
